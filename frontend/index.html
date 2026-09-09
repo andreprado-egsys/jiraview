@@ -4,51 +4,178 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>egSYS Painel do Cliente Jira</title>
+  <script>
+    (function() {
+      const t = localStorage.getItem("theme") || "light";
+      document.documentElement.setAttribute("data-theme", t);
+      if (t === "dark") {
+        document.documentElement.classList.add("dark");
+        document.documentElement.style.colorScheme = "dark";
+      }
+    })();
+  </script>
   <style>
-    :root { --bg:#f4f5f7; --card:#fff; --border:#dfe1e6; --text:#172b4d; --accent:#0c66e4;
-            --green:#00875a; --yellow:#ffab00; --blue:#0c66e4; --red:#de350b; }
-    * { box-sizing:border-box; }
-    body { margin:0; font-family:-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); }
-    header { background:#0052cc; color:#fff; padding:12px 24px; display:flex; justify-content:space-between; align-items:center; }
-    header h1 { font-size:18px; margin:0; }
-    .container { padding:20px 24px; max-width:1400px; margin:0 auto; }
+    :root {
+      color-scheme: light;
+      --bg: #f4f5f7;
+      --card: #ffffff;
+      --border: #dfe1e6;
+      --text: #172b4d;
+      --text-sub: #6b778c;
+      --header-bg: #0052cc;
+      --header-text: #ffffff;
+      --header-btn-bg: rgba(255, 255, 255, 0.18);
+      --header-btn-border: rgba(255, 255, 255, 0.35);
+      --th-bg: #fafbfc;
+      --tr-border: #ebecf0;
+      --tr-hover: #f8f9fb;
+      --input-bg: #ffffff;
+      --input-border: #dfe1e6;
+      --input-text: #172b4d;
+      --chip-bg: #e9f2ff;
+      --chip-text: #0c66e4;
+      --chip-border: #cce0ff;
+      --ghost-bg: #ffffff;
+      --link-color: #0c66e4;
+      --empty-bg: #fff7e6;
+      --empty-border: #ffd666;
+      --empty-text: #8c6d1f;
+      --accent: #0c66e4;
+      --green: #00875a;
+      --yellow: #ffab00;
+      --blue: #0c66e4;
+      --red: #de350b;
+    }
+
+    [data-theme="dark"], html.dark, body.dark, html[data-theme="dark"], body[data-theme="dark"] {
+      color-scheme: dark !important;
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #30363d;
+      --text: #f0f6fc;
+      --text-sub: #8b949e;
+      --header-bg: #161b22;
+      --header-text: #f0f6fc;
+      --header-btn-bg: rgba(255, 255, 255, 0.1);
+      --header-btn-border: rgba(255, 255, 255, 0.2);
+      --th-bg: #1c2128;
+      --tr-border: #21262d;
+      --tr-hover: #1f242c;
+      --input-bg: #0d1117;
+      --input-border: #30363d;
+      --input-text: #f0f6fc;
+      --chip-bg: #1c2b42;
+      --chip-text: #58a6ff;
+      --chip-border: #388bfd40;
+      --ghost-bg: #161b22;
+      --link-color: #58a6ff;
+      --empty-bg: #2d2208;
+      --empty-border: #634707;
+      --empty-text: #e3b341;
+      --accent: #388bfd;
+      --green: #238636;
+      --yellow: #d29922;
+      --blue: #388bfd;
+      --red: #f85149;
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      background-color: var(--bg);
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      width: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    [data-theme="dark"], html.dark, body.dark {
+      background-color: #0d1117 !important;
+      color: #f0f6fc !important;
+    }
+
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    header h1 { font-size: 18px; margin: 0; }
+    #theme-btn {
+      background: var(--header-btn-bg);
+      color: var(--header-text);
+      border: 1px solid var(--header-btn-border);
+      border-radius: 6px;
+      padding: 5px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    #theme-btn:hover {
+      filter: brightness(1.2);
+    }
+    .container { padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
+
     /* Cards (gadgets estilo Jira Dashboard) */
-    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-bottom:20px; }
-    .card { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:14px 18px; }
-    .card .label { font-size:12px; color:#6b778c; text-transform:uppercase; letter-spacing:.4px; }
-    .card .value { font-size:26px; font-weight:600; margin-top:4px; }
-    .card small { color:#6b778c; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .card { background-color: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px 18px; transition: background 0.2s ease, border-color 0.2s ease; }
+    .card .label { font-size: 12px; color: var(--text-sub); text-transform: uppercase; letter-spacing: .4px; }
+    .card .value { font-size: 26px; font-weight: 600; margin-top: 4px; color: var(--text); }
+    .card small { color: var(--text-sub); }
+
     /* Filtros */
-    .filters { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:end; margin-bottom:16px; }
-    .filters label { font-size:12px; color:#6b778c; display:flex; flex-direction:column; gap:4px; }
-    .filters select, .filters input { height:34px; padding:0 10px; border:1px solid var(--border); border-radius:4px; min-width:150px; }
-    .btn { height:34px; padding:0 16px; border:0; border-radius:4px; background:var(--accent); color:#fff; cursor:pointer; font-weight:600; }
-    .btn.ghost { background:#fff; color:var(--accent); border:1px solid var(--accent); }
-    .btn.danger { background:#fff; color:var(--red); border:1px solid var(--red); }
+    .filters { background-color: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px; display: flex; gap: 10px; flex-wrap: wrap; align-items: end; margin-bottom: 16px; transition: background 0.2s ease, border-color 0.2s ease; }
+    .filters label { font-size: 12px; color: var(--text-sub); display: flex; flex-direction: column; gap: 4px; }
+    .filters select, .filters input { height: 34px; padding: 0 10px; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--input-border); border-radius: 4px; min-width: 150px; outline: none; transition: border-color 0.2s ease, background 0.2s ease; }
+    .filters select:focus, .filters input:focus { border-color: var(--accent); }
+    select option { background-color: var(--input-bg); color: var(--input-text); }
+    .btn { height: 34px; padding: 0 16px; border: 0; border-radius: 4px; background: var(--accent); color: #fff; cursor: pointer; font-weight: 600; transition: filter 0.2s ease; }
+    .btn:hover { filter: brightness(1.1); }
+    .btn.ghost { background-color: var(--ghost-bg); color: var(--accent); border: 1px solid var(--accent); }
+    .btn.danger { background-color: var(--ghost-bg); color: var(--red); border: 1px solid var(--red); }
+
     /* Tabela (colunas da imagem) */
-    table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--border); border-radius:6px; overflow:hidden; }
-    th { text-align:left; font-size:12px; color:#6b778c; background:#fafbfc; padding:10px 12px; border-bottom:1px solid var(--border); text-transform:uppercase; letter-spacing:.3px; }
-    td { padding:10px 12px; border-bottom:1px solid #ebecf0; font-size:13px; vertical-align:middle; }
-    tr:hover td { background:#f8f9fb; }
-    .status { display:inline-block; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; color:#fff; }
-    .pause { color:#6b778c; font-size:12px; }
+    table { width: 100%; border-collapse: collapse; background-color: var(--card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; transition: background 0.2s ease, border-color 0.2s ease; }
+    th { text-align: left; font-size: 12px; color: var(--text-sub); background-color: var(--th-bg); padding: 10px 12px; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: .3px; }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--tr-border); font-size: 13px; vertical-align: middle; color: var(--text); }
+    tr:hover td { background-color: var(--tr-hover); }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .status { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; color: #fff; }
+    .pause { color: var(--text-sub); font-size: 12px; }
+
     /* Filtros salvos */
-    .saved { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
-    .chip { background:#e9f2ff; color:var(--accent); border-radius:16px; padding:5px 12px; font-size:12px; cursor:pointer; display:inline-flex; gap:6px; align-items:center; }
-    .chip button { border:0; background:none; cursor:pointer; color:var(--accent); font-weight:700; }
+    .saved { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .chip { background-color: var(--chip-bg); color: var(--chip-text); border: 1px solid var(--chip-border); border-radius: 16px; padding: 5px 12px; font-size: 12px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+    .chip button { border: 0; background: none; cursor: pointer; color: var(--chip-text); font-weight: 700; }
+
     /* Construtor visual (estilo Jira) */
-    .builder { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:14px; margin-bottom:16px; }
-    .builder .builder-row { display:flex; gap:8px; flex-wrap:wrap; align-items:end; }
-    .builder select, .builder input { height:34px; padding:0 10px; border:1px solid var(--border); border-radius:4px; }
-    .builder select { min-width:170px; }
-    .builder input { min-width:220px; }
-    .builder .and { align-self:center; font-weight:700; color:#6b778c; padding-bottom:8px; }
+    .builder { background-color: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px; margin-bottom: 16px; transition: background 0.2s ease, border-color 0.2s ease; }
+    .builder .builder-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
+    .builder select, .builder input { height: 34px; padding: 0 10px; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--input-border); border-radius: 4px; outline: none; }
+    .builder select:focus, .builder input:focus { border-color: var(--accent); }
+    .builder select { min-width: 170px; }
+    .builder input { min-width: 220px; }
+    .builder .and { align-self: center; font-weight: 700; color: var(--text-sub); padding-bottom: 8px; }
+    .builder-hint { color: var(--text-sub) !important; font-size: 12px; margin-top: 8px; }
+    #builder-hint { color: var(--text-sub) !important; }
+
     /* Gráficos (estilo Jira Dashboard) */
-    .charts { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:14px; margin-bottom:20px; }
-    .chart-box { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:14px; }
-    .chart-box h3 { margin:0 0 8px; font-size:14px; color:#172b4d; }
-    .chart-box canvas { max-height:260px; }
-    .empty-msg { padding:14px; background:#fff7e6; border:1px solid #ffd666; border-radius:6px; color:#8c6d1f; margin:8px 0; }
+    .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .chart-box { background-color: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px; transition: background 0.2s ease, border-color 0.2s ease; }
+    .chart-box h3 { margin: 0 0 8px; font-size: 14px; color: var(--text); }
+    .chart-box canvas { max-height: 260px; }
+    .empty-msg { padding: 14px; background-color: var(--empty-bg); border: 1px solid var(--empty-border); border-radius: 6px; color: var(--empty-text); margin: 8px 0; }
   </style>
 </head>
 <body>
@@ -56,8 +183,7 @@
   <header>
     <h1>egSYS Painel do Cliente Jira</h1>
     <div style="display:flex;align-items:center;gap:10px;">
-      <button id="theme-btn" onclick="toggleTheme()" title="Alternar modo claro/escuro"
-        style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:5px 12px;cursor:pointer;">🌙 Escuro</button>
+      <button id="theme-btn" onclick="toggleTheme()" title="Alternar modo claro/escuro">🌙 Escuro</button>
       <div id="user"></div>
     </div>
   </header>
@@ -98,7 +224,7 @@
     <!-- Construtor visual de filtros — OCULTO por padrão (evocado) -->
     <div style="margin-bottom:10px;">
       <button class="btn ghost" id="btn-builder" onclick="toggleBuilder()">⚙️ Filtros avançados</button>
-      <span id="builder-hint" style="font-size:12px;color:#6b778c;"> — oculto por padrão; clique para montar filtro visual (padrão Jira)</span>
+      <span id="builder-hint" style="font-size:12px;color:var(--text-sub);"> — oculto por padrão; clique para montar filtro visual (padrão Jira)</span>
     </div>
     <div class="builder" id="builder-card" style="display:none;">
       <div class="builder-row">
@@ -123,7 +249,7 @@
         <button class="btn" onclick="builderAdd()">Adicionar condição</button>
         <button class="btn ghost" onclick="builderClear()">Limpar</button>
       </div>
-      <div style="margin-top:8px; font-size:12px; color:#6b778c;">
+      <div style="margin-top:8px; font-size:12px; color:var(--text-sub);">
         Condições adicionadas: <span id="b-chips"></span>
       </div>
       <div style="margin-top:8px;">
@@ -228,10 +354,24 @@
     function chartPaleta() {
       const dark = document.documentElement.getAttribute("data-theme") === "dark";
       return dark
-        ? { cols: ["#4bce97", "#4c9aff", "#e2b203", "#9fadbc", "#f87168", "#9f8fef", "#37c4d8", "#f78d4f"],
-            texto: "#e6e6e6", sub: "#9fadbc", grid: "rgba(255,255,255,.12)" }
-        : { cols: ["#00875a", "#0c66e4", "#ffab00", "#6b778c", "#de350b", "#5e4db2", "#00b8d9", "#f7812f"],
-            texto: "#172b4d", sub: "#6b778c", grid: "rgba(9,30,66,.12)" };
+        ? {
+            cols: ["#388bfd", "#3fb950", "#d29922", "#f85149", "#a371f7", "#39c5cf", "#f0883e", "#db61a2"],
+            texto: "#f0f6fc",
+            sub: "#8b949e",
+            grid: "rgba(255, 255, 255, 0.18)",
+            border: "#161b22",
+            backdrop: "transparent",
+            tooltipBg: "rgba(22, 27, 34, 0.95)"
+          }
+        : {
+            cols: ["#00875a", "#0c66e4", "#ffab00", "#de350b", "#5e4db2", "#00b8d9", "#f7812f", "#6b778c"],
+            texto: "#172b4d",
+            sub: "#6b778c",
+            grid: "rgba(9, 30, 66, 0.10)",
+            border: "#ffffff",
+            backdrop: "rgba(255, 255, 255, 0.75)",
+            tooltipBg: "rgba(9, 30, 66, 0.95)"
+          };
     }
     async function loadCharts() {
       const d = await api("/charts?estado=" + ESTADO + "&periodo=" + periodoAtual());
@@ -240,37 +380,172 @@
       const C = window.Chart;
       const P = chartPaleta();
       const cols = P.cols;
+
       // 1) Barras por status
       const dataStatus = d.por_status || {};
       charts.status = new C(document.getElementById("ch-status"), {
         type: "bar",
-        data: { labels: Object.keys(dataStatus),
-          datasets: [{ label: "Solicitações", data: Object.values(dataStatus), backgroundColor: cols, borderRadius: 4 }] },
-        options: { indexAxis: "y", maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
+        data: {
+          labels: Object.keys(dataStatus),
+          datasets: [{
+            label: "Solicitações",
+            data: Object.values(dataStatus),
+            backgroundColor: cols,
+            borderRadius: 4
+          }]
+        },
+        options: {
+          indexAxis: "y",
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              titleColor: "#ffffff",
+              bodyColor: "#ffffff",
+              backgroundColor: P.tooltipBg,
+              borderColor: P.grid,
+              borderWidth: 1
+            }
+          },
           scales: {
-            x: { ticks: { precision: 0, color: P.sub }, grid: { color: P.grid } },
-            y: { ticks: { color: P.sub }, grid: { color: P.grid } }
-          } }
+            x: {
+              ticks: { precision: 0, color: P.texto, font: { weight: 500 } },
+              grid: { color: P.grid }
+            },
+            y: {
+              ticks: { color: P.texto, font: { weight: 500 } },
+              grid: { display: false }
+            }
+          }
+        }
       });
+
       // 2) Donut por prioridade
       charts.prioridade = new C(document.getElementById("ch-prioridade"), {
         type: "doughnut",
-        data: { labels: Object.keys(d.por_prioridade || {}), datasets: [{ data: Object.values(d.por_prioridade || {}), backgroundColor: cols, borderWidth: 0 }] },
-        options: { maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { color: P.texto } } } }
+        data: {
+          labels: Object.keys(d.por_prioridade || {}),
+          datasets: [{
+            data: Object.values(d.por_prioridade || {}),
+            backgroundColor: cols,
+            borderColor: P.border,
+            borderWidth: 2
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: "bottom",
+              labels: {
+                color: P.texto,
+                font: { size: 12, weight: 500 },
+                padding: 10
+              }
+            },
+            tooltip: {
+              titleColor: "#ffffff",
+              bodyColor: "#ffffff",
+              backgroundColor: P.tooltipBg,
+              borderColor: P.grid,
+              borderWidth: 1
+            }
+          }
+        }
       });
-      // 3) Saolicitantes top 6
+
+      // 3) Solicitantes top 6 (Polar Area calibrado para visibilidade total)
       charts.solicitante = new C(document.getElementById("ch-solicitante"), {
         type: "polarArea",
-        data: { labels: Object.keys(d.por_solicitante || {}), datasets: [{ data: Object.values(d.por_solicitante || {}), backgroundColor: cols.slice(0,6) }] },
-        options: { maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { color: P.texto } } } }
+        data: {
+          labels: Object.keys(d.por_solicitante || {}),
+          datasets: [{
+            data: Object.values(d.por_solicitante || {}),
+            backgroundColor: cols.slice(0, 6),
+            borderColor: P.border,
+            borderWidth: 2
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: "bottom",
+              labels: {
+                color: P.texto,
+                font: { size: 12, weight: 500 },
+                padding: 12
+              }
+            },
+            tooltip: {
+              titleColor: "#ffffff",
+              bodyColor: "#ffffff",
+              backgroundColor: P.tooltipBg,
+              borderColor: P.grid,
+              borderWidth: 1
+            }
+          },
+          scales: {
+            r: {
+              grid: { color: P.grid, lineWidth: 1.2 },
+              angleLines: { color: P.grid, lineWidth: 1.2 },
+              ticks: {
+                color: P.texto,
+                backdropColor: P.backdrop,
+                font: { size: 11, weight: 600 },
+                precision: 0,
+                z: 10
+              },
+              pointLabels: {
+                color: P.texto,
+                font: { size: 12, weight: 500 }
+              }
+            }
+          }
+        }
       });
+
       // 4) Linha: criadas nos últimos 15 dias
       charts.tempo = new C(document.getElementById("ch-tempo"), {
         type: "line",
-        data: { labels: (d.por_dia || []).map(x => x.dia.slice(5)), datasets: [{ label: "Criadas", data: (d.por_dia || []).map(x => x.count), borderColor: "#0c66e4", backgroundColor: "rgba(12,102,228,.15)", fill: true, tension: .3 }] },
-        options: { maintainAspectRatio: false, plugins: { legend: { display: false } },
-          scales: { x: { ticks: { color: P.sub }, grid: { color: P.grid } }, y: { ticks: { color: P.sub }, grid: { color: P.grid } } } }
+        data: {
+          labels: (d.por_dia || []).map(x => x.dia.slice(5)),
+          datasets: [{
+            label: "Criadas",
+            data: (d.por_dia || []).map(x => x.count),
+            borderColor: cols[0] || "#388bfd",
+            backgroundColor: (document.documentElement.getAttribute("data-theme") === "dark") ? "rgba(56, 139, 253, 0.25)" : "rgba(12, 102, 228, 0.15)",
+            pointBackgroundColor: cols[0] || "#388bfd",
+            pointBorderColor: P.border,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              titleColor: "#ffffff",
+              bodyColor: "#ffffff",
+              backgroundColor: P.tooltipBg,
+              borderColor: P.grid,
+              borderWidth: 1
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: P.texto, font: { weight: 500 } },
+              grid: { color: P.grid }
+            },
+            y: {
+              ticks: { color: P.texto, precision: 0, font: { weight: 500 } },
+              grid: { color: P.grid }
+            }
+          }
+        }
       });
     }
 
@@ -375,7 +650,7 @@
     }
     function renderChips() {
       document.getElementById("b-chips").innerHTML = builderChips.map((c,i) =>
-        `<span class="chip" onclick="builderChips.splice(${i},1);renderChips();">${esc(c)} <span style="color:#de350b;font-weight:700">×</span></span>`
+        `<span class="chip" onclick="builderChips.splice(${i},1);renderChips();">${esc(c)} <span style="color:var(--red);font-weight:700">×</span></span>`
       ).join(" &nbsp; ") || "nenhuma";
       document.getElementById("f-jql").value = builderChips.join(" AND ");
     }
@@ -416,16 +691,33 @@
       btn.textContent = wasHidden ? "⚙️ Ocultar filtros avançados" : "⚙️ Filtros avançados";
     }
 
-    // ==== Modo escuro (padrão Orion: localStorage + atributo no html) ====
+    // ==== Modo escuro (padrão Orion: localStorage + atributo no html/body) ====
     function applyTheme(theme) {
+      const isDark = theme === "dark";
       document.documentElement.setAttribute("data-theme", theme);
+      if (document.body) {
+        document.body.setAttribute("data-theme", theme);
+        if (isDark) {
+          document.body.classList.add("dark");
+        } else {
+          document.body.classList.remove("dark");
+        }
+      }
+      if (isDark) {
+        document.documentElement.classList.add("dark");
+        document.documentElement.style.colorScheme = "dark";
+      } else {
+        document.documentElement.classList.remove("dark");
+        document.documentElement.style.colorScheme = "light";
+      }
       const btn = document.getElementById("theme-btn");
-      if (btn) btn.textContent = theme === "dark" ? "☀️ Claro" : "🌙 Escuro";
+      if (btn) btn.textContent = isDark ? "☀️ Claro" : "🌙 Escuro";
       localStorage.setItem("theme", theme);
     }
     function toggleTheme() {
       const cur = document.documentElement.getAttribute("data-theme") || "light";
-      applyTheme(cur === "dark" ? "light" : "dark");
+      const next = cur === "dark" ? "light" : "dark";
+      applyTheme(next);
       try { loadCharts(); } catch(e) {}   // redesenha gráficos com nova paleta
     }
     applyTheme(localStorage.getItem("theme") || "light");

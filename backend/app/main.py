@@ -7,10 +7,8 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from .core.config import get_settings
 from .core.security import TokenPayload, get_current_user, jsm
+from .core.estados import estado_por_sigla
 from .api.v1 import router as v1_router
-from fastapi import FastAPI, Depends
-from fastapi.staticfiles import StaticFiles
-from pathlib import Path
 
 app = FastAPI(title="egSYS JiraView", version="0.1.0")
 
@@ -48,8 +46,10 @@ async def health():
 @app.get("/api/v1/overview")
 async def overview(user: TokenPayload = Depends(get_current_user)):
     """Solicitações do estado do usuário (role viewer+)."""
+    cfg = estado_por_sigla(user.state)
+    projetos = ", ".join(cfg["projects"]) if cfg and cfg.get("projects") else "HDPMSC"
     states = await jsm().search(
-        f'project in (HDPMSC, SCPMH) AND resolution is EMPTY ORDER BY updated DESC',
+        f"project in ({projetos}) AND resolution is EMPTY ORDER BY updated DESC",
         max_results=50,
     )
     return {"role": user.role, "state": user.state, "issues": states}
