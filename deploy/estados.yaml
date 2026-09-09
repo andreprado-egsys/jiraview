@@ -15,7 +15,7 @@ estados:
 
   sc:
     display_name: "Santa Catarina — PMSC"
-    projects: [HDPMSC, SCPMH]
+    projects: [HDPMSC]   # SCPMH desativado (espaço legado; não filtrar tasks dele)
     # Responsáveis da PM (clientes do portal) — são os únicos cujas solicitações
     # aparecem no painel do cliente por padrão (regra de negócio).
     # accountId "qm:*" = customer Atlassian (portal); os de equipe ficam de fora.

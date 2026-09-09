@@ -15,6 +15,21 @@ _FIELDS = "summary,status,priority,reporter,assignee,created,updated,duedate,iss
 JSM = jsm()
 
 
+def _jql_janela(periodo: Optional[str] = None) -> str:
+    """Periodo -> clausula de janela de criacao em JQL (dias; M deprecado no Cloud)."""
+    if not periodo:
+        return ""
+    if periodo == "ano":
+        return ' AND created >= "2026-01-01"'
+    if periodo == "90d":
+        return " AND created >= -90d"
+    if periodo == "6m":
+        return " AND created >= -180d"
+    if periodo == "12m":
+        return " AND created >= -365d"
+    return ""
+
+
 def _build_jql(
     projetos: list[str],
     status: Optional[str] = None,
@@ -22,6 +37,7 @@ def _build_jql(
     jql_extra: Optional[str] = None,
     aberto_apenas: bool = False,
     reporters: Optional[list[str]] = None,
+    janela: str = "",
 ) -> str:
     parts = [f"project in ({', '.join(projetos)})"]
     if reporters:
@@ -37,7 +53,7 @@ def _build_jql(
         parts.append(f'issuetype = "{tipo}"')
     if jql_extra:
         parts.append(f"({jql_extra})")
-    return " AND ".join(parts) + " ORDER BY updated DESC"
+    return " AND ".join(parts) + janela + " ORDER BY updated DESC"
 
 
 @router.get("/issues")
@@ -48,6 +64,7 @@ async def list_issues(
     origem: Optional[str] = None,
     jql: Optional[str] = None,
     abertas: bool = True,
+    periodo: Optional[str] = None,
     max_results: int = 50,
     user: TokenPayload = Depends(get_current_user),
 ):
@@ -59,9 +76,8 @@ async def list_issues(
 
     from ..core.estados import clientes_do_estado
     q = _build_jql(cfg["projects"], status_filter, tipo, jql, abertas,
-                   reporters=clientes_do_estado(estado))
+                   reporters=clientes_do_estado(estado), janela=_jql_janela(periodo))
     issues = await JSM.search(q, max_results)
-    import json as _j
     if origem in ("cliente", "interno"):
         def _eh_origem(it):
             acct = str(((it.get("fields", {}).get("reporter") or {}).get("accountId") or ""))
@@ -94,7 +110,7 @@ async def list_issues(
 
 
 @router.get("/dashboard")
-async def dashboard(estado: str, user: TokenPayload = Depends(get_current_user)):
+async def dashboard(estado: str, periodo: Optional[str] = None, user: TokenPayload = Depends(get_current_user)):
     """Métricas agregadas (cards estilo Jira Dashboard)."""
     cfg = estado_por_sigla(estado)
     if not cfg:
@@ -117,7 +133,7 @@ async def dashboard(estado: str, user: TokenPayload = Depends(get_current_user))
     _filtro_rp = f" AND reporter in ({_rp})" if _rp else ""
     # Janela do painel = últimos 90 dias (padrão de report do NOC; evita
     # contabilizar o histórico legado sem fim dos 4 responsáveis).
-    todas = await _todos(f"project in ({projetos}){_filtro_rp} AND created >= -90d ORDER BY created DESC")
+    todas = await _todos(f"project in ({projetos}){_filtro_rp}{_jql_janela(periodo)} ORDER BY created DESC")
     por_status, cat = {}, {"new": 0, "indeterminate": 0, "done": 0}
     por_origem = {"cliente_new": 0, "cliente_ind": 0, "cliente_done": 0,
                   "interno_new": 0, "interno_ind": 0, "interno_done": 0}
@@ -156,6 +172,7 @@ async def dashboard(estado: str, user: TokenPayload = Depends(get_current_user))
         "por_tipo": por_tipo,
         "total_geral": len(todas),
         "total_com_resolucao": cat["done"],
+        "periodo": periodo or "tudo",
     }
 
 
@@ -221,7 +238,7 @@ async def apagar_filtro(estado: str, fid: str,
     return FiltroRepo().apagar(user.sub, estado, fid)
 
 @router.get("/charts")
-async def charts(estado: str, user: TokenPayload = Depends(get_current_user)):
+async def charts(estado: str, periodo: Optional[str] = None, user: TokenPayload = Depends(get_current_user)):
     """Agregados para os gráficos (barras, donut, prioridade, solicitante, tempo)."""
     from collections import Counter, defaultdict
 
@@ -233,7 +250,7 @@ async def charts(estado: str, user: TokenPayload = Depends(get_current_user)):
     _rp = ", ".join('"'+c["accountId"]+'"' for c in clientes_do_estado(estado) if c.get("accountId"))
     _filtro_rp = f" AND reporter in ({_rp})" if _rp else ""
     issues = await JSM.search(
-        f"project in ({projetos}){_filtro_rp} AND created >= -90d ORDER BY created DESC",
+        f"project in ({projetos}){_filtro_rp}{_jql_janela(periodo)} ORDER BY created DESC",
         100)
     por_status = Counter()
     por_prioridade = Counter()

@@ -65,8 +65,9 @@
   <div class="container">
     <!-- Cards estilo Jira Dashboard -->
     <div class="cards" id="cards">
-      <div class="card"><div class="label">Solicitações abertas</div><div class="value" id="c-abertas">–</div></div>
-      <div class="card"><div class="label">Em andamento</div><div class="value" id="c-andamento">–</div></div>
+      <div class="card"><div class="label">Solicitações abertas <span id="p-label"></span></div><div class="value" id="c-abertas">–</div></div>
+      <div class="card"><div class="label">Em andamento <span id="p-label2"></span></div><div class="value" id="c-andamento">–</div></div>
+      <div class="card"><div class="label">Concluídas <span id="p-label3"></span></div><div class="value" id="c-concluidas">–</div></div>
       <div class="card"><div class="label">Fechadas (7 dias)</div><div class="value" id="c-fechadas">–</div></div>
       <div class="card"><div class="label">Projetos do estado</div><div class="value" id="c-projetos">–</div><small>SC</small></div>
     </div>
@@ -141,8 +142,17 @@
       <label>Apenas abertas
         <select id="f-abertas"><option value="true">Sim</option><option value="false">Não</option></select>
       </label>
+      <label>Período
+        <select id="f-periodo" onchange="loadAll()">
+          <option value="90d">Últimos 90 dias</option>
+          <option value="6m">Últimos 6 meses</option>
+          <option value="12m">Últimos 12 meses</option>
+          <option value="ano">Ano atual (2026)</option>
+          <option value="">Tudo</option>
+        </select>
+      </label>
       <label>Origem
-        <select id="f-origem"><option value="">Todas</option><option value="cliente">Cliente (portal)</option><option value="interno">Interno (equipe)</option></select>
+        <select id="f-origem"><option value="">Todas</option><option value="cliente">Cliente (portal)</option></select>
       </label>
       <label>JQL (gestor)
         <input id="f-jql" placeholder="ex.: assignee = currentUser()" style="width:320px" />
@@ -174,24 +184,43 @@
 
     function auth() { return { "Authorization": "Bearer " + token }; }
 
-    async function api(path) {
-      const r = await fetch(API + path, { headers: auth() });
-      if (r.status === 401) {
-        document.getElementById("user").innerHTML = "<button onclick='login()'>Entrar</button>";
-        throw new Error("não autenticado");
+    let authAttempts = 0;
+    async function api(path, opcoes = {}) {
+      const r = await fetch(API + path, { headers: auth(), ...opcoes });
+      if (r.status === 401 && authAttempts < 2 && !opcoes.skipAuth) {
+        authAttempts++;
+        try { await relogin(); } catch(e) { /* sem refresh, mostra erro */ }
+        authAttempts = 0;
+        return api(path, { ...opcoes, skipAuth: true });   // retenta 1x
       }
+      if (!r.ok) throw new Error("HTTP " + r.status);
       return r.json();
+    }
+    async function relogin() {
+      const r = await fetch(BASE + "/api/v1/demo-token", { method: "POST" });
+      const d = await r.json();
+      token = d.token; localStorage.setItem("jiraview_token", token);
     }
 
     function login() {
-      // demo local: JWT gerado para teste (produção: tela/rotas de auth)
-      fetch(BASE + "/api/v1/demo-token", { method:"POST" }).then(r=>r.json()).then(d => {
-        token = d.token; localStorage.setItem("jiraview_token", token); boot();
+      relogin().then(() => boot()).catch(e => {
+        document.getElementById("user").innerHTML = "<span style='color:#ffd;font-size:12px'>Falha de acesso — recarregue a página</span>";
       });
     }
 
+    function bootSeguro(fn) {
+      Promise.resolve().then(fn).catch(e => console.warn("boot item:", fn.name, e.message));
+    }
+
+    function periodoAtual() {
+      return document.getElementById("f-periodo") ? document.getElementById("f-periodo").value : "90d";
+    }
+    function loadAll() {
+      load(); loadCards(); loadCharts();
+    }
     function boot() {
-      load(); loadCards(); loadMeta(); loadSaved(); refreshBuilderValores(); loadCharts();
+      bootSeguro(load); bootSeguro(loadCards); bootSeguro(loadMeta);
+      bootSeguro(loadSaved); bootSeguro(refreshBuilderValores); bootSeguro(loadCharts);
     }
 
     // ==== Gráficos (estilo Jira Dashboard) — paleta segue o tema ====
@@ -205,7 +234,7 @@
             texto: "#172b4d", sub: "#6b778c", grid: "rgba(9,30,66,.12)" };
     }
     async function loadCharts() {
-      const d = await api("/charts?estado=" + ESTADO);
+      const d = await api("/charts?estado=" + ESTADO + "&periodo=" + periodoAtual());
       if (!window.Chart) return;
       Object.values(charts).forEach(c => { try { c.destroy(); } catch(e){} });
       const C = window.Chart;
@@ -247,14 +276,17 @@
 
     // ==== Cards (dashboard) ====
     async function loadCards() {
-      const d = await api("/dashboard?estado=" + ESTADO);
+      const d = await api("/dashboard?estado=" + ESTADO + "&periodo=" + periodoAtual());
       document.getElementById("c-abertas").textContent = d.abertas ?? "–";
       const andamento = (d.por_status || {});
       document.getElementById("c-andamento").textContent =
         Object.values(andamento).filter(v => v > 0).length ? Object.entries(andamento)
           .filter(([k,v]) => k !== "Aberto").reduce((a,[,v]) => a+v, 0) : "–";
+      document.getElementById("c-concluidas").textContent = d.total_com_resolucao ?? "–";
       document.getElementById("c-fechadas").textContent = d.fechadas_7d ?? "–";
       document.getElementById("c-projetos").textContent = (d.projetos || []).join(", ");
+      const rot = { "90d":"(90 dias)", "6m":"(6 meses)", "12m":"(12 meses)", "ano":"(2026)", "":"(tudo)" }[periodoAtual()];
+      ["p-label","p-label2","p-label3"].forEach(id => { const e = document.getElementById(id); if (e) e.textContent = rot || ""; });
     }
 
     // ==== Meta (filtros dinâmicos com contagem real) ====
@@ -278,7 +310,7 @@
       const tp = document.getElementById("f-tipo").value;
       const ab = document.getElementById("f-abertas").value;
       const jql = document.getElementById("f-jql").value;
-      const q = new URLSearchParams({ estado: ESTADO, abertas: ab, max_results: "50" });
+      const q = new URLSearchParams({ estado: ESTADO, abertas: ab, periodo: periodoAtual(), max_results: "50" });
       if (st) q.set("status_filter", st);
       if (tp) q.set("tipo", tp);
       const org = document.getElementById("f-origem").value;
