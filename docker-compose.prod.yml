@@ -1,0 +1,38 @@
+# egSYS JiraView — PROD (monitoramento-egsys, rede webproxy + Traefik)
+# 1 container único multi-estado. Hardening Orion: mem 512m / cpus 1.0 / pids 150
+services:
+  jiraview:
+    build: .
+    image: egsys-jiraview:latest
+    container_name: egsys-jiraview
+    restart: always
+    env_file: backend/.env
+    expose:
+      - "8090"
+    volumes:
+      - ./data:/app/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jiraview.rule=Host(`painel.egsys.siseg.tech`)"
+      - "traefik.http.routers.jiraview.entrypoints=websecure"
+      - "traefik.http.routers.jiraview.tls=true"
+      - "traefik.http.routers.jiraview.tls.certresolver=letsencrypt"
+      - "traefik.http.services.jiraview.loadbalancer.server.port=8090"
+    networks:
+      - webproxy
+    mem_limit: 512m
+    mem_reservation: 128m
+    cpus: 1.0
+    cpu_shares: 512
+    pids_limit: 150
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  webproxy:
+    external: true

@@ -1,0 +1,10 @@
+fastapi>=0.110
+uvicorn[standard]
+pydantic>=2.5
+pydantic-settings
+python-jose[cryptography]>=3.3
+passlib[bcrypt]
+httpx
+PyYAML
+pytest
+ruff

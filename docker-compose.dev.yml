@@ -1,0 +1,22 @@
+# egSYS JiraView — dev stack (espelho Orion: env_file + limites cgroup)
+services:
+  jiraview-api:
+    build: .
+    image: egsys-jiraview:dev
+    container_name: egsys-jiraview-dev
+    restart: unless-stopped
+    env_file: backend/.env
+    ports:
+      - "8090:8090"
+    mem_limit: 512m
+    mem_reservation: 128m
+    cpus: 1.0
+    cpu_shares: 512
+    pids_limit: 150
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

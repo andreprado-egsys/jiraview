@@ -1,0 +1,75 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+*.egg
+dist/
+build/
+
+# Node
+node_modules/
+.next/
+out/
+dist/
+
+# Environment (NUNCA versionar)
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.prod
+
+# IDE/OS
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+
+# Logs
+*.log
+
+# Deploy sensível
+deploy/env/
+deploy/**/env/
+deploy/ssh/
+deploy/**/ssh/
+deploy/resources/
+deploy/**/resources/
+
+# Banco/persistência local
+*.db
+*.db-journal
+backend/data/
+data/
+
+# Sessão/histórico interno (NUNCA sobe)
+docs/SESSION_*
+docs/history.md
+docs/HISTORIA_*
+docs/CREDENCIAIS_*
+docs/GESTAO_CREDENCIAIS*
+docs/INC_RESPONSE_*
+docs/GUIA_INTERNO_*
+
+# Agente/metadados IA
+.agent/
+.hermes/
+.kiro/
+.opencode/
+openspec/
+graphify-out/
+.ai_lessons_learned*
+LOGO_PROMPT*
+
+# Snapshots e backups operacionais
+*.bak*
+scripts/portal-jsm/snapshots/
+snapshots/

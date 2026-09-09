@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>egSYS Painel do Cliente Jira</title>
+  <style>
+    :root { --bg:#f4f5f7; --card:#fff; --border:#dfe1e6; --text:#172b4d; --accent:#0c66e4;
+            --green:#00875a; --yellow:#ffab00; --blue:#0c66e4; --red:#de350b; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); }
+    header { background:#0052cc; color:#fff; padding:12px 24px; display:flex; justify-content:space-between; align-items:center; }
+    header h1 { font-size:18px; margin:0; }
+    .container { padding:20px 24px; max-width:1400px; margin:0 auto; }
+    /* Cards (gadgets estilo Jira Dashboard) */
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-bottom:20px; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:14px 18px; }
+    .card .label { font-size:12px; color:#6b778c; text-transform:uppercase; letter-spacing:.4px; }
+    .card .value { font-size:26px; font-weight:600; margin-top:4px; }
+    .card small { color:#6b778c; }
+    /* Filtros */
+    .filters { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:end; margin-bottom:16px; }
+    .filters label { font-size:12px; color:#6b778c; display:flex; flex-direction:column; gap:4px; }
+    .filters select, .filters input { height:34px; padding:0 10px; border:1px solid var(--border); border-radius:4px; min-width:150px; }
+    .btn { height:34px; padding:0 16px; border:0; border-radius:4px; background:var(--accent); color:#fff; cursor:pointer; font-weight:600; }
+    .btn.ghost { background:#fff; color:var(--accent); border:1px solid var(--accent); }
+    .btn.danger { background:#fff; color:var(--red); border:1px solid var(--red); }
+    /* Tabela (colunas da imagem) */
+    table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+    th { text-align:left; font-size:12px; color:#6b778c; background:#fafbfc; padding:10px 12px; border-bottom:1px solid var(--border); text-transform:uppercase; letter-spacing:.3px; }
+    td { padding:10px 12px; border-bottom:1px solid #ebecf0; font-size:13px; vertical-align:middle; }
+    tr:hover td { background:#f8f9fb; }
+    .status { display:inline-block; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; color:#fff; }
+    .pause { color:#6b778c; font-size:12px; }
+    /* Filtros salvos */
+    .saved { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+    .chip { background:#e9f2ff; color:var(--accent); border-radius:16px; padding:5px 12px; font-size:12px; cursor:pointer; display:inline-flex; gap:6px; align-items:center; }
+    .chip button { border:0; background:none; cursor:pointer; color:var(--accent); font-weight:700; }
+    /* Construtor visual (estilo Jira) */
+    .builder { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:14px; margin-bottom:16px; }
+    .builder .builder-row { display:flex; gap:8px; flex-wrap:wrap; align-items:end; }
+    .builder select, .builder input { height:34px; padding:0 10px; border:1px solid var(--border); border-radius:4px; }
+    .builder select { min-width:170px; }
+    .builder input { min-width:220px; }
+    .builder .and { align-self:center; font-weight:700; color:#6b778c; padding-bottom:8px; }
+    /* Gráficos (estilo Jira Dashboard) */
+    .charts { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:14px; margin-bottom:20px; }
+    .chart-box { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:14px; }
+    .chart-box h3 { margin:0 0 8px; font-size:14px; color:#172b4d; }
+    .chart-box canvas { max-height:260px; }
+    .empty-msg { padding:14px; background:#fff7e6; border:1px solid #ffd666; border-radius:6px; color:#8c6d1f; margin:8px 0; }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <header>
+    <h1>egSYS Painel do Cliente Jira</h1>
+    <div id="user"></div>
+  </header>
+
+  <div class="container">
+    <!-- Cards estilo Jira Dashboard -->
+    <div class="cards" id="cards">
+      <div class="card"><div class="label">Solicitações abertas</div><div class="value" id="c-abertas">–</div></div>
+      <div class="card"><div class="label">Em andamento</div><div class="value" id="c-andamento">–</div></div>
+      <div class="card"><div class="label">Fechadas (7 dias)</div><div class="value" id="c-fechadas">–</div></div>
+      <div class="card"><div class="label">Projetos do estado</div><div class="value" id="c-projetos">–</div><small>SC</small></div>
+    </div>
+
+    <!-- Gráficos estilo Jira Dashboard (barras, donut, gauge) -->
+    <div class="charts">
+      <div class="chart-box">
+        <h3>📊 Abertas por status</h3>
+        <canvas id="ch-status"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>📍 Distribuição por prioridade</h3>
+        <canvas id="ch-prioridade"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>👤 Por solicitante (top 6)</h3>
+        <canvas id="ch-solicitante"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>🗓️ Criadas nos últimos 30 dias</h3>
+        <canvas id="ch-tempo"></canvas>
+      </div>
+    </div>
+
+    <!-- Filtros salvos do gestor (JQL) -->
+    <div class="saved" id="saved-filters"></div>
+
+    <!-- Construtor visual de filtros (estilo Jira: campo + operador + valor) -->
+    <div class="builder">
+      <div class="builder-row">
+        <span class="and">Filtro visual:</span>
+        <select id="b-campo">
+          <option value="status">Status</option>
+          <option value="issuetype">Tipo de solicitação</option>
+          <option value="priority">Prioridade</option>
+          <option value="reporter">Solicitante</option>
+          <option value="assignee">Responsável</option>
+          <option value="created">Criada em</option>
+          <option value="text">Contém texto</option>
+        </select>
+        <select id="b-op">
+          <option value="=">= (igual)</option>
+          <option value="!=">!= (diferente)</option>
+          <option value="~">~ (contém)</option>
+          <option value="in">in (multiseleção)</option>
+        </select>
+        <select id="b-valor" multiple size="5" style="min-width:220px;height:auto"></select>
+        <input id="b-valor-texto" placeholder="valor (ou gere pelo quadro acima)" style="display:none" />
+        <button class="btn" onclick="builderAdd()">Adicionar condição</button>
+      </div>
+      <div style="margin-top:8px; font-size:12px; color:#6b778c;">
+        Condições adicionadas: <span id="b-chips"></span>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filters">
+      <label>Status
+        <select id="f-status"><option value="">Todos</option></select>
+      </label>
+      <label>Tipo de solicitação
+        <select id="f-tipo"><option value="">Todos</option></select>
+      </label>
+      <label>Apenas abertas
+        <select id="f-abertas"><option value="true">Sim</option><option value="false">Não</option></select>
+      </label>
+      <label>JQL (gestor)
+        <input id="f-jql" placeholder="ex.: assignee = currentUser()" style="width:320px" />
+      </label>
+      <button class="btn" onclick="load()">Aplicar</button>
+      <button class="btn ghost" onclick="salvarFiltro()">Salvar filtro</button>
+    </div>
+
+    <!-- Listagem -->
+    <table>
+      <thead>
+        <tr>
+          <th>Tipo</th><th>Referência</th><th>Resumo</th><th>Status</th>
+          <th>Solicitante</th><th>Prioridade</th><th>Data de atualização</th><th>Data de entrega</th>
+        </tr>
+      </thead>
+      <tbody id="rows"><tr><td colspan="8" class="pause">Carregando…</td></tr></tbody>
+    </table>
+  </div>
+
+  <script>
+    // ==== Config ====
+    const ESTADO = "sc";
+    // Base do app: funciona em root (dev) ou sob /painel_sc (prod via Traefik)
+    const BASE = window.location.pathname.startsWith("/painel_sc") ? "/painel_sc" : "";
+    const API = BASE + "/api/v1";
+    let token = localStorage.getItem("jiraview_token") || "";
+    const ROLES = { viewer:1, manager:2, admin:3 };
+
+    function auth() { return { "Authorization": "Bearer " + token }; }
+
+    async function api(path) {
+      const r = await fetch(API + path, { headers: auth() });
+      if (r.status === 401) {
+        document.getElementById("user").innerHTML = "<button onclick='login()'>Entrar</button>";
+        throw new Error("não autenticado");
+      }
+      return r.json();
+    }
+
+    function login() {
+      // demo local: JWT gerado para teste (produção: tela/rotas de auth)
+      fetch(BASE + "/api/v1/demo-token", { method:"POST" }).then(r=>r.json()).then(d => {
+        token = d.token; localStorage.setItem("jiraview_token", token); boot();
+      });
+    }
+
+    function boot() {
+      load(); loadCards(); loadMeta(); loadSaved(); refreshBuilderValores(); loadCharts();
+    }
+
+    // ==== Gráficos (estilo Jira Dashboard) ====
+    let charts = {};
+    async function loadCharts() {
+      const d = await api("/charts?estado=" + ESTADO);
+      if (!window.Chart) return;
+      Object.values(charts).forEach(c => { try { c.destroy(); } catch(e){} });
+      const C = window.Chart;
+      const cols = ["#00875a", "#0c66e4", "#ffab00", "#6b778c", "#de350b", "#5e4db2", "#00b8d9", "#f7812f"];
+      // 1) Barras por status
+      const dataStatus = d.por_status || {};
+      charts.status = new C(document.getElementById("ch-status"), {
+        type: "bar",
+        data: { labels: Object.keys(dataStatus),
+          datasets: [{ label: "Solicitações", data: Object.values(dataStatus), backgroundColor: cols, borderRadius: 4 }] },
+        options: { indexAxis: "y", maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { ticks: { precision: 0 } } } }
+      });
+      // 2) Donut por prioridade
+      charts.prioridade = new C(document.getElementById("ch-prioridade"), {
+        type: "doughnut",
+        data: { labels: Object.keys(d.por_prioridade || {}), datasets: [{ data: Object.values(d.por_prioridade || {}), backgroundColor: cols, borderWidth: 0 }] },
+        options: { maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } }
+      });
+      // 3) Saolicitantes top 6
+      charts.solicitante = new C(document.getElementById("ch-solicitante"), {
+        type: "polarArea",
+        data: { labels: Object.keys(d.por_solicitante || {}), datasets: [{ data: Object.values(d.por_solicitante || {}), backgroundColor: cols.slice(0,6) }] },
+        options: { maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } }
+      });
+      // 4) Linha: criadas nos últimos 15 dias
+      charts.tempo = new C(document.getElementById("ch-tempo"), {
+        type: "line",
+        data: { labels: (d.por_dia || []).map(x => x.dia.slice(5)), datasets: [{ label: "Criadas", data: (d.por_dia || []).map(x => x.count), borderColor: "#0c66e4", backgroundColor: "rgba(12,102,228,.15)", fill: true, tension: .3 }] },
+        options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+    }
+
+    // ==== Cards (dashboard) ====
+    async function loadCards() {
+      const d = await api("/dashboard?estado=" + ESTADO);
+      document.getElementById("c-abertas").textContent = d.abertas ?? "–";
+      const andamento = (d.por_status || {});
+      document.getElementById("c-andamento").textContent =
+        Object.values(andamento).filter(v => v > 0).length ? Object.entries(andamento)
+          .filter(([k,v]) => k !== "Aberto").reduce((a,[,v]) => a+v, 0) : "–";
+      document.getElementById("c-fechadas").textContent = d.fechadas_7d ?? "–";
+      document.getElementById("c-projetos").textContent = (d.projetos || []).join(", ");
+    }
+
+    // ==== Meta (filtros dinâmicos) ====
+    async function loadMeta() {
+      const d = await api("/meta?estado=" + ESTADO);
+      const selS = document.getElementById("f-status");
+      (d.statuses || []).forEach(s => { const o = document.createElement("option"); o.value = s; o.textContent = s; selS.appendChild(o); });
+      const selT = document.getElementById("f-tipo");
+      (d.tipos || []).forEach(t => { const o = document.createElement("option"); o.value = t; o.textContent = t; selT.appendChild(o); });
+    }
+
+    // ==== Listagem (colunas da imagem) ====
+    async function load() {
+      const st = document.getElementById("f-status").value;
+      const tp = document.getElementById("f-tipo").value;
+      const ab = document.getElementById("f-abertas").value;
+      const jql = document.getElementById("f-jql").value;
+      const q = new URLSearchParams({ estado: ESTADO, abertas: ab, max_results: "50" });
+      if (st) q.set("status_filter", st);
+      if (tp) q.set("tipo", tp);
+      if (jql) q.set("jql", jql);
+      const d = await api("/issues?" + q);
+      const rows = document.getElementById("rows");
+      const cores = { done:"var(--green)", indeterminate:"var(--blue)", new:"var(--yellow)" };
+      if (!d.issues.length) {
+        rows.innerHTML = `<tr><td colspan="8">
+          <div class="empty-msg">🔍 <b>0 resultados para esta combinação de filtros.</b><br>
+          A consulta está correta — não há solicitações que atendam: ${esc((jql || st || tp) ? ((jql || "status = " + st + (tp ? " & tipo = " + tp : ""))) : "os filtros atuais")}.<br>
+          Dica: ajuste o status/tipo ou remova a condição no campo JQL.</div>
+        </td></tr>`;
+      } else {
+        rows.innerHTML = d.issues.map(i => `
+        <tr>
+          <td>${esc(i.tipo)}</td>
+          <td><a href="https://egsys.atlassian.net/browse/${i.referencia}" target="_blank">${esc(i.referencia)}</a></td>
+          <td>${esc(i.resumo)}</td>
+          <td><span class="status" style="background:${cores[i.statusCategoria] || 'var(--blue)'}">${esc(i.status)}</span></td>
+          <td>${esc(i.solicitante)}</td>
+          <td>${i.prioridade === "Mais alta possível" ? "🔴 " : i.prioridade === "Alta" ? "🟠 " : ""}${esc(i.prioridade)}</td>
+          <td>${esc(i.atualizacao)}</td>
+          <td>${esc(i.entrega || "–")}</td>
+        </tr>`).join("");
+      }
+    }
+
+    // ==== Construtor visual (estilo Jira) ====
+    let builderChips = [];
+    async function refreshBuilderValores() {
+      const campo = document.getElementById("b-campo").value;
+      const sel = document.getElementById("b-valor");
+      const txt = document.getElementById("b-valor-texto");
+      sel.innerHTML = ""; sel.style.display = "";
+      const meta = await api("/meta?estado=" + ESTADO);
+      if (campo === "status") { (meta.statuses||[]).forEach(v => addOpt(sel, v)); txt.style.display="none"; }
+      else if (campo === "issuetype") { (meta.tipos||[]).forEach(v => addOpt(sel, v)); txt.style.display="none"; }
+      else if (campo === "priority") {
+        ["Mais alta possível","Alta","Normal","Baixa","Mais baixa possível","Mais alta"].forEach(v => addOpt(sel, v)); txt.style.display="none";
+      }
+      else { sel.style.display="none"; txt.style.display="block"; }
+    }
+    function addOpt(sel, v) { const o=document.createElement("option"); o.value=v; o.textContent=v; sel.appendChild(o); }
+    function builderAdd() {
+      const campo = document.getElementById("b-campo").value;
+      const op = document.getElementById("b-op").value;
+      const sel = document.getElementById("b-valor");
+      const txt = document.getElementById("b-valor-texto");
+      const vals = [...sel.selectedOptions].map(o=>o.value);
+      const v = (sel.style.display === "none" ? txt.value : (vals.length ? vals.join(",") : sel.value));
+      if (!v) { alert("Escolha um valor"); return; }
+      let cond;
+      if (op === "in" && !v.includes(",")) v = v; // in com 1 valor funciona igual
+      cond = `${campo} ${op} ${op === "in" ? "("+v.split(",").map(x=>`"${x.trim()}"`).join(", ")+")" : `"${v.trim()}"`}`;
+      builderChips.push(cond);
+      document.getElementById("b-chips").innerHTML = builderChips.map(c=>`<em>${esc(c)}</em> &nbsp;`).join(" · ");
+      document.getElementById("f-jql").value = builderChips.join(" AND ");
+      document.getElementById("b-valor-texto").value = "";
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("b-campo").addEventListener("change", refreshBuilderValores);
+    });
+
+    // ==== Filtros salvos (padrão JQL, por gestor) ====
+    async function loadSaved() {
+      const d = await api("/filtros?estado=" + ESTADO);
+      const el = document.getElementById("saved-filters");
+      el.innerHTML = (d.filtros || []).map(f => `
+        <span class="chip" onclick='aplicarFiltro(${JSON.stringify(f.jql)})'>${esc(f.nome)} <button onclick="delFiltro('${f.id}', event)">×</button></span>`).join("");
+    }
+    async function salvarFiltro() {
+      const nome = prompt("Nome do filtro:");
+      if (!nome) return;
+      const jql = document.getElementById("f-jql").value;
+      await fetch(API + "/filtros?estado=" + ESTADO, { method:"POST", headers:{...auth(),"Content-Type":"application/json"},
+        body: JSON.stringify({ nome, jql }) });
+      loadSaved();
+    }
+    function aplicarFiltro(jql) { document.getElementById("f-jql").value = jql; load(); }
+    async function delFiltro(id, ev) {
+      ev.stopPropagation();
+      await fetch(API + "/filtros/" + id + "?estado=" + ESTADO, { method:"DELETE", headers: auth() });
+      loadSaved();
+    }
+
+    function esc(s) { return (s ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])); }
+
+    // boot
+    if (token) boot();
+    else login();
+  </script>
+</body>
+</html>

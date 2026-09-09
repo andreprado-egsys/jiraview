@@ -1,0 +1,39 @@
+# Configuração de ESTADOS — egSYS Painel do Cliente Jira (egsys-jiraview)
+#
+# ⚠️ MODELO: NÃO é 1 docker por estado. Este arquivo é a configuração INTERNA
+# do ÚNICO container (egsys-jiraview). Todos os estados rodam juntos aqui.
+# Adicionar/remover estado = editar este arquivo (sem tocar código/infra).
+#
+# Estrutura por estado:
+#   display_name: nome exibido
+#   projects:     projetos Jira (JSM service desks) do estado
+#   clientes:     gestores/clientes com acesso a este estado (RBAC scoped)
+#   áreas:        abas do painel — filtros (JQL/text) por área de atendimento
+#   only_reporter: se definido, filtra tickets apenas deste reporter (ex.: migração SCPMH)
+
+estados:
+
+  sc:
+    display_name: "Santa Catarina — PMSC"
+    projects: [HDPMSC, SCPMH]
+    clientes:
+      - { name: "João Mário Mazzola", role: manager }
+      - { name: "Ilclemar Vieira",    role: manager }
+      - { name: "Alex Sandro de Oliveira", role: manager }
+      - { name: "Cap Thiesen",        role: admin }
+    only_reporter: null
+    áreas:
+      Cidadão:     { match: ["Cidadão", "Cidadao", "CIDADAO", "PMSC Cidadão"] }
+      SADE:        { match: ["SADE", "Sade"] }
+      Integração:  { match: ["Integra", "integra", "Ticket"] }
+      Operações:   { match: ["Operac", "operac", "Programac"] }
+
+  # Exemplo de adição futura — descomente quando o estado entrar:
+  #
+  # to:
+  #   display_name: "Tocantins — PMTO"
+  #   projects: [HDPMTO]
+  #   clientes: []
+  #   only_reporter: null
+  #   áreas:
+  #     Ocorrências: { match: ["Ocorren", "Ocorrência"] }
