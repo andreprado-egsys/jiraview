@@ -16,11 +16,14 @@ estados:
   sc:
     display_name: "Santa Catarina — PMSC"
     projects: [HDPMSC, SCPMH]
+    # Responsáveis da PM (clientes do portal) — são os únicos cujas solicitações
+    # aparecem no painel do cliente por padrão (regra de negócio).
+    # accountId "qm:*" = customer Atlassian (portal); os de equipe ficam de fora.
     clientes:
-      - { name: "João Mário Mazzola", role: manager }
-      - { name: "Ilclemar Vieira",    role: manager }
-      - { name: "Alex Sandro de Oliveira", role: manager }
-      - { name: "Cap Thiesen",        role: admin }
+      - { name: "João Mário Mazzola",    accountId: "qm:5ba24cb3-ebfa-43b6-a2a8-f70ba37359e7:efe96b21-75d2-4a2b-8217-99f25ba04603", role: manager }
+      - { name: "Ilclemar Vieira",       accountId: "qm:5ba24cb3-ebfa-43b6-a2a8-f70ba37359e7:09ba8e6e-ddda-438b-ac95-9a3c89ecc2e6", role: manager }
+      - { name: "Alex Sandro de Oliveira", accountId: "qm:5ba24cb3-ebfa-43b6-a2a8-f70ba37359e7:77785cc8-1462-4b85-8619-a7dc4b78c643", role: manager }
+      - { name: "Cap Thiesen",           accountId: "qm:5ba24cb3-ebfa-43b6-a2a8-f70ba37359e7:8860bb83-1410-4364-99a6-be3fe40244c7", role: admin }
     only_reporter: null
     áreas:
       Cidadão:     { match: ["Cidadão", "Cidadao", "CIDADAO", "PMSC Cidadão"] }

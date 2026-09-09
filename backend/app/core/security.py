@@ -47,13 +47,16 @@ class JSMService:
 
     async def search(self, jql: str, max_results: int = 25,
                      fields: str = "summary,status,resolution,assignee,created,updated,priority,reporter,duedate,issuetype",
+                     start_at: int = 0,
                      ) -> list[dict]:
         import httpx
 
         async with httpx.AsyncClient(timeout=20) as c:
             r = await c.get(
                 f"{self._s.jira_url}/rest/api/3/search/jql",
-                params={"jql": jql, "maxResults": min(max_results, 100),
+                params={"jql": jql,
+                        "maxResults": min(max_results, 100),
+                        "startAt": start_at,
                         "fields": fields},
                 headers=self._basic(),
             )

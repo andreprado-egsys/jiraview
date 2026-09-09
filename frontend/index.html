@@ -55,7 +55,11 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <header>
     <h1>egSYS Painel do Cliente Jira</h1>
-    <div id="user"></div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button id="theme-btn" onclick="toggleTheme()" title="Alternar modo claro/escuro"
+        style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:5px 12px;cursor:pointer;">🌙 Escuro</button>
+      <div id="user"></div>
+    </div>
   </header>
 
   <div class="container">
@@ -90,8 +94,12 @@
     <!-- Filtros salvos do gestor (JQL) -->
     <div class="saved" id="saved-filters"></div>
 
-    <!-- Construtor visual de filtros (estilo Jira: campo + operador + valor) -->
-    <div class="builder">
+    <!-- Construtor visual de filtros — OCULTO por padrão (evocado) -->
+    <div style="margin-bottom:10px;">
+      <button class="btn ghost" id="btn-builder" onclick="toggleBuilder()">⚙️ Filtros avançados</button>
+      <span id="builder-hint" style="font-size:12px;color:#6b778c;"> — oculto por padrão; clique para montar filtro visual (padrão Jira)</span>
+    </div>
+    <div class="builder" id="builder-card" style="display:none;">
       <div class="builder-row">
         <span class="and">Filtro visual:</span>
         <select id="b-campo">
@@ -112,9 +120,13 @@
         <select id="b-valor" multiple size="5" style="min-width:220px;height:auto"></select>
         <input id="b-valor-texto" placeholder="valor (ou gere pelo quadro acima)" style="display:none" />
         <button class="btn" onclick="builderAdd()">Adicionar condição</button>
+        <button class="btn ghost" onclick="builderClear()">Limpar</button>
       </div>
       <div style="margin-top:8px; font-size:12px; color:#6b778c;">
         Condições adicionadas: <span id="b-chips"></span>
+      </div>
+      <div style="margin-top:8px;">
+        <button class="btn ghost" onclick="toggleBuilder()">Fechar construtor</button>
       </div>
     </div>
 
@@ -129,6 +141,9 @@
       <label>Apenas abertas
         <select id="f-abertas"><option value="true">Sim</option><option value="false">Não</option></select>
       </label>
+      <label>Origem
+        <select id="f-origem"><option value="">Todas</option><option value="cliente">Cliente (portal)</option><option value="interno">Interno (equipe)</option></select>
+      </label>
       <label>JQL (gestor)
         <input id="f-jql" placeholder="ex.: assignee = currentUser()" style="width:320px" />
       </label>
@@ -140,11 +155,11 @@
     <table>
       <thead>
         <tr>
-          <th>Tipo</th><th>Referência</th><th>Resumo</th><th>Status</th>
+          <th>Tipo</th><th>Origem</th><th>Referência</th><th>Resumo</th><th>Status</th>
           <th>Solicitante</th><th>Prioridade</th><th>Data de atualização</th><th>Data de entrega</th>
         </tr>
       </thead>
-      <tbody id="rows"><tr><td colspan="8" class="pause">Carregando…</td></tr></tbody>
+      <tbody id="rows"><tr><td colspan="9" class="pause">Carregando…</td></tr></tbody>
     </table>
   </div>
 
@@ -179,14 +194,23 @@
       load(); loadCards(); loadMeta(); loadSaved(); refreshBuilderValores(); loadCharts();
     }
 
-    // ==== Gráficos (estilo Jira Dashboard) ====
+    // ==== Gráficos (estilo Jira Dashboard) — paleta segue o tema ====
     let charts = {};
+    function chartPaleta() {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      return dark
+        ? { cols: ["#4bce97", "#4c9aff", "#e2b203", "#9fadbc", "#f87168", "#9f8fef", "#37c4d8", "#f78d4f"],
+            texto: "#e6e6e6", sub: "#9fadbc", grid: "rgba(255,255,255,.12)" }
+        : { cols: ["#00875a", "#0c66e4", "#ffab00", "#6b778c", "#de350b", "#5e4db2", "#00b8d9", "#f7812f"],
+            texto: "#172b4d", sub: "#6b778c", grid: "rgba(9,30,66,.12)" };
+    }
     async function loadCharts() {
       const d = await api("/charts?estado=" + ESTADO);
       if (!window.Chart) return;
       Object.values(charts).forEach(c => { try { c.destroy(); } catch(e){} });
       const C = window.Chart;
-      const cols = ["#00875a", "#0c66e4", "#ffab00", "#6b778c", "#de350b", "#5e4db2", "#00b8d9", "#f7812f"];
+      const P = chartPaleta();
+      const cols = P.cols;
       // 1) Barras por status
       const dataStatus = d.por_status || {};
       charts.status = new C(document.getElementById("ch-status"), {
@@ -195,25 +219,29 @@
           datasets: [{ label: "Solicitações", data: Object.values(dataStatus), backgroundColor: cols, borderRadius: 4 }] },
         options: { indexAxis: "y", maintainAspectRatio: false,
           plugins: { legend: { display: false } },
-          scales: { x: { ticks: { precision: 0 } } } }
+          scales: {
+            x: { ticks: { precision: 0, color: P.sub }, grid: { color: P.grid } },
+            y: { ticks: { color: P.sub }, grid: { color: P.grid } }
+          } }
       });
       // 2) Donut por prioridade
       charts.prioridade = new C(document.getElementById("ch-prioridade"), {
         type: "doughnut",
         data: { labels: Object.keys(d.por_prioridade || {}), datasets: [{ data: Object.values(d.por_prioridade || {}), backgroundColor: cols, borderWidth: 0 }] },
-        options: { maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } }
+        options: { maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { color: P.texto } } } }
       });
       // 3) Saolicitantes top 6
       charts.solicitante = new C(document.getElementById("ch-solicitante"), {
         type: "polarArea",
         data: { labels: Object.keys(d.por_solicitante || {}), datasets: [{ data: Object.values(d.por_solicitante || {}), backgroundColor: cols.slice(0,6) }] },
-        options: { maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } }
+        options: { maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { color: P.texto } } } }
       });
       // 4) Linha: criadas nos últimos 15 dias
       charts.tempo = new C(document.getElementById("ch-tempo"), {
         type: "line",
         data: { labels: (d.por_dia || []).map(x => x.dia.slice(5)), datasets: [{ label: "Criadas", data: (d.por_dia || []).map(x => x.count), borderColor: "#0c66e4", backgroundColor: "rgba(12,102,228,.15)", fill: true, tension: .3 }] },
-        options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        options: { maintainAspectRatio: false, plugins: { legend: { display: false } },
+          scales: { x: { ticks: { color: P.sub }, grid: { color: P.grid } }, y: { ticks: { color: P.sub }, grid: { color: P.grid } } } }
       });
     }
 
@@ -229,11 +257,17 @@
       document.getElementById("c-projetos").textContent = (d.projetos || []).join(", ");
     }
 
-    // ==== Meta (filtros dinâmicos) ====
+    // ==== Meta (filtros dinâmicos com contagem real) ====
     async function loadMeta() {
       const d = await api("/meta?estado=" + ESTADO);
       const selS = document.getElementById("f-status");
-      (d.statuses || []).forEach(s => { const o = document.createElement("option"); o.value = s; o.textContent = s; selS.appendChild(o); });
+      (d.statuses || []).forEach(s => {
+        const o = document.createElement("option");
+        o.value = s.name;
+        o.textContent = `${s.name} (${s.tickets})`;
+        if (!s.tickets) { o.disabled = true; o.textContent += " — sem solicitações"; }
+        selS.appendChild(o);
+      });
       const selT = document.getElementById("f-tipo");
       (d.tipos || []).forEach(t => { const o = document.createElement("option"); o.value = t; o.textContent = t; selT.appendChild(o); });
     }
@@ -247,12 +281,14 @@
       const q = new URLSearchParams({ estado: ESTADO, abertas: ab, max_results: "50" });
       if (st) q.set("status_filter", st);
       if (tp) q.set("tipo", tp);
+      const org = document.getElementById("f-origem").value;
+      if (org) q.set("origem", org);
       if (jql) q.set("jql", jql);
       const d = await api("/issues?" + q);
       const rows = document.getElementById("rows");
       const cores = { done:"var(--green)", indeterminate:"var(--blue)", new:"var(--yellow)" };
       if (!d.issues.length) {
-        rows.innerHTML = `<tr><td colspan="8">
+        rows.innerHTML = `<tr><td colspan="9">
           <div class="empty-msg">🔍 <b>0 resultados para esta combinação de filtros.</b><br>
           A consulta está correta — não há solicitações que atendam: ${esc((jql || st || tp) ? ((jql || "status = " + st + (tp ? " & tipo = " + tp : ""))) : "os filtros atuais")}.<br>
           Dica: ajuste o status/tipo ou remova a condição no campo JQL.</div>
@@ -261,6 +297,7 @@
         rows.innerHTML = d.issues.map(i => `
         <tr>
           <td>${esc(i.tipo)}</td>
+          <td><span class="chip">${i.origem === "cliente" ? "👤 Cliente" : "🏢 Interno"}</span></td>
           <td><a href="https://egsys.atlassian.net/browse/${i.referencia}" target="_blank">${esc(i.referencia)}</a></td>
           <td>${esc(i.resumo)}</td>
           <td><span class="status" style="background:${cores[i.statusCategoria] || 'var(--blue)'}">${esc(i.status)}</span></td>
@@ -280,7 +317,7 @@
       const txt = document.getElementById("b-valor-texto");
       sel.innerHTML = ""; sel.style.display = "";
       const meta = await api("/meta?estado=" + ESTADO);
-      if (campo === "status") { (meta.statuses||[]).forEach(v => addOpt(sel, v)); txt.style.display="none"; }
+      if (campo === "status") { (meta.statuses||[]).forEach(v => addOpt(sel, typeof v === "object" ? v.name : v)); txt.style.display="none"; }
       else if (campo === "issuetype") { (meta.tipos||[]).forEach(v => addOpt(sel, v)); txt.style.display="none"; }
       else if (campo === "priority") {
         ["Mais alta possível","Alta","Normal","Baixa","Mais baixa possível","Mais alta"].forEach(v => addOpt(sel, v)); txt.style.display="none";
@@ -299,11 +336,18 @@
       let cond;
       if (op === "in" && !v.includes(",")) v = v; // in com 1 valor funciona igual
       cond = `${campo} ${op} ${op === "in" ? "("+v.split(",").map(x=>`"${x.trim()}"`).join(", ")+")" : `"${v.trim()}"`}`;
+      if (builderChips.includes(cond)) { alert("Condição já adicionada"); return; }  // anti-duplicata
       builderChips.push(cond);
-      document.getElementById("b-chips").innerHTML = builderChips.map(c=>`<em>${esc(c)}</em> &nbsp;`).join(" · ");
-      document.getElementById("f-jql").value = builderChips.join(" AND ");
+      renderChips();
       document.getElementById("b-valor-texto").value = "";
     }
+    function renderChips() {
+      document.getElementById("b-chips").innerHTML = builderChips.map((c,i) =>
+        `<span class="chip" onclick="builderChips.splice(${i},1);renderChips();">${esc(c)} <span style="color:#de350b;font-weight:700">×</span></span>`
+      ).join(" &nbsp; ") || "nenhuma";
+      document.getElementById("f-jql").value = builderChips.join(" AND ");
+    }
+    function builderClear() { builderChips = []; renderChips(); }
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("b-campo").addEventListener("change", refreshBuilderValores);
     });
@@ -331,6 +375,28 @@
     }
 
     function esc(s) { return (s ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])); }
+
+    function toggleBuilder() {
+      const card = document.getElementById("builder-card");
+      const btn = document.getElementById("btn-builder");
+      const wasHidden = card.style.display === "none";
+      card.style.display = wasHidden ? "block" : "none";
+      btn.textContent = wasHidden ? "⚙️ Ocultar filtros avançados" : "⚙️ Filtros avançados";
+    }
+
+    // ==== Modo escuro (padrão Orion: localStorage + atributo no html) ====
+    function applyTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      const btn = document.getElementById("theme-btn");
+      if (btn) btn.textContent = theme === "dark" ? "☀️ Claro" : "🌙 Escuro";
+      localStorage.setItem("theme", theme);
+    }
+    function toggleTheme() {
+      const cur = document.documentElement.getAttribute("data-theme") || "light";
+      applyTheme(cur === "dark" ? "light" : "dark");
+      try { loadCharts(); } catch(e) {}   // redesenha gráficos com nova paleta
+    }
+    applyTheme(localStorage.getItem("theme") || "light");
 
     // boot
     if (token) boot();

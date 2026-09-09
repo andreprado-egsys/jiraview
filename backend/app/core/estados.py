@@ -29,3 +29,7 @@ def projeto_em_estado(projeto: str) -> list[str]:
         if projeto.upper() in [p.upper() for p in cfg.get("projects", [])]:
             out.append(sigla)
     return out
+
+
+def clientes_do_estado(sigla: str) -> list[dict]:
+    return (carregar_estados().get(sigla.lower()) or {}).get("clientes", [])
