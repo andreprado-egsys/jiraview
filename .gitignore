@@ -60,6 +60,7 @@ docs/INC_RESPONSE_*
 docs/GUIA_INTERNO_*
 
 # Agente/metadados IA
+AGENTS.md
 .agent/
 .hermes/
 .kiro/
