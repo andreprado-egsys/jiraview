@@ -1,5 +1,5 @@
 # egSYS JiraView — Segurança: RBAC + serviços JSM read-only
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Optional
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -8,15 +8,18 @@ from pydantic import BaseModel
 
 from .config import get_settings
 
-Role = Literal["viewer", "manager", "admin"]
+Role = Literal["viewer", "manager", "admin", "coordenador"]
 
-ROLE_LEVEL = {"viewer": 1, "manager": 2, "admin": 3}
+ROLE_LEVEL = {"viewer": 1, "manager": 2, "admin": 3, "coordenador": 3}
 
 
 class TokenPayload(BaseModel):
     sub: str
-    role: Role = "viewer"
+    role: str = "viewer"
     state: str = "sc"
+    nome: Optional[str] = None
+    painel_url: Optional[str] = None
+    must_change_password: bool = False
     exp: int = 0
 
 
@@ -64,16 +67,29 @@ class JSMService:
             return r.json().get("issues", [])
 
 
-def create_access_token(sub: str, role: Role, state: str) -> str:
+def create_access_token(
+    sub: str,
+    role: str = "viewer",
+    state: str = "sc",
+    nome: Optional[str] = None,
+    painel_url: Optional[str] = None,
+    must_change_password: bool = False,
+) -> str:
     from datetime import datetime, timedelta, timezone
 
     s = get_settings()
     exp = datetime.now(timezone.utc) + timedelta(minutes=s.access_token_expire_minutes)
-    return jwt.encode(
-        {"sub": sub, "role": role, "state": state,
-         "exp": exp, "iat": datetime.now(timezone.utc)},
-        s.secret_key, algorithm="HS256",
-    )
+    payload = {
+        "sub": sub,
+        "role": role,
+        "state": state,
+        "nome": nome or sub,
+        "painel_url": painel_url or "/painel_sc",
+        "must_change_password": bool(must_change_password),
+        "exp": exp,
+        "iat": datetime.now(timezone.utc),
+    }
+    return jwt.encode(payload, s.secret_key, algorithm="HS256")
 
 
 _bearer = HTTPBearer(auto_error=False)

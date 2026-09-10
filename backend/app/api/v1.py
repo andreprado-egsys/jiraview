@@ -77,7 +77,9 @@ def _jql_janela(periodo: Optional[str] = None) -> str:
     if not periodo:
         return ""
     if periodo == "ano":
-        return ' AND created >= "2026-01-01"'
+        import datetime
+        cur_year = datetime.date.today().year
+        return f' AND created >= "{cur_year}-01-01"'
     if periodo == "90d":
         return " AND created >= -90d"
     if periodo == "6m":

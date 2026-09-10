@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>egSYS — Acesso aos Painéis de Atendimento</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%3E<text y=%2226%22 font-size=%2226%22>🛡️</text></svg>">
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem("jiraview_theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const theme = savedTheme ? savedTheme : (prefersDark ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      --bg-app: #f4f5f7;
+      --bg-card: #ffffff;
+      --bg-input: #f8fafc;
+      --border: #dfe1e6;
+      --border-focus: #0c66e4;
+      --text-main: #172b4d;
+      --text-sub: #6b778c;
+      --primary: #0c66e4;
+      --primary-hover: #0052cc;
+      --card-shadow: 0 10px 25px -5px rgba(9, 30, 66, 0.1), 0 8px 10px -6px rgba(9, 30, 66, 0.06);
+      --error-bg: #ffebe6;
+      --error-text: #de350b;
+      --error-border: #ffbdad;
+      color-scheme: light;
+    }
+
+    [data-theme="dark"] {
+      --bg-app: #0b0f14;
+      --bg-card: #161b22;
+      --bg-input: #0d1117;
+      --border: #30363d;
+      --border-focus: #58a6ff;
+      --text-main: #f0f6fc;
+      --text-sub: #8b949e;
+      --primary: #238636;
+      --primary-hover: #2ea043;
+      --card-shadow: 0 12px 28px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.4);
+      --error-bg: rgba(248, 81, 73, 0.15);
+      --error-text: #ff7b72;
+      --error-border: #f85149;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .theme-toggle-container {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+    }
+
+    .btn-theme {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-theme:hover {
+      border-color: var(--border-focus);
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 36px 32px;
+      box-shadow: var(--card-shadow);
+      position: relative;
+    }
+
+    .header-logo {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-badge span.accent {
+      color: var(--primary);
+    }
+
+    .login-subtitle {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-top: 6px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 11px 14px;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrapper input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 2px rgba(12, 102, 228, 0.2);
+    }
+
+    .btn-toggle-pwd {
+      position: absolute;
+      right: 12px;
+      background: transparent;
+      border: none;
+      color: var(--text-sub);
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s, transform 0.1s;
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-submit:active {
+      transform: scale(0.99);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .msg-box {
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-bottom: 18px;
+      display: none;
+    }
+
+    .msg-box.error {
+      display: block;
+      background-color: var(--error-bg);
+      color: var(--error-text);
+      border: 1px solid var(--error-border);
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Modal Primeiro Acesso (Padrão Orion) */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 1000;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 440px;
+      padding: 28px 24px;
+      box-shadow: var(--card-shadow);
+      animation: slideUp 0.25s ease-out;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-icon-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .modal-subtitle {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .modal-notice {
+      background: rgba(12, 102, 228, 0.08);
+      border: 1px solid rgba(12, 102, 228, 0.2);
+      color: var(--text-main);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      line-height: 1.4;
+      margin-bottom: 18px;
+    }
+
+    [data-theme="dark"] .modal-notice {
+      background: rgba(88, 166, 255, 0.1);
+      border-color: rgba(88, 166, 255, 0.25);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(12px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="theme-toggle-container">
+    <button class="btn-theme" onclick="toggleTheme()" id="btn-theme-text">🌙 Modo Escuro</button>
+  </div>
+
+  <div class="login-container">
+    <div class="header-logo">
+      <div class="brand-badge">
+        🛡️ egSYS <span class="accent">JiraView</span>
+      </div>
+      <div class="login-subtitle">
+        Portal de Atendimento e Observabilidade
+      </div>
+    </div>
+
+    <div id="msg-box" class="msg-box"></div>
+
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="username">Usuário</label>
+        <div class="input-wrapper">
+          <input type="text" id="username" autocomplete="username" required placeholder="Digite seu usuário" autofocus>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <div class="input-wrapper">
+          <input type="password" id="password" autocomplete="current-password" required placeholder="Digite sua senha">
+          <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility()" title="Mostrar/ocultar senha">👁️</button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="btn-submit">
+        <span id="btn-text">Entrar no Painel</span>
+        <div class="spinner" id="btn-spinner" style="display:none;"></div>
+      </button>
+    </form>
+
+    <div class="footer-note">
+      egSYS Sistemas de Segurança © 2026<br>
+      Acesso corporativo seguro
+    </div>
+  </div>
+
+  <!-- MODAL BLOQUEANTE: PRIMEIRO ACESSO / TROCA DE SENHA OBRIGATÓRIA (PADRÃO ORION) -->
+  <div id="modalFirstLogin" class="modal-overlay" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-icon-badge">🔐</div>
+        <div>
+          <h2 class="modal-title">Troca Obrigatória de Senha</h2>
+          <p class="modal-subtitle">Primeiro acesso detectado para <strong id="mfl-username" style="color:var(--primary);"></strong></p>
+        </div>
+      </div>
+
+      <div class="modal-notice">
+        ℹ️ Por diretriz de segurança e conformidade da egSYS, você deve cadastrar uma nova senha individual antes de acessar o painel.
+      </div>
+
+      <div id="mfl-error-box" class="msg-box" style="display:none;"></div>
+
+      <form id="mfl-form" onsubmit="handleFirstLoginPasswordChange(event)">
+        <div class="form-group">
+          <label for="mfl-new-password">Nova Senha (Mínimo 6 caracteres)</label>
+          <div class="input-wrapper">
+            <input type="password" id="mfl-new-password" required minlength="6" placeholder="Digite sua nova senha individual" oninput="validatePasswordInputs()">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="mfl-confirm-password">Confirmar Nova Senha</label>
+          <div class="input-wrapper">
+            <input type="password" id="mfl-confirm-password" required minlength="6" placeholder="Repita a nova senha" oninput="validatePasswordInputs()">
+          </div>
+          <div id="mfl-password-hint" style="font-size:11px; margin-top:5px; color:var(--text-sub);"></div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="mfl-btn-submit" disabled>
+          <span id="mfl-btn-text">Salvar Nova Senha & Entrar</span>
+          <div class="spinner" id="mfl-btn-spinner" style="display:none;"></div>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function updateThemeUI() {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      const btn = document.getElementById("btn-theme-text");
+      if (btn) {
+        btn.textContent = isDark ? "☀️ Modo Claro" : "🌙 Modo Escuro";
+      }
+    }
+    updateThemeUI();
+
+    function toggleTheme() {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      const next = isDark ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("jiraview_theme", next);
+      updateThemeUI();
+    }
+
+    function togglePasswordVisibility() {
+      const input = document.getElementById("password");
+      input.type = (input.type === "password") ? "text" : "password";
+    }
+
+    function showMessage(text, isError = true) {
+      const box = document.getElementById("msg-box");
+      box.textContent = text;
+      box.className = isError ? "msg-box error" : "msg-box";
+      box.style.display = "block";
+    }
+
+    function clearMessage() {
+      const box = document.getElementById("msg-box");
+      box.style.display = "none";
+      box.textContent = "";
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      clearMessage();
+
+      const uInput = document.getElementById("username");
+      const pInput = document.getElementById("password");
+      const submitBtn = document.getElementById("btn-submit");
+      const btnText = document.getElementById("btn-text");
+      const spinner = document.getElementById("btn-spinner");
+
+      const username = uInput.value.trim();
+      const password = pInput.value;
+
+      if (!username || !password) {
+        showMessage("Preencha usuário e senha.");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      btnText.textContent = "Validando...";
+      spinner.style.display = "inline-block";
+
+      try {
+        const res = await fetch("/api/v1/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.detail || "Usuário ou senha incorretos.");
+        }
+
+        // Salva dados no localStorage
+        localStorage.setItem("jiraview_token", data.token);
+        localStorage.setItem("jiraview_user", JSON.stringify(data.user));
+
+        // Padrão egSYS Orion: Se for 1º acesso (must_change_password), abre modal bloqueante
+        if (data.user && data.user.must_change_password) {
+          sessionStorage.setItem("mfl_token", data.token);
+          sessionStorage.setItem("mfl_user", JSON.stringify(data.user));
+          sessionStorage.setItem("mfl_dest", data.redirect_url || "/painel_sc");
+
+          document.getElementById("mfl-username").textContent = data.user.nome || data.user.username;
+          document.getElementById("modalFirstLogin").style.display = "flex";
+          document.getElementById("mfl-new-password").focus();
+
+          submitBtn.disabled = false;
+          btnText.textContent = "Entrar no Painel";
+          spinner.style.display = "none";
+          return;
+        }
+
+        btnText.textContent = "Acessando painel...";
+
+        // Redireciona para o painel de destino do usuário
+        const dest = data.redirect_url || "/painel_sc";
+        window.location.href = dest;
+
+      } catch (err) {
+        showMessage(err.message || "Erro de conexão com o servidor.");
+        submitBtn.disabled = false;
+        btnText.textContent = "Entrar no Painel";
+        spinner.style.display = "none";
+      }
+    }
+
+    function validatePasswordInputs() {
+      const p1 = document.getElementById("mfl-new-password").value;
+      const p2 = document.getElementById("mfl-confirm-password").value;
+      const hint = document.getElementById("mfl-password-hint");
+      const btn = document.getElementById("mfl-btn-submit");
+
+      if (p1.length === 0) {
+        hint.textContent = "";
+        btn.disabled = true;
+        return;
+      }
+      if (p1.length < 6) {
+        hint.textContent = `A senha deve ter no mínimo 6 caracteres (${p1.length}/6).`;
+        hint.style.color = "var(--error-text)";
+        btn.disabled = true;
+        return;
+      }
+      if (p2.length > 0 && p1 !== p2) {
+        hint.textContent = "As senhas não coincidem.";
+        hint.style.color = "var(--error-text)";
+        btn.disabled = true;
+        return;
+      }
+      if (p1 === p2) {
+        hint.textContent = "✓ Senhas coincidem!";
+        hint.style.color = "#238636";
+        btn.disabled = false;
+      } else {
+        hint.textContent = "";
+        btn.disabled = true;
+      }
+    }
+
+    async function handleFirstLoginPasswordChange(e) {
+      e.preventDefault();
+      const p1 = document.getElementById("mfl-new-password").value;
+      const p2 = document.getElementById("mfl-confirm-password").value;
+      const errBox = document.getElementById("mfl-error-box");
+      const btn = document.getElementById("mfl-btn-submit");
+      const btnText = document.getElementById("mfl-btn-text");
+      const spinner = document.getElementById("mfl-btn-spinner");
+
+      errBox.style.display = "none";
+
+      if (p1.length < 6) {
+        errBox.textContent = "A nova senha deve possuir no mínimo 6 caracteres.";
+        errBox.className = "msg-box error";
+        errBox.style.display = "block";
+        return;
+      }
+      if (p1 !== p2) {
+        errBox.textContent = "A confirmação de senha não confere com a nova senha.";
+        errBox.className = "msg-box error";
+        errBox.style.display = "block";
+        return;
+      }
+
+      const token = sessionStorage.getItem("mfl_token") || localStorage.getItem("jiraview_token");
+      if (!token) {
+        errBox.textContent = "Sessão expirada. Por favor, faça login novamente.";
+        errBox.className = "msg-box error";
+        errBox.style.display = "block";
+        setTimeout(() => { window.location.reload(); }, 1500);
+        return;
+      }
+
+      btn.disabled = true;
+      btnText.textContent = "Atualizando senha...";
+      spinner.style.display = "inline-block";
+
+      try {
+        const res = await fetch("/api/v1/auth/change-password", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+          body: JSON.stringify({ new_password: p1 }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.detail || "Erro ao atualizar senha.");
+        }
+
+        // Salva novo token e dados no localStorage (agora com must_change_password = false)
+        localStorage.setItem("jiraview_token", data.token);
+        localStorage.setItem("jiraview_user", JSON.stringify(data.user));
+
+        errBox.textContent = "✅ Senha alterada com sucesso! Acessando painel...";
+        errBox.className = "msg-box";
+        errBox.style.backgroundColor = "rgba(35, 134, 54, 0.15)";
+        errBox.style.borderColor = "#238636";
+        errBox.style.color = "#2ea043";
+        errBox.style.display = "block";
+
+        const dest = sessionStorage.getItem("mfl_dest") || data.user.painel_url || "/painel_sc";
+        sessionStorage.removeItem("mfl_token");
+        sessionStorage.removeItem("mfl_user");
+        sessionStorage.removeItem("mfl_dest");
+
+        setTimeout(() => {
+          window.location.href = dest;
+        }, 1000);
+
+      } catch (err) {
+        errBox.textContent = err.message || "Falha ao atualizar senha.";
+        errBox.className = "msg-box error";
+        errBox.style.display = "block";
+        btn.disabled = false;
+        btnText.textContent = "Salvar Nova Senha & Entrar";
+        spinner.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>

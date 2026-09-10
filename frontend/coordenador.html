@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>egSYS JiraView — Painel da Coordenação de Suporte</title>
+  <script>
+    (function() {
+      const t = localStorage.getItem("theme") || "dark";
+      document.documentElement.setAttribute("data-theme", t);
+      if (t === "dark") {
+        document.documentElement.classList.add("dark");
+        document.documentElement.style.colorScheme = "dark";
+      }
+    })();
+  </script>
+  <!-- Chart.js local com fallback CDN -->
+  <script src="vendor/chart.umd.min.js"></script>
+  <script>
+    if (!window.Chart) {
+      var cdn = document.createElement("script");
+      cdn.src = "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js";
+      document.head.appendChild(cdn);
+    }
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f5f7;
+      --card: #ffffff;
+      --border: #dfe1e6;
+      --text: #172b4d;
+      --text-sub: #6b778c;
+      --header-bg: #0747a6;
+      --header-text: #ffffff;
+      --header-btn-bg: rgba(255, 255, 255, 0.18);
+      --header-btn-border: rgba(255, 255, 255, 0.35);
+      --th-bg: #fafbfc;
+      --tr-border: #ebecf0;
+      --tr-hover: #f0f4f9;
+      --input-bg: #ffffff;
+      --input-border: #dfe1e6;
+      --input-text: #172b4d;
+      --chip-bg: #e9f2ff;
+      --chip-text: #0c66e4;
+      --chip-border: #cce0ff;
+      --link-color: #0c66e4;
+      --accent: #0c66e4;
+      --green: #00875a;
+      --yellow: #ffab00;
+      --red: #de350b;
+      --drawer-bg: #ffffff;
+      --drawer-overlay: rgba(9, 30, 66, 0.54);
+      --posse-egsys-bg: #e9f2ff;
+      --posse-egsys-border: #b3d4ff;
+      --posse-egsys-text: #0052cc;
+      --posse-cliente-bg: #fff7e6;
+      --posse-cliente-border: #ffe380;
+      --posse-cliente-text: #974f00;
+      --step-done: #00875a;
+      --step-active: #0c66e4;
+      --step-pending: #a5b2c6;
+    }
+
+    [data-theme="dark"], html.dark, body.dark {
+      color-scheme: dark !important;
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #30363d;
+      --text: #f0f6fc;
+      --text-sub: #8b949e;
+      --header-bg: #161b22;
+      --header-text: #f0f6fc;
+      --header-btn-bg: rgba(255, 255, 255, 0.1);
+      --header-btn-border: rgba(255, 255, 255, 0.2);
+      --th-bg: #1c2128;
+      --tr-border: #21262d;
+      --tr-hover: #1f242c;
+      --input-bg: #0d1117;
+      --input-border: #30363d;
+      --input-text: #f0f6fc;
+      --chip-bg: #1c2b42;
+      --chip-text: #58a6ff;
+      --chip-border: #388bfd40;
+      --link-color: #58a6ff;
+      --accent: #388bfd;
+      --green: #238636;
+      --yellow: #d29922;
+      --red: #f85149;
+      --drawer-bg: #161b22;
+      --drawer-overlay: rgba(0, 0, 0, 0.75);
+      --posse-egsys-bg: #1c2b42;
+      --posse-egsys-border: #388bfd66;
+      --posse-egsys-text: #79c0ff;
+      --posse-cliente-bg: #2d2208;
+      --posse-cliente-border: #d2992266;
+      --posse-cliente-text: #f0883e;
+      --step-done: #238636;
+      --step-active: #388bfd;
+      --step-pending: #484f58;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-left h1 {
+      font-size: 17px;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge-role {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: rgba(234, 179, 8, 0.2);
+      color: #eab308;
+      border: 1px solid rgba(234, 179, 8, 0.4);
+    }
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .select-control {
+      height: 36px;
+      padding: 0 12px;
+      background-color: var(--header-btn-bg);
+      color: var(--header-text);
+      border: 1px solid var(--header-btn-border);
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+    .select-control optgroup {
+      background-color: var(--card);
+      color: var(--text-sub);
+      font-weight: 700;
+    }
+    .select-control option {
+      background-color: var(--card);
+      color: var(--text);
+      font-weight: 500;
+    }
+    .btn-action {
+      background: var(--header-btn-bg);
+      color: var(--header-text);
+      border: 1px solid var(--header-btn-border);
+      border-radius: 6px;
+      padding: 7px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-action:hover { filter: brightness(1.2); }
+
+    .container {
+      padding: 24px;
+      max-width: 1540px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .scope-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--chip-bg);
+      color: var(--chip-text);
+      border: 1px solid var(--chip-border);
+    }
+
+    /* Funil de 4 Estágios */
+    .funnel-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 1024px) {
+      .funnel-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .funnel-grid { grid-template-columns: 1fr; }
+    }
+    .funnel-card {
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+    .funnel-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+      border-color: var(--accent);
+    }
+    .funnel-card.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+    .funnel-card .label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .funnel-card .value {
+      font-size: 32px;
+      font-weight: 800;
+      margin: 8px 0 4px;
+      color: var(--text);
+    }
+    .funnel-card .subtext {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+    .funnel-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    /* Big Numbers Grid */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 900px) {
+      .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    .kpi-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .kpi-icon {
+      font-size: 24px;
+      padding: 10px;
+      border-radius: 8px;
+      background: var(--th-bg);
+    }
+    .kpi-info .kpi-val {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .kpi-info .kpi-lbl {
+      font-size: 11px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    /* Gráficos de Observabilidade */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 960px) {
+      .charts-grid { grid-template-columns: 1fr; }
+    }
+    .chart-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .chart-panel h3 {
+      margin: 0 0 14px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .chart-box {
+      position: relative;
+      height: 250px;
+      width: 100%;
+    }
+
+    /* Barra de Filtros da Tabela */
+    .table-toolbar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px 8px 0 0;
+      padding: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .toolbar-left {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .search-input {
+      height: 34px;
+      padding: 0 12px;
+      background-color: var(--input-bg);
+      color: var(--input-text);
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      font-size: 13px;
+      min-width: 250px;
+      outline: none;
+    }
+    .filter-select {
+      height: 34px;
+      padding: 0 10px;
+      background-color: var(--input-bg);
+      color: var(--input-text);
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      font-size: 12px;
+      outline: none;
+    }
+
+    /* Tabela */
+    .table-container {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      overflow-x: auto;
+      max-height: 600px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    th {
+      background: var(--th-bg);
+      padding: 11px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-sub);
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 11px 14px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--tr-border);
+      color: var(--text);
+      vertical-align: middle;
+    }
+    tr.clickable:hover td {
+      background: var(--tr-hover);
+      cursor: pointer;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge-state {
+      background: var(--chip-bg);
+      color: var(--chip-text);
+      border: 1px solid var(--chip-border);
+    }
+    .badge-area {
+      background: rgba(163, 113, 247, 0.15);
+      color: #a371f7;
+      border: 1px solid rgba(163, 113, 247, 0.3);
+    }
+    .badge-fase {
+      background: var(--th-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .badge-posse-egsys {
+      background: var(--posse-egsys-bg);
+      color: var(--posse-egsys-text);
+      border: 1px solid var(--posse-egsys-border);
+    }
+    .badge-posse-cliente {
+      background: var(--posse-cliente-bg);
+      color: var(--posse-cliente-text);
+      border: 1px solid var(--posse-cliente-border);
+    }
+    .badge-sla-ok {
+      background: rgba(35, 134, 54, 0.15);
+      color: #3fb950;
+      border: 1px solid rgba(35, 134, 54, 0.3);
+    }
+    .badge-sla-risk {
+      background: rgba(248, 81, 73, 0.15);
+      color: #f85149;
+      border: 1px solid rgba(248, 81, 73, 0.3);
+    }
+
+    /* Drawer Lateral */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--drawer-overlay);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+      z-index: 99;
+    }
+    .drawer-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -560px;
+      width: 540px;
+      max-width: 90vw;
+      height: 100vh;
+      background: var(--drawer-bg);
+      border-left: 1px solid var(--border);
+      box-shadow: -6px 0 24px rgba(0,0,0,0.3);
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+    .drawer.open {
+      right: 0;
+    }
+    .drawer-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .drawer-header h2 {
+      margin: 6px 0 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .btn-close {
+      background: transparent;
+      border: 0;
+      color: var(--text-sub);
+      font-size: 22px;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+    .drawer-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .stepper {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .step-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .step-icon.done {
+      background: var(--step-done);
+      color: #fff;
+    }
+    .step-icon.current {
+      background: var(--step-active);
+      color: #fff;
+      box-shadow: 0 0 0 3px rgba(56, 139, 253, 0.3);
+    }
+    .step-icon.pending {
+      background: var(--step-pending);
+      color: #fff;
+      opacity: 0.5;
+    }
+    .step-content {
+      flex: 1;
+    }
+    .step-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .step-meta {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    /* Abas de Navegação Superior */
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: 16px;
+    }
+    .nav-tab {
+      background: transparent;
+      border: 1px solid transparent;
+      color: rgba(255, 255, 255, 0.75);
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .nav-tab:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+    .nav-tab.active {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+
+    /* Gestão de Usuários */
+    .user-section-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .user-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .user-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .user-form-group label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-sub);
+      letter-spacing: 0.4px;
+    }
+    .user-form-input, .user-form-select {
+      height: 38px;
+      padding: 0 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--input-text);
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .user-form-input:focus, .user-form-select:focus {
+      border-color: var(--accent);
+    }
+    .btn-user-submit {
+      height: 38px;
+      padding: 0 18px;
+      background: var(--accent);
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s;
+    }
+    .btn-user-submit:hover { opacity: 0.9; }
+
+    .btn-sm-action {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .btn-sm-action:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .btn-sm-danger {
+      color: #f85149;
+      border-color: rgba(248, 81, 73, 0.4);
+    }
+    .btn-sm-danger:hover {
+      background: rgba(248, 81, 73, 0.15);
+      border-color: #f85149;
+    }
+
+    .badge-status-on {
+      background: rgba(35, 134, 54, 0.15);
+      color: #3fb950;
+      border: 1px solid rgba(35, 134, 54, 0.3);
+    }
+    .badge-status-off {
+      background: rgba(248, 81, 73, 0.15);
+      color: #ff7b72;
+      border: 1px solid rgba(248, 81, 73, 0.3);
+    }
+
+    /* Toast Notification */
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1f242c;
+      color: #ffffff;
+      border: 1px solid #30363d;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <h1>👑 egSYS JiraView</h1>
+      <span class="badge-role">Coordenação</span>
+      <nav class="nav-tabs">
+        <button id="btnTabObs" class="nav-tab active" onclick="trocarAba('observabilidade')">📊 Monitoramento & Espaços</button>
+        <button id="btnTabUsers" class="nav-tab" onclick="trocarAba('usuarios')">👥 Gestão de Usuários</button>
+      </nav>
+    </div>
+    <div class="header-controls">
+      <!-- BUSCA E SELEÇÃO DE ESPAÇOS (CONTEXTUAL DA ABA OBSERVABILIDADE) -->
+      <div id="controls-observabilidade" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <input type="text" id="spaceSearch" class="search-input" placeholder="⚡ Buscar espaço (ex: PMSC, ANN, DS, TO...)" oninput="filtrarEspacosDropdown(this.value)" style="max-width: 220px; height: 36px; font-weight: 500;" />
+
+      <!-- SELETOR UNIVERSAL DE QUALQUER ESPAÇO + PANORAMA GERAL -->
+      <select id="spaceSelector" class="select-control" onchange="selecionarEspaco()" style="max-width: 380px;">
+        <option value="ALL">🌐 PANORAMA GERAL (Todos os 73 Projetos do Jira)</option>
+
+        <optgroup label="👑 Gestão & Liderança André Prado (18 espaços)">
+          <option value="ANN">ANN — Atendimento_N2_N3</option>
+          <option value="DS">DS — Demandas Suporte</option>
+          <option value="HDPMSCEG">HDPMSCEG — HDPMSC-EG</option>
+          <option value="PLANTAO">PLANTAO — Passagem de Plantão</option>
+          <option value="PPS">PPS — Projeto Pontual Suporte</option>
+          <option value="SBC">SBC — Suporte GM Balneário (BCU)</option>
+          <option value="SDB">SDB — Suporte Drive Behave</option>
+          <option value="SGS">SGS — Suporte Guard Solution</option>
+          <option value="SGSJ">SGSJ — Suporte GM São José</option>
+          <option value="SPAM">SPAM — Suporte PMAM</option>
+          <option value="SPI">SPI — Suporte PI</option>
+          <option value="SPMT">SPMT — Suporte PMMT</option>
+          <option value="SPR">SPR — Suporte PMPR</option>
+          <option value="SR">SR — Suporte Rastreamento</option>
+          <option value="SRO">SRO — Suporte RO</option>
+          <option value="SSA">SSA — Suporte SISEG AMAZONAS</option>
+          <option value="SSC">SSC — Suporte SC</option>
+          <option value="STO">STO — Suporte PMTO</option>
+        </optgroup>
+
+        <optgroup label="🏢 Portais Helpdesk JSM — Clientes & Órgãos (21 espaços)">
+          <option value="CMBPRH">CMBPRH — Helpdesk - CMBPR</option>
+          <option value="GMMA">GMMA — Guarda Municipal Manaus</option>
+          <option value="GMSJ">GMSJ — Guarda Municipal de São José</option>
+          <option value="HDCMBPR">HDCMBPR — Helpdesk CMBPR</option>
+          <option value="HDDB">HDDB — Helpdesk Driverbehave</option>
+          <option value="HDPMAM">HDPMAM — Helpdesk PMAM</option>
+          <option value="HDPMMT">HDPMMT — Helpdesk PMMT</option>
+          <option value="HDPMPR">HDPMPR — Helpdesk PMPR</option>
+          <option value="HDPMSC">HDPMSC — Helpdesk PMSC</option>
+          <option value="HDPMTO">HDPMTO — Helpdesk PMTO</option>
+          <option value="HDSESDEC">HDSESDEC — Helpdesk SESDEC</option>
+          <option value="HDSISEGGM">HDSISEGGM — Helpdesk SISEGGM</option>
+          <option value="HPA">HPA — Helpdesk - PMAM</option>
+          <option value="HSA">HSA — Helpdesk SISEG AMAZONAS</option>
+          <option value="PGM">PGM — Projeto - SISEGGM</option>
+          <option value="PMMTH">PMMTH — Helpdesk - PMMT</option>
+          <option value="PRPMH">PRPMH — Helpdesk - PMPR</option>
+          <option value="SCPMH">SCPMH — Helpdesk - PMSC</option>
+          <option value="SESDECH">SESDECH — Helpdesk - SESDEC</option>
+          <option value="SISEGGMH">SISEGGMH — Helpdesk - SISEGGM</option>
+          <option value="TOPMH">TOPMH — Helpdesk - PMTO</option>
+        </optgroup>
+
+        <optgroup label="🗺️ Projetos Estaduais & Operações (18 espaços)">
+          <option value="AIT">AIT — Projeto - AIT</option>
+          <option value="CBMPR">CBMPR — Projeto CBMPR</option>
+          <option value="PAM">PAM — Projeto - AM</option>
+          <option value="PGU">PGU — Projeto - Guard</option>
+          <option value="PHL">PHL — Projeto - HomeLock</option>
+          <option value="PMPR">PMPR — Projeto PMPR</option>
+          <option value="PMT">PMT — Projeto - MT</option>
+          <option value="PO">PO — Tarefas - Jacson</option>
+          <option value="POI">POI — Projeto - OI</option>
+          <option value="PPI">PPI — Projeto - PI</option>
+          <option value="PPR">PPR — Projeto - PR</option>
+          <option value="PRO">PRO — Projeto - PMRO Cidadão</option>
+          <option value="PSC">PSC — Projeto - SC</option>
+          <option value="PSEI">PSEI — Projeto - Suporte e Infraestrutura</option>
+          <option value="PSR">PSR — Projeto - SESDEC RO</option>
+          <option value="PTDS">PTDS — Projeto - Trocas de Serviços CBMRS</option>
+          <option value="PTO">PTO — Projeto - TO</option>
+          <option value="PUL">PUL — Projeto - ULBRA</option>
+        </optgroup>
+
+        <optgroup label="💻 Engenharia, Desenvolvimento & Testes (9 espaços)">
+          <option value="ADT">ADT — Automação de testes</option>
+          <option value="BH">BH — Behave</option>
+          <option value="DRIV">DRIV — Driverbehave</option>
+          <option value="MOIV">MOIV — MOIVI</option>
+          <option value="QA">QA — QA</option>
+          <option value="RM">RM — Refactor Mobile</option>
+          <option value="SAFERAI">SAFERAI — SAFER AI</option>
+          <option value="T0">T0 — Desenvolvimento</option>
+          <option value="TSP">TSP — Scrum project</option>
+        </optgroup>
+
+        <optgroup label="🛠️ Ferramentas & Outros (7 espaços)">
+          <option value="AITSC">AITSC — SYSAIT-SC</option>
+          <option value="APF">APF — Medição de Pontos de Função</option>
+          <option value="FDS">FDS — Ferramentas de Suporte</option>
+          <option value="JN">JN — Jira Novo</option>
+          <option value="PMSCV2">PMSCV2 — PMSC v2.0</option>
+          <option value="RHR">RHR — Recrutamento</option>
+          <option value="SA">SA — SISEG AMAZONAS</option>
+        </optgroup>
+      </select>
+        <button class="btn-action" onclick="recarregarDados()">🔄 Sincronizar Jira</button>
+      </div>
+
+      <button id="theme-btn" class="btn-action" onclick="toggleTheme()">🌓 Tema</button>
+      <div id="userDisplay" style="font-size:12px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);padding:6px 12px;border-radius:6px;font-weight:600;">👤 <span id="userDisplayName">Coordenação</span></div>
+      <button class="btn-action" onclick="logout()" style="background:rgba(248,81,73,0.2);border-color:rgba(248,81,73,0.4);color:#ff7b72;" title="Sair da sessão">🚪 Sair</button>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- ============================================== -->
+    <!-- ABA 1: MONITORAMENTO & OBSERVABILIDADE JIRA    -->
+    <!-- ============================================== -->
+    <div id="view-observabilidade">
+
+    <!-- CABEÇALHO DO CONTEXTO -->
+    <div class="section-header">
+      <span class="section-title">🎯 Observabilidade do Espaço Selecionado</span>
+      <div class="scope-badge" id="labelEspacoAtivo">
+        <span>🌐 PANORAMA GERAL: 12 Projetos Mapeados (329 Tickets Analisados)</span>
+      </div>
+    </div>
+
+    <!-- NÍVEL 1: FUNIL DE 4 ESTÁGIOS -->
+    <div class="funnel-grid">
+      <div class="funnel-card" id="card-novas" onclick="filtrarEstagio('novas')">
+        <div class="label">
+          <span>📥 Novas / Triagem</span>
+          <span style="color: #388bfd;">N1 / N2</span>
+        </div>
+        <div class="value" id="val-novas">0</div>
+        <div class="subtext">Aguardando início pela egSYS</div>
+        <div class="funnel-bar" style="background: #388bfd;"></div>
+      </div>
+
+      <div class="funnel-card" id="card-em-atendimento" onclick="filtrarEstagio('em-atendimento')">
+        <div class="label">
+          <span>⚙️ Em Atendimento</span>
+          <span style="color: #a371f7;">Dev / QA / Análise</span>
+        </div>
+        <div class="value" id="val-em-atendimento">0</div>
+        <div class="subtext">Em execução pela equipe técnica</div>
+        <div class="funnel-bar" style="background: #a371f7;"></div>
+      </div>
+
+      <div class="funnel-card" id="card-aguardando" onclick="filtrarEstagio('aguardando')">
+        <div class="label">
+          <span>⏸️ Aguard. Validação</span>
+          <span style="color: #d29922;">Cliente</span>
+        </div>
+        <div class="value" id="val-aguardando">0</div>
+        <div class="subtext">Homologação / Bloqueio externo</div>
+        <div class="funnel-bar" style="background: #d29922;"></div>
+      </div>
+
+      <div class="funnel-card" id="card-concluidas" onclick="filtrarEstagio('concluidas')">
+        <div class="label">
+          <span>✅ Concluídas</span>
+          <span style="color: #238636;">Histórico</span>
+        </div>
+        <div class="value" id="val-concluidas">0</div>
+        <div class="subtext">Resolvidas / Entregues</div>
+        <div class="funnel-bar" style="background: #238636;"></div>
+      </div>
+    </div>
+
+    <!-- BIG NUMBERS DE GESTÃO -->
+    <div class="kpi-row">
+      <div class="kpi-item">
+        <div class="kpi-icon">📦</div>
+        <div class="kpi-info">
+          <div class="kpi-val" id="kpi-backlog">0</div>
+          <div class="kpi-lbl">Total Backlog Ativo</div>
+        </div>
+      </div>
+      <div class="kpi-item">
+        <div class="kpi-icon" style="background: rgba(248,81,73,0.15); color: #f85149;">🚨</div>
+        <div class="kpi-info">
+          <div class="kpi-val" id="kpi-sla" style="color: #f85149;">0</div>
+          <div class="kpi-lbl">Atenção / Risco de SLA</div>
+        </div>
+      </div>
+      <div class="kpi-item">
+        <div class="kpi-icon">⏱️</div>
+        <div class="kpi-info">
+          <div class="kpi-val" id="kpi-posse">0% egSYS</div>
+          <div class="kpi-lbl">Posse da Bola Predominante</div>
+        </div>
+      </div>
+      <div class="kpi-item">
+        <div class="kpi-icon">🚀</div>
+        <div class="kpi-info">
+          <div class="kpi-val" id="kpi-vazao">0 tickets</div>
+          <div class="kpi-lbl">Capacidade / Vazão de Entrega</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NÍVEL 2: OBSERVABILIDADE GRÁFICA ADAPTATIVA -->
+    <div class="charts-grid">
+      <div class="chart-panel">
+        <h3>
+          <span id="chart1Title">📊 Distribuição de Chamados por Espaço</span>
+          <small id="chart1Sub" style="font-size: 11px; color: var(--text-sub);">Comparativo do Jira</small>
+        </h3>
+        <div class="chart-box">
+          <canvas id="chart1"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-panel">
+        <h3>
+          <span id="chart2Title">⏱️ Gargalos & Tempo por Macro-Etapa</span>
+          <small id="chart2Sub" style="font-size: 11px; color: var(--text-sub);">Onde o fluxo passa mais tempo</small>
+        </h3>
+        <div class="chart-box">
+          <canvas id="chart2"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- NÍVEL 3: TABELA TÁTICA DE TASKS -->
+    <div class="table-toolbar">
+      <div class="toolbar-left">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Filtrar por chave, resumo, tipo ou status..." onkeyup="aplicarFiltros()" />
+        <select id="filtroArea" class="filter-select" onchange="aplicarFiltros()">
+          <option value="todas">Todas as Áreas</option>
+          <option value="SADE">SADE</option>
+          <option value="Cidadão">Cidadão</option>
+          <option value="Integração">Integração</option>
+          <option value="Operações">Operações</option>
+        </select>
+        <select id="filtroPosse" class="filter-select" onchange="aplicarFiltros()">
+          <option value="todas">Todas as Posses</option>
+          <option value="egsys">Ação com egSYS</option>
+          <option value="cliente">Ação com Cliente</option>
+        </select>
+      </div>
+      <div>
+        <span id="contagemTabela" style="font-size: 12px; color: var(--text-sub); font-weight: 700;">Carregando...</span>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Espaço</th>
+            <th>Chave</th>
+            <th>Tipo</th>
+            <th>Resumo do Chamado</th>
+            <th>Área</th>
+            <th>Macro-Fase</th>
+            <th>Posse da Bola</th>
+            <th>Status Jira</th>
+            <th>SLA</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaChamados">
+        </tbody>
+      </table>
+    </div>
+
+    </div> <!-- FIM view-observabilidade -->
+
+    <!-- ============================================== -->
+    <!-- ABA 2: CADASTRO E GERENCIAMENTO DE USUÁRIOS   -->
+    <!-- ============================================== -->
+    <div id="view-usuarios" style="display:none;">
+      
+      <div class="section-header">
+        <div>
+          <span class="section-title">👥 Gestão de Acessos & Painéis Estaduais</span>
+          <div style="font-size: 13px; color: var(--text-sub); margin-top: 4px;">
+            Cadastre novos gestores e configure o direcionamento automático para o respectivo painel estadual.
+          </div>
+        </div>
+        <button class="btn-action" onclick="toggleFormNovoUsuario()" id="btnToggleFormUser" style="background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600;">
+          ➕ Novo Usuário
+        </button>
+      </div>
+
+      <!-- CARD: FORMULÁRIO DE NOVO USUÁRIO -->
+      <div class="user-section-card" id="cardNovoUsuario" style="display:none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--text);">Cadastrar Novo Usuário</h3>
+          <button class="btn-action" onclick="toggleFormNovoUsuario()" style="padding: 2px 8px; font-size: 12px;">✕ Fechar</button>
+        </div>
+        <form id="formNovoUsuario" onsubmit="cadastrarUsuario(event)">
+          <div class="user-form-grid">
+            <div class="user-form-group">
+              <label for="u_nome">Nome Completo / Órgão</label>
+              <input type="text" id="u_nome" class="user-form-input" required placeholder="Ex.: Gestão PMSC - Capitão Silva" />
+            </div>
+
+            <div class="user-form-group">
+              <label for="u_username">Nome de Usuário (Login)</label>
+              <input type="text" id="u_username" class="user-form-input" required placeholder="Ex.: gestor.sc" />
+            </div>
+
+            <div class="user-form-group">
+              <label for="u_password">Senha Inicial</label>
+              <input type="text" id="u_password" class="user-form-input" required placeholder="Ex.: egsys@sc2026" />
+            </div>
+
+            <div class="user-form-group">
+              <label for="u_role">Perfil de Acesso</label>
+              <select id="u_role" class="user-form-select">
+                <option value="manager" selected>Gestor Estadual (manager)</option>
+                <option value="viewer">Visualizador (viewer)</option>
+                <option value="admin">Coordenação / Admin (admin)</option>
+              </select>
+            </div>
+
+            <div class="user-form-group">
+              <label for="u_estado">Estado / Tenant</label>
+              <select id="u_estado" class="user-form-select" onchange="aoMudarEstadoCadastro(this.value)">
+                <option value="sc" selected>Santa Catarina (PMSC)</option>
+                <option value="to">Tocantins (PMTO)</option>
+                <option value="am">Amazonas (PMAM)</option>
+                <option value="ro">Rondônia (SESDEC)</option>
+                <option value="pr">Paraná (PMPR)</option>
+                <option value="mt">Mato Grosso (PMMT)</option>
+                <option value="gm">Guardas Municipais (GM)</option>
+                <option value="todos">Todos os Estados (Coordenação)</option>
+              </select>
+            </div>
+
+            <div class="user-form-group">
+              <label for="u_painel_url">URL do Painel de Destino</label>
+              <input type="text" id="u_painel_url" class="user-form-input" required value="/painel_sc" />
+            </div>
+
+            <div class="user-form-group" style="grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 8px; padding: 12px 14px; margin-top: 4px;">
+              <input type="checkbox" id="u_must_change_password" checked style="width: 17px; height: 17px; accent-color: #f59e0b; cursor: pointer;" />
+              <label for="u_must_change_password" style="cursor: pointer; text-transform: none; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 0;">
+                Exigir Troca de Senha no 1º Acesso <span style="font-weight: 400; font-size: 11px; color: var(--text-sub);">(Padrão de Conformidade egSYS Orion / SOC 2)</span>
+              </label>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+            <button type="button" class="btn-action" onclick="toggleFormNovoUsuario()">Cancelar</button>
+            <button type="submit" class="btn-user-submit" id="btnSalvarUsuario">💾 Salvar Usuário</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- CARD: LISTAGEM DE USUÁRIOS -->
+      <div class="user-section-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+          <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--text);">
+            Usuários Cadastrados (<span id="totalUsuariosCount">0</span>)
+          </h3>
+          <input type="text" id="buscaUsuarioInput" class="search-input" placeholder="🔍 Filtrar usuários..." oninput="filtrarTabelaUsuarios(this.value)" style="max-width: 260px; height: 34px;" />
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Usuário (Login)</th>
+                <th>Nome / Órgão</th>
+                <th>Perfil</th>
+                <th>Estado</th>
+                <th>Painel Destino</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaUsuariosCorpo">
+              <tr><td colspan="8" style="text-align:center; padding: 20px; color: var(--text-sub);">Carregando usuários...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div> <!-- FIM view-usuarios -->
+
+  </div> <!-- FIM container -->
+
+  <!-- TOAST FLUTUANTE -->
+  <div id="toastMsg" class="toast-msg"></div>
+
+  <!-- DRAWER LATERAL: DIAGNÓSTICO DA JORNADA -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="fecharDrawer()"></div>
+  <div class="drawer" id="drawer">
+    <div class="drawer-header">
+      <div>
+        <span id="drawerKey" class="badge badge-state">HDPMSC-399</span>
+        <h2 id="drawerTitle">Operação coordenada para atualização de servidores</h2>
+      </div>
+      <button class="btn-close" onclick="fecharDrawer()">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+        <span id="drawerEspaco" class="badge badge-state">PMSC</span>
+        <span id="drawerArea" class="badge badge-area">Operações</span>
+        <span id="drawerPosse" class="badge badge-posse-egsys">🔵 Ação com egSYS</span>
+        <span id="drawerSla" class="badge badge-sla-ok">SLA: Normal</span>
+      </div>
+
+      <h4 style="margin: 16px 0 8px; font-size: 13px; text-transform: uppercase; color: var(--text-sub);">
+        🧭 Jornada do Ticket na Esteira (7 Fases Canônicas)
+      </h4>
+      <div class="stepper" id="drawerStepper">
+      </div>
+
+      <div style="background: var(--th-bg); padding: 14px; border-radius: 8px; border: 1px solid var(--border); margin-top: 20px;">
+        <div style="font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px;">⏱️ Indicadores de Ciclo</div>
+        <div style="font-size: 12px; color: var(--text-sub);" id="drawerTempoFase">Tempo nesta fase: <strong>4h 20m</strong></div>
+        <div style="font-size: 12px; color: var(--text-sub); margin-top: 4px;" id="drawerTempoTotal">Tempo total no Jira: <strong>1d 18h</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let JIRA_DB = {};
+    let chart1Inst = null;
+    let chart2Inst = null;
+    let estagioFiltro = null;
+    let ticketsFiltradosAtuais = [];
+
+    const FASES_CANONICAS = [
+      "1. Triagem (N1)",
+      "2. Triagem (N2)",
+      "3. Análise de Desenvolvimento",
+      "4. Em Desenvolvimento",
+      "5. Validação Interna / QA",
+      "6. Validação / Homologação Cliente",
+      "7. Concluído"
+    ];
+
+    async function carregarDadosIniciais() {
+      try {
+        let basePath = window.location.pathname;
+        if (basePath.endsWith("/") || basePath.endsWith(".html") || basePath.endsWith("coordenador")) {
+          basePath = basePath.substring(0, basePath.lastIndexOf("/"));
+        }
+        const url = (basePath ? basePath + "/" : "") + "assets/jira_real_cache.json";
+        
+        let res = await fetch(url);
+        if (!res.ok) {
+          res = await fetch("assets/jira_real_cache.json");
+        }
+        if (!res.ok) {
+          res = await fetch("/assets/jira_real_cache.json");
+        }
+        JIRA_DB = await res.json();
+        selecionarEspaco();
+      } catch (err) {
+        console.warn("Tentando fallback de carregamento:", err);
+        try {
+          const resFallback = await fetch("/assets/jira_real_cache.json");
+          JIRA_DB = await resFallback.json();
+          selecionarEspaco();
+        } catch (e) {
+          console.error("Erro fatal ao carregar dados do Jira:", e);
+          document.getElementById("contagemTabela").innerText = "Aguardando sincronização do Jira...";
+        }
+      }
+    }
+
+    function filtrarEspacosDropdown(termo) {
+      const t = termo.toLowerCase().trim();
+      const select = document.getElementById("spaceSelector");
+      const options = select.querySelectorAll("option");
+      let primeiroVisivel = null;
+
+      options.forEach(opt => {
+        if (opt.value === "ALL") {
+          opt.style.display = t ? "none" : "";
+          return;
+        }
+        const match = opt.text.toLowerCase().includes(t) || opt.value.toLowerCase().includes(t);
+        opt.style.display = match ? "" : "none";
+        if (match && !primeiroVisivel) primeiroVisivel = opt;
+      });
+
+      select.querySelectorAll("optgroup").forEach(grp => {
+        const hasVisible = Array.from(grp.querySelectorAll("option")).some(o => o.style.display !== "none");
+        grp.style.display = hasVisible ? "" : "none";
+      });
+
+      if (t && primeiroVisivel) {
+        select.value = primeiroVisivel.value;
+        selecionarEspaco();
+      } else if (!t) {
+        select.value = "ALL";
+        selecionarEspaco();
+      }
+    }
+
+    function obterTicketsPorEscopo(scope) {
+      if (!JIRA_DB || Object.keys(JIRA_DB).length === 0) return [];
+
+      if (scope === "ALL") {
+        let all = [];
+        Object.keys(JIRA_DB).forEach(k => {
+          all = all.concat(JIRA_DB[k].tickets);
+        });
+        return all;
+      }
+
+      if (scope.startsWith("GRP_")) {
+        const reg = scope.replace("GRP_", "");
+        let keys = [];
+        if (reg === "SC") keys = ["HDPMSC", "GMSJ"];
+        if (reg === "TO") keys = ["HDPMTO"];
+        if (reg === "RO") keys = ["HDSESDEC"];
+        if (reg === "PR") keys = ["HDPMPR", "HDCMBPR"];
+        if (reg === "AM") keys = ["HDPMAM"];
+        if (reg === "MT") keys = ["HDPMMT"];
+        if (reg === "INT") keys = ["ANN", "DS", "PLANTAO", "PSEI"];
+
+        let grpTickets = [];
+        keys.forEach(k => {
+          if (JIRA_DB[k]) grpTickets = grpTickets.concat(JIRA_DB[k].tickets);
+        });
+        return grpTickets;
+      }
+
+      if (JIRA_DB[scope]) {
+        return JIRA_DB[scope].tickets;
+      }
+
+      return [];
+    }
+
+    function selecionarEspaco() {
+      const scope = document.getElementById("spaceSelector").value;
+      const tickets = obterTicketsPorEscopo(scope);
+
+      // Atualizar badge de escopo
+      const lbl = document.getElementById("labelEspacoAtivo");
+      if (scope === "ALL") {
+        lbl.innerHTML = `<span>🌐 PANORAMA GERAL: Todos os 12 Projetos Mapeados (${tickets.length} Tickets Extraídos)</span>`;
+      } else if (scope.startsWith("GRP_")) {
+        lbl.innerHTML = `<span>📁 AGRUPAMENTO REGIONAL: ${scope.replace("GRP_", "")} (${tickets.length} Tickets)</span>`;
+      } else {
+        const meta = JIRA_DB[scope]?.meta || { nome: scope };
+        lbl.innerHTML = `<span>🎯 ESPAÇO INDIVIDUAL: <strong>${meta.nome}</strong> [${scope}] (${tickets.length} Tickets)</span>`;
+      }
+
+      // Calcular Funil
+      let novas = 0, emAtendimento = 0, aguardando = 0, concluidas = 0;
+      tickets.forEach(t => {
+        if (t.estagio === "novas") novas++;
+        else if (t.estagio === "em-atendimento") emAtendimento++;
+        else if (t.estagio === "aguardando") aguardando++;
+        else if (t.estagio === "concluidas") concluidas++;
+      });
+
+      document.getElementById("val-novas").innerText = novas;
+      document.getElementById("val-em-atendimento").innerText = emAtendimento;
+      document.getElementById("val-aguardando").innerText = aguardando;
+      document.getElementById("val-concluidas").innerText = concluidas;
+
+      // Calcular KPIs
+      const backlogAtivo = novas + emAtendimento + aguardando;
+      const riscoSla = tickets.filter(t => t.sla === "risk" && t.estagio !== "concluidas").length;
+      const egsysCount = tickets.filter(t => t.posse === "egsys" && t.estagio !== "concluidas").length;
+      const pctEgsys = backlogAtivo > 0 ? Math.round((egsysCount / backlogAtivo) * 100) : 0;
+
+      document.getElementById("kpi-backlog").innerText = backlogAtivo;
+      document.getElementById("kpi-sla").innerText = riscoSla;
+      document.getElementById("kpi-posse").innerText = `${pctEgsys}% egSYS`;
+      document.getElementById("kpi-vazao").innerText = `${concluidas} entregas`;
+
+      // Atualizar Gráficos
+      atualizarGraficos(scope, tickets);
+
+      // Renderizar Tabela
+      aplicarFiltros();
+    }
+
+    function atualizarGraficos(scope, tickets) {
+      if (!window.Chart) return;
+      const isDark = document.documentElement.classList.contains("dark");
+      const textColor = isDark ? "#8b949e" : "#6b778c";
+      const gridColor = isDark ? "#21262d" : "#dfe1e6";
+
+      // GRÁFICO 1: Se for ALL ou GRP, compara espaços. Se for espaço individual, mostra distribuição de Áreas!
+      const ctx1 = document.getElementById("chart1").getContext("2d");
+      if (chart1Inst) chart1Inst.destroy();
+
+      if (scope === "ALL" || scope.startsWith("GRP_")) {
+        document.getElementById("chart1Title").innerText = "📊 Distribuição de Chamados por Espaço";
+        document.getElementById("chart1Sub").innerText = "Volume por Projeto Jira";
+
+        const contagens = {};
+        tickets.forEach(t => {
+          contagens[t.espaco] = (contagens[t.espaco] || 0) + 1;
+        });
+
+        chart1Inst = new Chart(ctx1, {
+          type: "bar",
+          data: {
+            labels: Object.keys(contagens),
+            datasets: [{
+              label: "Tickets Registrados",
+              data: Object.values(contagens),
+              backgroundColor: "#388bfd",
+              borderRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { color: textColor }, grid: { color: gridColor } },
+              y: { ticks: { color: textColor }, grid: { color: gridColor } }
+            }
+          }
+        });
+      } else {
+        // Espaço Individual: Distribuição por Área do Sistema (SADE, Cidadão, Integração, Operações)
+        document.getElementById("chart1Title").innerText = `📊 Demanda por Frente de Sistema (${scope})`;
+        document.getElementById("chart1Sub").innerText = "Composição interna do espaço";
+
+        const contArea = { "SADE": 0, "Cidadão": 0, "Integração": 0, "Operações": 0 };
+        tickets.forEach(t => {
+          if (contArea[t.area] !== undefined) contArea[t.area]++;
+          else contArea["Operações"]++;
+        });
+
+        chart1Inst = new Chart(ctx1, {
+          type: "doughnut",
+          data: {
+            labels: Object.keys(contArea),
+            datasets: [{
+              data: Object.values(contArea),
+              backgroundColor: ["#388bfd", "#a371f7", "#238636", "#d29922"]
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { labels: { color: textColor, font: { size: 11 } } }
+            }
+          }
+        });
+      }
+
+      // GRÁFICO 2: Gargalos e Distribuição por Macro-Etapa (Horas / Volume)
+      const ctx2 = document.getElementById("chart2").getContext("2d");
+      if (chart2Inst) chart2Inst.destroy();
+
+      const contFases = [0, 0, 0, 0, 0, 0, 0];
+      tickets.forEach(t => {
+        if (t.etapaNum >= 1 && t.etapaNum <= 7) {
+          contFases[t.etapaNum - 1]++;
+        }
+      });
+
+      chart2Inst = new Chart(ctx2, {
+        type: "bar",
+        data: {
+          labels: ["Triagem N1", "Triagem N2", "Análise Dev", "Em Dev", "QA Interno", "Homologação", "Concluído"],
+          datasets: [{
+            label: "Quantidade de Tickets na Etapa",
+            data: contFases,
+            backgroundColor: ["#388bfd", "#58a6ff", "#8957e5", "#a371f7", "#d29922", "#f0883e", "#238636"],
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: textColor, font: { size: 10 } }, grid: { color: gridColor } },
+            y: { ticks: { color: textColor }, grid: { color: gridColor } }
+          }
+        }
+      });
+    }
+
+    function filtrarEstagio(estagio) {
+      if (estagioFiltro === estagio) {
+        estagioFiltro = null;
+        document.querySelectorAll(".funnel-card").forEach(c => c.classList.remove("active"));
+      } else {
+        estagioFiltro = estagio;
+        document.querySelectorAll(".funnel-card").forEach(c => c.classList.remove("active"));
+        document.getElementById(`card-${estagio}`)?.classList.add("active");
+      }
+      aplicarFiltros();
+    }
+
+    function aplicarFiltros() {
+      const scope = document.getElementById("spaceSelector").value;
+      const baseTickets = obterTicketsPorEscopo(scope);
+
+      const termo = document.getElementById("searchInput").value.toLowerCase();
+      const area = document.getElementById("filtroArea").value;
+      const posse = document.getElementById("filtroPosse").value;
+
+      const filtrados = baseTickets.filter(t => {
+        const bateTexto = t.chave.toLowerCase().includes(termo) || 
+                          t.resumo.toLowerCase().includes(termo) || 
+                          (t.status && t.status.toLowerCase().includes(termo)) ||
+                          (t.tipo && t.tipo.toLowerCase().includes(termo));
+        const bateArea = area === "todas" || t.area === area;
+        const batePosse = posse === "todas" || t.posse === posse;
+        const bateEstagio = !estagioFiltro || t.estagio === estagioFiltro;
+
+        return bateTexto && bateArea && batePosse && bateEstagio;
+      });
+
+      renderizarTabela(filtrados);
+    }
+
+    function renderizarTabela(tickets) {
+      const tbody = document.getElementById("tabelaChamados");
+      tbody.innerHTML = "";
+
+      tickets.forEach(t => {
+        const tr = document.createElement("tr");
+        tr.className = "clickable";
+        tr.onclick = () => abrirDrawer(t);
+
+        const badgePosseClass = t.posse === "egsys" ? "badge-posse-egsys" : "badge-posse-cliente";
+        const badgeSlaClass = t.sla === "ok" ? "badge-sla-ok" : "badge-sla-risk";
+        const badgeSlaText = t.sla === "ok" ? "Em dia" : "Atenção SLA";
+
+        tr.innerHTML = `
+          <td><span class="badge badge-state">${t.espaco}</span></td>
+          <td><strong style="color: var(--link-color);">${t.chave}</strong></td>
+          <td><span style="font-size: 11px; color: var(--text-sub);">${t.tipo || "Demanda"}</span></td>
+          <td>${t.resumo}</td>
+          <td><span class="badge badge-area">${t.area}</span></td>
+          <td><span class="badge badge-fase">Etapa ${t.etapaNum}/7 (${t.etapaNome})</span></td>
+          <td><span class="badge ${badgePosseClass}">${t.posseLabel}</span></td>
+          <td><span style="font-size: 12px; font-weight: 500;">${t.status}</span></td>
+          <td><span class="badge ${badgeSlaClass}">${badgeSlaText}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById("contagemTabela").innerText = `Exibindo ${tickets.length} chamados`;
+    }
+
+    function abrirDrawer(ticket) {
+      document.getElementById("drawerKey").innerText = ticket.chave;
+      document.getElementById("drawerTitle").innerText = ticket.resumo;
+      document.getElementById("drawerEspaco").innerText = ticket.espacoNome || ticket.espaco;
+      document.getElementById("drawerArea").innerText = ticket.area;
+      
+      const drawerPosse = document.getElementById("drawerPosse");
+      drawerPosse.innerText = ticket.posseLabel;
+      drawerPosse.className = `badge ${ticket.posse === 'egsys' ? 'badge-posse-egsys' : 'badge-posse-cliente'}`;
+
+      const drawerSla = document.getElementById("drawerSla");
+      drawerSla.className = `badge ${ticket.sla === 'ok' ? 'badge-sla-ok' : 'badge-sla-risk'}`;
+      drawerSla.innerText = ticket.sla === 'ok' ? "SLA: Em dia" : "SLA: Em Atenção";
+
+      document.getElementById("drawerTempoFase").innerHTML = `Tempo nesta fase: <strong>${ticket.tempoFase}</strong>`;
+      document.getElementById("drawerTempoTotal").innerHTML = `Tempo total no Jira: <strong>${ticket.tempoTotal}</strong>`;
+
+      const stepper = document.getElementById("drawerStepper");
+      stepper.innerHTML = "";
+
+      FASES_CANONICAS.forEach((faseNome, idx) => {
+        const num = idx + 1;
+        const item = document.createElement("div");
+        item.className = "step-item";
+
+        let iconClass = "pending";
+        let iconText = num;
+        if (num < ticket.etapaNum) {
+          iconClass = "done";
+          iconText = "✓";
+        } else if (num === ticket.etapaNum) {
+          iconClass = "current";
+          iconText = num;
+        }
+
+        item.innerHTML = `
+          <div class="step-icon ${iconClass}">${iconText}</div>
+          <div class="step-content">
+            <div class="step-title">${faseNome}</div>
+            <div class="step-meta">${num === ticket.etapaNum ? `Fase ativa no Jira: ${ticket.status}` : (num < ticket.etapaNum ? "Concluída" : "Aguardando avanço")}</div>
+          </div>
+        `;
+        stepper.appendChild(item);
+      });
+
+      document.getElementById("drawerOverlay").classList.add("open");
+      document.getElementById("drawer").classList.add("open");
+    }
+
+    function fecharDrawer() {
+      document.getElementById("drawerOverlay").classList.remove("open");
+      document.getElementById("drawer").classList.remove("open");
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const cur = html.getAttribute("data-theme") || "dark";
+      const next = cur === "dark" ? "light" : "dark";
+      html.setAttribute("data-theme", next);
+      if (next === "dark") {
+        html.classList.add("dark");
+        html.style.colorScheme = "dark";
+      } else {
+        html.classList.remove("dark");
+        html.style.colorScheme = "light";
+      }
+      localStorage.setItem("theme", next);
+      const scope = document.getElementById("spaceSelector").value;
+      atualizarGraficos(scope, obterTicketsPorEscopo(scope));
+    }
+
+    function recarregarDados() {
+      carregarDadosIniciais();
+    }
+
+    // ==========================================
+    // SESSÃO, AUTENTICAÇÃO E LOGOUT
+    // ==========================================
+    function getToken() {
+      return localStorage.getItem("jiraview_token") || "";
+    }
+
+    let usuarioLogado = null;
+
+    function validarAutenticacao() {
+      const tk = getToken();
+      if (!tk) {
+        window.location.href = "/login";
+        return false;
+      }
+      try {
+        usuarioLogado = JSON.parse(localStorage.getItem("jiraview_user") || "{}");
+        if (usuarioLogado && usuarioLogado.must_change_password) {
+          window.location.href = "/login";
+          return false;
+        }
+        const nameEl = document.getElementById("userDisplayName");
+        if (nameEl && usuarioLogado.nome) {
+          nameEl.textContent = usuarioLogado.nome;
+        }
+      } catch(e) {}
+      return true;
+    }
+
+    function logout() {
+      localStorage.removeItem("jiraview_token");
+      localStorage.removeItem("jiraview_user");
+      window.location.href = "/login";
+    }
+
+    function authHeaders() {
+      const tk = getToken();
+      return {
+        "Authorization": tk ? ("Bearer " + tk) : "",
+        "Content-Type": "application/json"
+      };
+    }
+
+    // ==========================================
+    // NAVEGAÇÃO ENTRE ABAS
+    // ==========================================
+    function trocarAba(aba) {
+      const btnObs = document.getElementById("btnTabObs");
+      const btnUsers = document.getElementById("btnTabUsers");
+      const viewObs = document.getElementById("view-observabilidade");
+      const viewUsers = document.getElementById("view-usuarios");
+      const controlsObs = document.getElementById("controls-observabilidade");
+
+      if (aba === "usuarios") {
+        btnObs.classList.remove("active");
+        btnUsers.classList.add("active");
+        viewObs.style.display = "none";
+        viewUsers.style.display = "block";
+        controlsObs.style.display = "none";
+        carregarUsuarios();
+      } else {
+        btnUsers.classList.remove("active");
+        btnObs.classList.add("active");
+        viewUsers.style.display = "none";
+        viewObs.style.display = "block";
+        controlsObs.style.display = "flex";
+      }
+    }
+
+    // ==========================================
+    // GESTÃO DE USUÁRIOS
+    // ==========================================
+    let listaUsuariosCache = [];
+
+    function mostrarToast(msg, isError = false) {
+      const toast = document.getElementById("toastMsg");
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.style.display = "flex";
+      toast.style.borderColor = isError ? "#f85149" : "#238636";
+      setTimeout(() => { toast.style.display = "none"; }, 3500);
+    }
+
+    function toggleFormNovoUsuario() {
+      const card = document.getElementById("cardNovoUsuario");
+      const isVisible = card.style.display !== "none";
+      card.style.display = isVisible ? "none" : "block";
+      if (!isVisible) {
+        document.getElementById("u_nome").focus();
+      }
+    }
+
+    function aoMudarEstadoCadastro(est) {
+      const inputUrl = document.getElementById("u_painel_url");
+      const map = {
+        "sc": "/painel_sc",
+        "to": "/painel_to",
+        "am": "/painel_am",
+        "ro": "/painel_ro",
+        "pr": "/painel_pr",
+        "mt": "/painel_mt",
+        "gm": "/painel_gm",
+        "todos": "/coordenador"
+      };
+      inputUrl.value = map[est] || ("/painel_" + est);
+    }
+
+    async function carregarUsuarios() {
+      const tbody = document.getElementById("tabelaUsuariosCorpo");
+      const tk = getToken();
+
+      if (!tk) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align:center; padding: 36px 20px;">
+              <div style="font-size: 15px; font-weight: 700; color: #ff7b72; margin-bottom: 8px;">⚠️ Sessão Não Encontrada</div>
+              <div style="font-size: 13px; color: var(--text-sub); margin-bottom: 16px;">Para carregar a lista de usuários, é necessário estar conectado com perfil de Coordenação/Admin.</div>
+              <button class="btn-action" onclick="logout()" style="background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600;">🔑 Fazer Login como Coordenador</button>
+            </td>
+          </tr>`;
+        return;
+      }
+
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 24px; color: var(--text-sub);">⏳ Carregando usuários do sistema...</td></tr>`;
+
+      try {
+        const res = await fetch("/api/v1/auth/users", { headers: authHeaders() });
+
+        if (res.status === 401 || res.status === 403) {
+          const errData = await res.json().catch(() => ({}));
+          const detalhe = errData.detail || "Perfil sem permissão de Coordenação.";
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="8" style="text-align:center; padding: 36px 20px;">
+                <div style="font-size: 15px; font-weight: 700; color: #ff7b72; margin-bottom: 8px;">⛔ Acesso Restrito (HTTP ${res.status})</div>
+                <div style="font-size: 13px; color: var(--text-sub); margin-bottom: 16px; max-width: 540px; margin-left: auto; margin-right: auto;">${detalhe}</div>
+                <button class="btn-action" onclick="logout()" style="background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600;">🔑 Entrar com Usuário Coordenador</button>
+              </td>
+            </tr>`;
+          mostrarToast("Acesso restrito à Coordenação.", true);
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error("HTTP " + res.status);
+        }
+
+        const data = await res.json();
+        listaUsuariosCache = data.users || [];
+        renderizarTabelaUsuarios(listaUsuariosCache);
+      } catch (err) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align:center; padding: 24px; color: #f85149;">
+              <div>Falha de comunicação com o servidor: ${err.message}</div>
+              <button class="btn-action" onclick="carregarUsuarios()" style="margin-top: 10px;">🔄 Tentar Novamente</button>
+            </td>
+          </tr>`;
+      }
+    }
+
+    function renderizarTabelaUsuarios(lista) {
+      const tbody = document.getElementById("tabelaUsuariosCorpo");
+      const countEl = document.getElementById("totalUsuariosCount");
+      if (countEl) countEl.textContent = lista.length;
+
+      if (!lista || lista.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 20px; color: var(--text-sub);">Nenhum usuário encontrado.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = lista.map(u => {
+        const statusBadge = u.is_active
+          ? `<span class="badge badge-status-on">Ativo</span>`
+          : `<span class="badge badge-status-off">Inativo</span>`;
+
+        const pswBadge = u.must_change_password
+          ? `<div style="margin-top:4px;"><span class="badge" style="background:rgba(245,158,11,0.15);color:#d97706;border:1px solid rgba(245,158,11,0.3);font-size:10px;" title="Usuário deve obrigatoriamente trocar a senha no 1º acesso">⚠️ 1º Acesso Pendente</span></div>`
+          : `<div style="margin-top:4px;"><span class="badge" style="background:rgba(35,134,54,0.12);color:#2ea043;border:1px solid rgba(35,134,54,0.25);font-size:10px;" title="Senha definitiva configurada">✅ Senha Definida</span></div>`;
+
+        const roleBadge = u.role === "admin"
+          ? `<span class="badge" style="background:rgba(234,179,8,0.15);color:#eab308;border:1px solid rgba(234,179,8,0.3);">👑 Coordenação/Admin</span>`
+          : `<span class="badge badge-state">Gestor</span>`;
+
+        const estadoBadge = `<span class="badge" style="background:var(--chip-bg);color:var(--chip-text);text-transform:uppercase;">${u.estado}</span>`;
+
+        const isSelf = usuarioLogado && usuarioLogado.username && usuarioLogado.username.toLowerCase() === u.username.toLowerCase();
+
+        return `
+          <tr>
+            <td style="color:var(--text-sub); font-size:12px;">#${u.id}</td>
+            <td><strong>${u.username}</strong></td>
+            <td>${u.nome}</td>
+            <td>${roleBadge}</td>
+            <td>${estadoBadge}</td>
+            <td><code style="font-size:11px;background:var(--th-bg);padding:2px 6px;border-radius:4px;">${u.painel_url}</code></td>
+            <td>${statusBadge}${pswBadge}</td>
+            <td>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <button class="btn-sm-action" onclick="redefinirSenhaUsuario(${u.id}, '${u.username}')" title="Redefinir senha e configurar 1º acesso">🔑 Senha</button>
+                <button class="btn-sm-action" onclick="alternarStatusUsuario(${u.id}, ${u.is_active})" title="${u.is_active ? 'Desativar' : 'Ativar'}">${u.is_active ? '⏸️' : '▶️'}</button>
+                ${!isSelf ? `<button class="btn-sm-action btn-sm-danger" onclick="excluirUsuario(${u.id}, '${u.username}')" title="Excluir">🗑️</button>` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function filtrarTabelaUsuarios(termo) {
+      const t = (termo || "").toLowerCase().trim();
+      if (!t) {
+        renderizarTabelaUsuarios(listaUsuariosCache);
+        return;
+      }
+      const filtrados = listaUsuariosCache.filter(u =>
+        (u.username && u.username.toLowerCase().includes(t)) ||
+        (u.nome && u.nome.toLowerCase().includes(t)) ||
+        (u.estado && u.estado.toLowerCase().includes(t)) ||
+        (u.role && u.role.toLowerCase().includes(t))
+      );
+      renderizarTabelaUsuarios(filtrados);
+    }
+
+    async function cadastrarUsuario(e) {
+      e.preventDefault();
+      const nome = document.getElementById("u_nome").value.trim();
+      const username = document.getElementById("u_username").value.trim();
+      const password = document.getElementById("u_password").value;
+      const role = document.getElementById("u_role").value;
+      const estado = document.getElementById("u_estado").value;
+      const painel_url = document.getElementById("u_painel_url").value.trim();
+      const chkMustChange = document.getElementById("u_must_change_password");
+      const must_change_password = (chkMustChange && chkMustChange.checked) ? 1 : 0;
+
+      const btnSubmit = document.getElementById("btnSalvarUsuario");
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = "Salvando...";
+
+      try {
+        const res = await fetch("/api/v1/auth/users", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({ nome, username, password, role, estado, painel_url, is_active: 1, must_change_password })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.detail || "Erro ao cadastrar usuário.");
+        }
+        mostrarToast(`Usuário '${username}' cadastrado com sucesso!`);
+        document.getElementById("formNovoUsuario").reset();
+        aoMudarEstadoCadastro("sc");
+        toggleFormNovoUsuario();
+        carregarUsuarios();
+      } catch(err) {
+        mostrarToast(err.message, true);
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = "💾 Salvar Usuário";
+      }
+    }
+
+    async function alternarStatusUsuario(id, statusAtual) {
+      const novoStatus = statusAtual ? 0 : 1;
+      try {
+        const res = await fetch(`/api/v1/auth/users/${id}`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify({ is_active: novoStatus })
+        });
+        if (!res.ok) throw new Error("Falha ao alterar status");
+        mostrarToast(novoStatus ? "Usuário ativado!" : "Usuário desativado!");
+        carregarUsuarios();
+      } catch(err) {
+        mostrarToast(err.message, true);
+      }
+    }
+
+    async function redefinirSenhaUsuario(id, username) {
+      const novaSenha = prompt(`Digite a nova senha para o usuário '${username}' (mínimo 6 caracteres):`);
+      if (!novaSenha || !novaSenha.trim()) return;
+      if (novaSenha.trim().length < 6) {
+        mostrarToast("A nova senha deve possuir no mínimo 6 caracteres.", true);
+        return;
+      }
+      const exigirTroca = confirm(`Deseja marcar para '${username}' trocar obrigatoriamente a senha no próximo login? (Padrão Orion)`);
+
+      try {
+        const res = await fetch(`/api/v1/auth/users/${id}`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify({
+            password: novaSenha.trim(),
+            must_change_password: exigirTroca ? 1 : 0
+          })
+        });
+        if (!res.ok) throw new Error("Falha ao redefinir senha");
+        mostrarToast(`Senha do usuário '${username}' redefinida com sucesso!`);
+        carregarUsuarios();
+      } catch(err) {
+        mostrarToast(err.message, true);
+      }
+    }
+
+    async function excluirUsuario(id, username) {
+      if (!confirm(`Tem certeza que deseja excluir o usuário '${username}'?`)) return;
+
+      try {
+        const res = await fetch(`/api/v1/auth/users/${id}`, {
+          method: "DELETE",
+          headers: authHeaders()
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Falha ao excluir");
+        mostrarToast(`Usuário '${username}' excluído.`);
+        carregarUsuarios();
+      } catch(err) {
+        mostrarToast(err.message, true);
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      if (!validarAutenticacao()) return;
+      carregarDadosIniciais();
+    });
+  </script>
+</body>
+</html>

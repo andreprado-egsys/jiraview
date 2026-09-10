@@ -609,9 +609,10 @@
       egSYS Painel do Cliente Jira
       <span class="header-badge" id="badge-estado">SC / PMSC</span>
     </h1>
-    <div style="display:flex;align-items:center;gap:10px;">
+    <div style="display:flex;align-items:center;gap:12px;">
       <button id="theme-btn" onclick="toggleTheme()" title="Alternar modo claro/escuro">🌙 Escuro</button>
-      <div id="user"></div>
+      <div id="user" style="display:flex;align-items:center;gap:6px;"></div>
+      <button class="btn ghost" onclick="logout()" title="Sair da sessão" style="padding:4px 10px;font-size:12px;border:1px solid var(--border);border-radius:4px;cursor:pointer;background:transparent;color:var(--text-main);">🚪 Sair</button>
     </div>
   </header>
 
@@ -729,11 +730,10 @@
       </label>
       <label>Período
         <select id="f-periodo" onchange="loadAll()">
-          <option value="90d">Últimos 90 dias</option>
+          <option value="90d" selected>Últimos 90 dias</option>
           <option value="6m">Últimos 6 meses</option>
           <option value="12m">Últimos 12 meses</option>
-          <option value="ano">Ano atual (2026)</option>
-          <option value="">Tudo</option>
+          <option value="ano">Ano atual</option>
         </select>
       </label>
       <label>Origem
@@ -873,30 +873,48 @@
     let posseAtiva = "";
     let activeTicketKey = "";
 
+    try {
+      const u = JSON.parse(localStorage.getItem("jiraview_user") || "{}");
+      if (u && u.must_change_password) {
+        window.location.href = "/login";
+      }
+    } catch(e) {}
+
     function auth() { return { "Authorization": "Bearer " + token }; }
 
-    let authAttempts = 0;
     async function api(path, opcoes = {}) {
+      if (!token) {
+        window.location.href = "/login";
+        return;
+      }
       const r = await fetch(API + path, { headers: auth(), ...opcoes });
-      if (r.status === 401 && authAttempts < 2 && !opcoes.skipAuth) {
-        authAttempts++;
-        try { await relogin(); } catch(e) { }
-        authAttempts = 0;
-        return api(path, { ...opcoes, skipAuth: true });
+      if (r.status === 401) {
+        localStorage.removeItem("jiraview_token");
+        localStorage.removeItem("jiraview_user");
+        window.location.href = "/login";
+        return;
       }
       if (!r.ok) throw new Error("HTTP " + r.status);
       return r.json();
     }
-    async function relogin() {
-      const r = await fetch(BASE + "/api/v1/demo-token", { method: "POST" });
-      const d = await r.json();
-      token = d.token; localStorage.setItem("jiraview_token", token);
+
+    function logout() {
+      localStorage.removeItem("jiraview_token");
+      localStorage.removeItem("jiraview_user");
+      window.location.href = "/login";
     }
 
-    function login() {
-      relogin().then(() => boot()).catch(e => {
-        document.getElementById("user").innerHTML = "<span style='color:#ffd;font-size:12px'>Falha de acesso — recarregue a página</span>";
-      });
+    function renderUserInfo() {
+      const uEl = document.getElementById("user");
+      if (!uEl) return;
+      try {
+        const u = JSON.parse(localStorage.getItem("jiraview_user") || "{}");
+        if (u && u.nome) {
+          uEl.innerHTML = `<span style="font-size:12px;color:var(--text-sub);" title="Conectado como ${u.username}">👤 <strong>${u.nome}</strong></span>`;
+          return;
+        }
+      } catch(e) {}
+      uEl.innerHTML = `<span style="font-size:12px;color:var(--text-sub);">👤 <strong>Gestor</strong></span>`;
     }
 
     function bootSeguro(fn) {
@@ -1062,7 +1080,7 @@
       document.getElementById("c-concluidas").textContent = f.concluidas ?? (d.total_com_resolucao ?? "–");
       document.getElementById("c-fechadas").textContent = d.fechadas_7d ?? "–";
       document.getElementById("c-projetos").textContent = "Projetos: " + (d.projetos || []).join(", ");
-      const rot = { "90d":"(90d)", "6m":"(6m)", "12m":"(12m)", "ano":"(2026)", "":"(tudo)" }[periodoAtual()];
+      const rot = { "90d":"(90d)", "6m":"(6m)", "12m":"(12m)", "ano":"(" + new Date().getFullYear() + ")" }[periodoAtual()] || "(90d)";
       ["p-label","p-label2","p-label3"].forEach(id => { const e = document.getElementById(id); if (e) e.textContent = rot || ""; });
     }
 
@@ -1415,9 +1433,13 @@
     }
     applyTheme(localStorage.getItem("theme") || "light");
 
-    // boot
-    if (token) boot();
-    else login();
+    // boot com autenticacao
+    if (token) {
+      renderUserInfo();
+      boot();
+    } else {
+      window.location.href = "/login";
+    }
   </script>
 </body>
 </html>

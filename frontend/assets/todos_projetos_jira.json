@@ -1,0 +1,440 @@
+[
+  {
+    "key": "ANN",
+    "name": "Atendimento_N2_N3",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "ADT",
+    "name": "Automação de testes",
+    "type": "next-gen",
+    "lead": "Fernanda Soares da Silva"
+  },
+  {
+    "key": "BH",
+    "name": "Behave",
+    "type": "classic",
+    "lead": "Allan Delfino"
+  },
+  {
+    "key": "DS",
+    "name": "Demandas Suporte",
+    "type": "next-gen",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "T0",
+    "name": "Desenvolvimento",
+    "type": "classic",
+    "lead": "Allan Delfino"
+  },
+  {
+    "key": "DRIV",
+    "name": "Driverbehave",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "FDS",
+    "name": "Ferramentas de Suporte",
+    "type": "classic",
+    "lead": "Bruno Camilo"
+  },
+  {
+    "key": "GMSJ",
+    "name": "Guarda Municipal de São José",
+    "type": "next-gen",
+    "lead": "Fernanda Soares da Silva"
+  },
+  {
+    "key": "GMMA",
+    "name": "Guarda Municipal Manaus",
+    "type": "classic",
+    "lead": "Maicon Diego Senna"
+  },
+  {
+    "key": "HDPMSCEG",
+    "name": "HDPMSC-EG",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "CMBPRH",
+    "name": "Helpdesk - CMBPR",
+    "type": "next-gen",
+    "lead": "Mariana Saldanha Coelho"
+  },
+  {
+    "key": "HPA",
+    "name": "Helpdesk - PMAM",
+    "type": "next-gen",
+    "lead": "Allan Delfino"
+  },
+  {
+    "key": "PMMTH",
+    "name": "Helpdesk - PMMT",
+    "type": "next-gen",
+    "lead": "Bruno Camilo"
+  },
+  {
+    "key": "PRPMH",
+    "name": "Helpdesk - PMPR",
+    "type": "next-gen",
+    "lead": "Maicon Diego Senna"
+  },
+  {
+    "key": "SCPMH",
+    "name": "Helpdesk - PMSC",
+    "type": "next-gen",
+    "lead": "Mariana Saldanha Coelho"
+  },
+  {
+    "key": "TOPMH",
+    "name": "Helpdesk - PMTO",
+    "type": "next-gen",
+    "lead": "Leandro Braun"
+  },
+  {
+    "key": "SESDECH",
+    "name": "Helpdesk - SESDEC",
+    "type": "next-gen",
+    "lead": "Mariana Saldanha Coelho"
+  },
+  {
+    "key": "SISEGGMH",
+    "name": "Helpdesk - SISEGGM",
+    "type": "next-gen",
+    "lead": "Leandro Braun"
+  },
+  {
+    "key": "HDCMBPR",
+    "name": "Helpdesk CMBPR",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "HDDB",
+    "name": "Helpdesk Driverbehave",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "HDPMAM",
+    "name": "Helpdesk PMAM",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "HDPMMT",
+    "name": "Helpdesk PMMT",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "HDPMPR",
+    "name": "Helpdesk PMPR",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "HDPMSC",
+    "name": "Helpdesk PMSC",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "HDPMTO",
+    "name": "Helpdesk PMTO",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "HDSESDEC",
+    "name": "Helpdesk SESDEC",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "HSA",
+    "name": "Helpdesk SISEG AMAZONAS",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "HDSISEGGM",
+    "name": "Helpdesk SISEGGM",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "JN",
+    "name": "Jira Novo",
+    "type": "classic",
+    "lead": "Fernanda Soares da Silva"
+  },
+  {
+    "key": "APF",
+    "name": "Medição de Pontos de Função",
+    "type": "next-gen",
+    "lead": "Bruno Cascaes"
+  },
+  {
+    "key": "MOIV",
+    "name": "MOIVI",
+    "type": "classic",
+    "lead": "Allan Delfino"
+  },
+  {
+    "key": "PLANTAO",
+    "name": "Passagem de Plantão",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "PMSCV2",
+    "name": "PMSC v2.0",
+    "type": "next-gen",
+    "lead": "Rafael Cardoso Paranhos"
+  },
+  {
+    "key": "AIT",
+    "name": "Projeto - AIT",
+    "type": "classic",
+    "lead": "Allan Delfino"
+  },
+  {
+    "key": "PAM",
+    "name": "Projeto - AM",
+    "type": "classic",
+    "lead": "Leandro Braun"
+  },
+  {
+    "key": "PGU",
+    "name": "Projeto - Guard",
+    "type": "classic",
+    "lead": "Juliano Simas"
+  },
+  {
+    "key": "PHL",
+    "name": "Projeto - HomeLock",
+    "type": "classic",
+    "lead": "Felipe Gusberti"
+  },
+  {
+    "key": "PMT",
+    "name": "Projeto - MT",
+    "type": "classic",
+    "lead": "Leandro Braun"
+  },
+  {
+    "key": "POI",
+    "name": "Projeto - OI",
+    "type": "classic",
+    "lead": "Juliano Simas"
+  },
+  {
+    "key": "PPI",
+    "name": "Projeto - PI",
+    "type": "classic",
+    "lead": "Felipe Gusberti"
+  },
+  {
+    "key": "PRO",
+    "name": "Projeto - PMRO Cidadão",
+    "type": "classic",
+    "lead": "Felipe Gusberti"
+  },
+  {
+    "key": "PPR",
+    "name": "Projeto - PR",
+    "type": "classic",
+    "lead": "Maicon Diego Senna"
+  },
+  {
+    "key": "PSC",
+    "name": "Projeto - SC",
+    "type": "classic",
+    "lead": "Mariana Saldanha Coelho"
+  },
+  {
+    "key": "PSR",
+    "name": "Projeto - SESDEC RO",
+    "type": "classic",
+    "lead": "Felipe Gusberti"
+  },
+  {
+    "key": "PGM",
+    "name": "Projeto - SISEGGM",
+    "type": "classic",
+    "lead": "Allan Delfino"
+  },
+  {
+    "key": "PSEI",
+    "name": "Projeto - Suporte e Infraestrutura",
+    "type": "classic",
+    "lead": "Bruno Camilo"
+  },
+  {
+    "key": "PTO",
+    "name": "Projeto - TO",
+    "type": "classic",
+    "lead": "Bruno Cascaes"
+  },
+  {
+    "key": "PTDS",
+    "name": "Projeto - Trocas de Serviços CBMRS",
+    "type": "classic",
+    "lead": "Allan Delfino"
+  },
+  {
+    "key": "PUL",
+    "name": "Projeto - ULBRA",
+    "type": "classic",
+    "lead": "Felipe Gusberti"
+  },
+  {
+    "key": "CBMPR",
+    "name": "Projeto CBMPR",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "PMPR",
+    "name": "Projeto PMPR",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "PPS",
+    "name": "Projeto Pontual Suporte",
+    "type": "next-gen",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "QA",
+    "name": "QA",
+    "type": "next-gen",
+    "lead": "Fernanda Soares da Silva"
+  },
+  {
+    "key": "RHR",
+    "name": "Recrutamento",
+    "type": "classic",
+    "lead": "Felipe Gusberti"
+  },
+  {
+    "key": "RM",
+    "name": "Refactor Mobile",
+    "type": "next-gen",
+    "lead": "Bruno Cascaes"
+  },
+  {
+    "key": "SAFERAI",
+    "name": "SAFER AI",
+    "type": "next-gen",
+    "lead": "Allan Delfino"
+  },
+  {
+    "key": "TSP",
+    "name": "Scrum project",
+    "type": "next-gen",
+    "lead": "Jacson Feiten"
+  },
+  {
+    "key": "SA",
+    "name": "SISEG AMAZONAS",
+    "type": "classic",
+    "lead": "Leonardo Ishikawa Souza"
+  },
+  {
+    "key": "SDB",
+    "name": "Suporte Drive Behave",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "SBC",
+    "name": "Suporte GM Balneário (BCU)",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "SGSJ",
+    "name": "Suporte GM São José",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "SGS",
+    "name": "Suporte Guard Solution",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "SPI",
+    "name": "Suporte PI",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "SPAM",
+    "name": "Suporte PMAM",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "SPMT",
+    "name": "Suporte PMMT",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "SPR",
+    "name": "Suporte PMPR",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "STO",
+    "name": "Suporte PMTO",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "SR",
+    "name": "Suporte Rastreamento",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "SRO",
+    "name": "Suporte RO",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "SSC",
+    "name": "Suporte SC",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "SSA",
+    "name": "Suporte SISEG AMAZONAS",
+    "type": "classic",
+    "lead": "André Antônio Prado da Silva"
+  },
+  {
+    "key": "AITSC",
+    "name": "SYSAIT-SC",
+    "type": "classic",
+    "lead": "Mariana Saldanha Coelho"
+  },
+  {
+    "key": "PO",
+    "name": "Tarefas - Jacson",
+    "type": "next-gen",
+    "lead": "Jacson Feiten"
+  }
+]
