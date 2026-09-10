@@ -35,18 +35,24 @@
   - Dependência Chart.js vendored em `frontend/vendor/chart.umd.min.js` para autonomia total e conformidade com ambientes offline/air-gapped.
 - [x] **Simplificação de Filtros**:
   - Remoção da opção 'Interno' no dropdown de Origem, focando no portal do cliente (`Todas` vs `Cliente (portal)`).
-- [ ] **Identidade & Acesso (RBAC)**:
-  - Login real (credencial → JWT + refresh), sem `demo-token` em produção
-  - Seed de usuários/papéis por estado (a partir de `estados.yaml`)
-  - Rate limiting + proteção de força bruta no login
+- [x] **Identidade & Acesso (RBAC)**:
+  - Login unitário real (`/login`, credencial → JWT seguro PBKDF2-HMAC-SHA256)
+  - Banco ultraleve nativo SQLite (`auth.db`) com migração automática e persistência em `/app/data`
+  - Gestão de usuários no Painel da Coordenação (`/coordenador`) com CRUD completo
+  - Troca Obrigatória de Senha no 1º Acesso (`must_change_password`, padrão Orion / SOC 2)
+  - Rate limiting (Traefik 100 req/s, burst 50) + headers defensivos (`Server: egSYS-Shield`)
 
-## v0.3 — Produtividade do Gestor & Exportação
+## v0.3 (concluída) — Painel do Coordenador, 73 Espaços & Governança de Acessos
+- [x] Painel da Coordenação (`/coordenador`) com visualização de todos os 73 espaços do Jira (PSEI-280)
+- [x] Seletor dinâmico de projetos JSM e PSEI para a coordenação de suporte
+- [x] Filtros temporais executivos em SC restritos a 4 opções (90d, 6m, 12m, Ano atual)
+- [x] Compatibilidade universal de roteamento Traefik para todo o domínio `suporte-monitor.egsys.siseg.tech`
+
+## v0.4 — Produtividade do Gestor & Exportação
 - [ ] Filtros compartilhados por estado (equipe)
 - [ ] Export CSV/Excel da listagem de tickets e métricas consolidadas
 - [ ] Widgets de alerta antecipado ("issues em risco de SLA" e "paradas há mais de X dias")
 - [ ] Notificação visual de tickets atualizados recentemente
-
-## v0.4 — Federação Multi-Estado
 - [ ] Estados TO/AM/PR/GM ativados (bloco YAML + clientes + papéis)
 - [ ] Dashboard consolidado por estado (seletor multi-estado para perfil gestor global)
 - [ ] Mapeamento dinâmico de áreas por tenant

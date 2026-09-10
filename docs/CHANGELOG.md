@@ -1,6 +1,20 @@
 # egSYS JiraView — Changelog
 
-## [Unreleased] — 2026-09-09
+## [0.3.0] — 2026-09-10
+
+### Added
+- `feat(auth): Tela de Login Unitária (/login)` — interface unificada e responsiva com direcionamento dinâmico de gestores por estado (`/painel_sc`, `/painel_to`, etc.) e coordenação (`/coordenador`), script anti-FOUC e tema Dark/Light persistente.
+- `feat(auth): Banco de Dados Ultraleve SQLite Nativo (auth.db)` — persistência leve e independente sem dependências externas pesadas (`backend/app/core/db.py`), com hashing NIST PBKDF2-HMAC-SHA256 (100.000 iterações com salt seguro), migração automática de schema e persistência garantida no volume `/app/data/auth.db` mapeado em `./data/auth.db`.
+- `feat(auth): Gestão de Usuários no Painel da Coordenação` — aba administrativa dedicada em `/coordenador` com listagem em tempo real, formulário de cadastro com auto-preenchimento de rotas estaduais, badges visuais de perfil e status, ativação/desativação imediata e redefinição administrativa de senhas.
+- `feat(auth): Troca Obrigatória de Senha no 1º Acesso (Padrão egSYS Orion / SOC 2)` — validação de primeiro acesso via flag `must_change_password`, modal bloqueante central com `backdrop-filter: blur(6px)`, validação em tempo real de tamanho mínimo (>= 6 caracteres) e coincidência, e endpoint seguro `POST /api/v1/auth/change-password` que renova o JWT sem pendência.
+- `feat(coordenador): Painel com 73 Espaços do Jira (PSEI-280)` — seletor global para coordenação de suporte com capacidade de navegar por todos os espaços do Jira vinculados à conta da coordenação, visão consolidada e cache local de alta performance (`todos_projetos_jira.json` e `jira_real_cache.json`).
+- `feat(traefik): Compatibilidade Universal de Rotas` — inclusão de routers FastAPI com e sem prefixo `/painel_sc` (`backend/app/main.py`), viabilizando tráfego unificado com ou sem middleware `stripPrefix` do Traefik.
+
+### Changed
+- `ui(sc): Filtros de Tempo Restritos a 4 Opções Executivas` — no painel de Santa Catarina (`frontend/index.html`), manutenção estrita dos filtros de tempo: `90 dias` (padrão), `6 meses`, `12 meses` e `Ano atual` (calculado dinamicamente no backend via ano corrente), removendo a opção ilimitada 'Tudo'.
+- `infra(traefik): Roteamento Global com Hardening` — consolidação da regra de roteamento no Traefik para o host completo `suporte-monitor.egsys.siseg.tech` com middleware de Rate Limiting (100 req/s, burst 50) e Security Headers defensivos (`Server: egSYS-Shield`, HSTS 1 ano, no-sniff, frameDeny).
+
+## [0.2.0] — 2026-09-10
 
 ### Added
 - `feat: Modo Escuro Full-Window (padrão Orion)` — suporte a tema escuro/claro em 100% da viewport (`color-scheme: dark !important`, script anti-FOUC no `<head>`, variáveis de tema aplicadas em todos os elementos estruturais e formulários, persistência em `localStorage`).

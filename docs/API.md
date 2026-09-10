@@ -1,9 +1,72 @@
 # API — egSYS JiraView
 
-Base: `https://suporte-monitor.egsys.siseg.tech/painel_sc` (prod) · local `:8090`
-Auth: `Authorization: Bearer <JWT>` (RBAC: `viewer` < `manager` < `admin` por estado).
+Base: `https://suporte-monitor.egsys.siseg.tech` (prod) · local `:8090`
+Auth: `Authorization: Bearer <JWT>` (RBAC: `viewer` < `manager` < `admin`/`coordenador`).
 
-## Endpoints Atuais
+## Endpoints de Autenticação & Gestão de Acessos
+
+### POST `/api/v1/auth/login`
+Autentica usuário cadastrado no banco SQLite e retorna JWT com URL de direcionamento específico e flag de primeiro acesso. **Público**.
+Payload:
+```json
+{"username": "gestor.sc", "password": "egsys@sc2026"}
+```
+Resposta:
+```json
+{
+  "token": "eyJhbGciOi...",
+  "token_type": "bearer",
+  "redirect_url": "/painel_sc",
+  "user": {
+    "username": "gestor.sc",
+    "nome": "Gestão PMSC (Santa Catarina)",
+    "role": "manager",
+    "estado": "sc",
+    "painel_url": "/painel_sc",
+    "must_change_password": true
+  }
+}
+```
+
+### POST `/api/v1/auth/change-password`
+Atualiza a senha do próprio usuário conectado (usado obrigatoriamente no 1º acesso ou em redefinição voluntária). **Auth obrigatório**.
+- Valida tamanho mínimo de 6 caracteres (HTTP 400 se menor).
+- Invalida a flag de primeiro acesso (`must_change_password = 0`).
+- Retorna novo JWT já liberado.
+Payload:
+```json
+{"new_password": "novaSenhaSegura@2026"}
+```
+
+### GET `/api/v1/auth/me`
+Retorna dados cadastrais do operador autenticado via token Bearer. **Auth obrigatório**.
+
+### GET `/api/v1/auth/users`
+Lista todos os usuários cadastrados no banco SQLite. **Acesso restrito à Coordenação / Admin** (`role in ('admin', 'coordenador')`).
+
+### POST `/api/v1/auth/users`
+Cadastra novo operador no sistema com direcionamento estadual. **Acesso restrito à Coordenação / Admin**.
+Payload:
+```json
+{
+  "username": "gestor.to",
+  "password": "egsys@to2026",
+  "nome": "Gestão PMTO (Tocantins)",
+  "role": "manager",
+  "estado": "to",
+  "painel_url": "/painel_to",
+  "is_active": 1,
+  "must_change_password": 1
+}
+```
+
+### PUT `/api/v1/auth/users/{user_id}`
+Atualiza dados cadastrais, redefine senha ou ativa/desativa usuário. **Acesso restrito à Coordenação / Admin**.
+
+### DELETE `/api/v1/auth/users/{user_id}`
+Remove usuário da base SQLite (impede que o usuário logado exclua a si mesmo). **Acesso restrito à Coordenação / Admin**.
+
+## Endpoints de Monitoramento & Métricas JSM
 
 ### GET `/api/v1/health`
 Alive + checagem leve do Jira. **Público** (sem auth).

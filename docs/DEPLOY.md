@@ -3,12 +3,16 @@
 ## Topologia
 - **Host:** `monitoramento-egsys` (45.7.171.41) — `/var/egsys-docker/container/jiraview/`
 - **Produto único:** 1 container (`egsys-jiraview`), multi-estado via `deploy/estados.yaml`.
-- **Rota pública:** `https://suporte-monitor.egsys.siseg.tech/painel_sc`
-  (Traefik `dynamic/jiraview.yml` — PathPrefix+stripPrefix; cert existente do domínio).
+- **Rotas públicas ativas:**
+  - `https://suporte-monitor.egsys.siseg.tech/login` — Tela de login unitária e direcionamento por estado
+  - `https://suporte-monitor.egsys.siseg.tech/coordenador` — Painel da coordenação (73 espaços Jira + Gestão de Usuários)
+  - `https://suporte-monitor.egsys.siseg.tech/painel_sc` — Painel do cliente Santa Catarina (PMSC)
+  - `https://suporte-monitor.egsys.siseg.tech/api/v1/health` — Endpoint público de healthcheck
+- **Gateway Traefik:** `traefik/dynamic/jiraview.yml` gerenciando todo o host com rate-limit e security headers defensivos (`Server: egSYS-Shield`).
 
 ## Arquivos
-- `docker-compose.prod.yml` — build local, rede `webproxy`, hardening, sem labels Traefik (router via dynamic).
-- `traefik/dynamic/jiraview.yml` — router/middleware/service (backup do padrão `noc.yml`).
+- `docker-compose.prod.yml` — build local, rede `webproxy`, hardening (512m RAM, 1.0 CPU, 150 PIDs), volume `./data:/app/data`.
+- `traefik/dynamic/jiraview.yml` — router/middleware/service dinâmico para SSL e roteamento de tráfego.
 
 ## Subir/atualizar
 ```bash
