@@ -14,22 +14,27 @@
 - [x] Tríade de Skills Corporativas (`jiraview-commit`, `jiraview-docs-sync`, `jiraview-jira-sync`)
 - [x] Configuração Git Dual-Path (`origin` empresa sanitizado vs `privado` backup)
 
-## v0.2 — Observabilidade & Jornada do Ticket (em planejamento)
-- [ ] **Taxonomia do Funil de Atendimento (Eliminação da ambiguidade de "Abertas")**:
+## v0.2 (atual) — Observabilidade, Ciclo Canônico em 7 Etapas & Rastreabilidade de Engenharia
+- [x] **Taxonomia do Funil de Atendimento (Eliminação da ambiguidade de "Abertas")**:
   - 📥 **Novas / Não Tratadas** (`statusCategory = new`): tickets recém-criados pelo cliente aguardando triagem/início egSYS.
   - ⚙️ **Em Atendimento / Em Tratamento** (`statusCategory = indeterminate`): tickets em análise, desenvolvimento ou sustentação ativa.
   - ⏸️ **Aguardando Validação / Pendente**: tickets bloqueados aguardando resposta/homologação do cliente ou terceiro.
   - ✅ **Concluídas**: tickets resolvidos no período de referência.
-- [ ] **Gaveta Lateral de Observabilidade (Drawer — "Jornada do Ticket")**:
-  - Tabela principal permanece ágil e limpa (apenas badges essenciais: Área `🏷️ SADE/Cidadão/Integração/Operações` e Fase resumida `Etapa 2/5`).
+- [x] **Gaveta Lateral de Observabilidade (Drawer — "Jornada do Ticket")**:
+  - Tabela principal permanece ágil e limpa (apenas badges essenciais: Área `🏷️ SADE/Cidadão/Integração/Operações` e Fase resumida `📊 3/7 Análise de Desenvolvimento`).
   - Clique na linha abre gaveta lateral direita sem poluir a visão geral.
-  - **Stepper Visual de 5 Etapas**:
-    `1. Triagem (NOC/N1) ➔ 2. Em Análise/Dev (N2/N3) ➔ 3. Validação Interna / QA ➔ 4. Homologação Cliente ➔ 5. Concluído`.
+  - **Stepper Visual Canônico de 7 Etapas**:
+    `1. Triagem (N1) ➔ 2. Triagem (N2) ➔ 3. Análise de Desenvolvimento ➔ 4. Em Desenvolvimento ➔ 5. Validação Interna / QA ➔ 6. Validação / Homologação Cliente ➔ 7. Concluído (Entregue)`.
   - **Métricas de Tempo e SLA**: tempo total aberto vs tempo na etapa atual (`SLA da Etapa`).
-  - **Posse da Bola (Responsabilidade)**: indicador visual claro de quem está com a ação no momento (`🔵 egSYS - Suporte/Dev` vs `🟡 Cliente - Validação`).
+  - **Posse da Bola (Responsabilidade & Gargalo)**: indicador visual claro de quem está com a ação no momento (`🔵 Ação com a egSYS` vs `🟡 Ação com o Cliente`).
+  - **Rastreabilidade de Engenharia (Derivações de Projeto)**: mapeamento paralelo via Jira API de tarefas técnicas vinculadas (`fields.issuelinks` como `PSC-3736` derivado de `HDPMSC-389`), com status executivo sanitizado, responsável técnico e progresso de subtarefas.
   - **Trilha de Auditoria (Changelog de Movimentações)**: linha do tempo com histórico de transições de status e passagem de bastão extraído do Jira.
-- [ ] **Agregação e Estatística Sem Limite Arbitrário no `/meta`**:
-  - Eliminar o cap de 100 tickets no cálculo de distribuição de status (`contagem` via agregação completa paginada ou JQL particionado).
+- [x] **Agregação e Estatística Sem Limite Arbitrário no `/meta` e `/dashboard`**:
+  - Mapeamento particionado por JQL e cálculo de funil dinâmico.
+- [x] **Chart.js Localmente Vendored**:
+  - Dependência Chart.js vendored em `frontend/vendor/chart.umd.min.js` para autonomia total e conformidade com ambientes offline/air-gapped.
+- [x] **Simplificação de Filtros**:
+  - Remoção da opção 'Interno' no dropdown de Origem, focando no portal do cliente (`Todas` vs `Cliente (portal)`).
 - [ ] **Identidade & Acesso (RBAC)**:
   - Login real (credencial → JWT + refresh), sem `demo-token` em produção
   - Seed de usuários/papéis por estado (a partir de `estados.yaml`)

@@ -13,7 +13,7 @@ e total sanitização (sem credenciais no client).
 | F0 — Diagnóstico/JSM | Análise do portal, causas (done sem resolução), correção 19+18, snapshots | ✅ |
 | F1 — Base app | FastAPI + SPA + RBAC JWT + Jira read-only + estados.yaml (SC) | ✅ |
 | F2 — Painel & UX | Cards + 4 gráficos + Modo Escuro Full-Window + Calibração Chart.js + Filtros JQL + Skills | ✅ |
-| F2.1 — Observabilidade & Jornada | Funil de 4 estágios (eliminação da ambiguidade "abertas") + Drawer lateral com Stepper de 5 etapas + Posse da bola + SLA de etapa | ⏳ v0.2 |
+| F2.1 — Observabilidade & Jornada | Funil de 4 estágios + Drawer lateral com Stepper Canônico de 7 etapas + Posse da bola + SLA de etapa + Rastreabilidade de Engenharia | ✅ |
 | F3 — Deploy prod | Traefik `/painel_sc` + hardening (512m/150pids) + cert existente | ✅ |
 | F4 — Identidade & RBAC | Login real + seed papéis por estado + rate limiting | ⏳ v0.2 |
 | F5 — Multi-estado | TO/AM/PR/GM ativados (YAML + papéis) + visão consolidada | ⏳ v0.4 |

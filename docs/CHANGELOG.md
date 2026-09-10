@@ -17,8 +17,11 @@
 - `feat: multi-estado por config` — `deploy/estados.yaml` (estado = bloco config; 1 único container).
 - `feat: deploy prod` — Traefik path-prefix em `suporte-monitor.egsys.siseg.tech/painel_sc`, hardening 512m/1.0cpu/150pids, no-new-privileges.
 - `feat: PSEI-277 correlato` — correção de 19+18 tickets divergentes (done sem resolução) via script idempotente + timer systemd; salvaguardas com snapshot/restore.
+- `docs: arquitetura executiva de observabilidade` — formalização do padrão canônico de transparência, funil de atendimento em 4 estágios e gaveta lateral de jornada do ticket em `docs/RELATORIO_EXECUTIVO_OBSERVABILIDADE.md`.
+
 
 ### Changed
+- `ui: simplificacao do dropdown de Origem` — remocao da opcao 'Interno' do filtro de origem, mantendo foco executivo no portal do cliente ('Todas' e 'Cliente (portal)').
 - `refactor: limpeza de imports e escopo de overview` — remoção de imports duplicados em `backend/app/main.py` e busca dinâmica de projetos por estado no `/overview`.
 
 ### Security
@@ -27,6 +30,10 @@
 - `security: .env chmod 600 e gitignored`; persistência de filtros em `data/filtros.json` 0600.
 
 ### Fixed
+- `feat/fix: régua canônica de 7 etapas no ciclo de vida` — consolidação da esteira operacional completa: `1. Triagem (N1)` ➔ `2. Triagem (N2)` ➔ `3. Análise de Desenvolvimento` ➔ `4. Em Desenvolvimento` ➔ `5. Validação Interna / QA` ➔ `6. Validação / Homologação Cliente` ➔ `7. Concluído`.
+- `fix: carregamento offline/intranet de gráficos` — vendoring local de `vendor/chart.umd.min.js` (204KB) no frontend com fallback resiliente para CDN e retry assíncrono, garantindo renderização de todos os gráficos mesmo sob bloqueio de CDN, firewalls ou proxies restritos.
+- `fix: filtragem do funil de atendimento sem JQL bruta` — criação do parâmetro nativo `funil_stage` (`novas`, `em_atendimento`, `aguardando_validacao`, `concluidas`) no endpoint `/issues`, eliminando erros de sintaxe e aspas simples (`statusCategory = 'In Progress'`) no Jira Cloud.
+- `fix: mapeamento e posse da bola no ciclo JSM` — inclusão de `Aguardando Informações` na Fase 6 (Ação do Cliente), `Validação N2` na Fase 2 (Triagem N2), `Análise de Desenvolvimento` na Fase 3, `Em Desenvolvimento` na Fase 4 e `Desenvolvimento concluído` / `Resolução Suporte` na Fase 7 (Concluído).
 - `fix: contraste do gráfico polar no modo escuro` — remoção de caixas brancas nos ticks e restauração de rótulos visíveis.
 - `fix: escopo de estilo modo escuro` — aplicação de classes e atributos no `<html>` e `<body>`, corrigindo fundo que permanecia claro.
 - `fix: CORS multi-método` (GET/POST/DELETE/OPTIONS) e origem correta de produção.

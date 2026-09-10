@@ -78,28 +78,74 @@ POST/DELETE exigem `role >= manager`.
 
 ---
 
-## Endpoints Planejados (v0.2 — Observabilidade & Jornada)
-
 ### GET `/api/v1/issues/{key}/journey?estado=sc`
-Retorna a jornada do ticket para alimentar o **Drawer Lateral (Gaveta de Observabilidade)**:
+Retorna a jornada completa e rastreabilidade do ticket para alimentar o **Drawer Lateral (Gaveta de Observabilidade)**:
+- **Stepper Canônico de 7 Etapas**:
+  1. `Triagem (N1)`
+  2. `Triagem (N2)`
+  3. `Análise de Desenvolvimento`
+  4. `Em Desenvolvimento`
+  5. `Validação Interna / QA`
+  6. `Validação / Homologação Cliente`
+  7. `Concluído (Entregue)`
+- **Posse da Bola**: `tipo` (`egsys` | `cliente`), `label`, `responsavel`, `tempo_etapa`, `tempo_total`.
+- **Rastreabilidade de Engenharia (`derivacoes_engenharia`)**: mapeamento em paralelo via Jira Cloud API de tarefas técnicas vinculadas (`fields.issuelinks` como `PSC-3736` derivado de `HDPMSC-389`), com status executivo sanitizado (`status_executivo`), cor, responsável técnico e progresso de subtarefas (`subtasks_concluidas`/`total_subtasks`).
+- **Trilha de Auditoria (`transicoes`)**: histórico cronológico extraído do changelog do Jira com datas, atores e movimentações de status.
+
+Exemplo de Resposta:
 ```json
 {
-  "key": "HDPMSC-1234",
-  "etapa_atual": 2,
+  "referencia": "HDPMSC-389",
+  "resumo": "AIT sem agente autuador",
+  "status": "Análise de Desenvolvimento",
+  "statusCategoria": "indeterminate",
+  "area": "Operações",
+  "tipo": "Bug Suporte",
+  "origem": "cliente",
+  "solicitante": "João Mário Mazzola",
+  "responsavel": "Erick Vinicius Ferreira da Silva",
+  "prioridade": "Normal",
+  "criacao": "2026-08-18",
+  "atualizacao": "2026-08-19",
+  "entrega": null,
+  "resolucao": null,
+  "etapa_atual": 3,
   "etapas": [
-    {"num": 1, "nome": "Triagem", "status": "concluido", "data_inicio": "2026-09-08T09:00:00", "duracao": "2h 15m"},
-    {"num": 2, "nome": "Em Análise / Dev", "status": "em_andamento", "data_inicio": "2026-09-08T11:15:00", "duracao": "1d 4h"},
-    {"num": 3, "nome": "Validação Interna / QA", "status": "pendente"},
-    {"num": 4, "nome": "Homologação Cliente", "status": "pendente"},
-    {"num": 5, "nome": "Concluído", "status": "pendente"}
+    {"num": 1, "nome": "Triagem (N1)", "estado": "concluido"},
+    {"num": 2, "nome": "Triagem (N2)", "estado": "concluido"},
+    {"num": 3, "nome": "Análise de Desenvolvimento", "estado": "ativo"},
+    {"num": 4, "nome": "Em Desenvolvimento", "estado": "pendente"},
+    {"num": 5, "nome": "Validação Interna / QA", "estado": "pendente"},
+    {"num": 6, "nome": "Validação / Homologação Cliente", "estado": "pendente"},
+    {"num": 7, "nome": "Concluído (Entregue)", "estado": "pendente"}
   ],
-  "posse_bola": {
-    "responsavel": "egSYS - Suporte / Dev",
+  "derivacoes_engenharia": [
+    {
+      "chave": "PSC-3736",
+      "resumo": "AIT sem agente autuador",
+      "tipo": "Bug Suporte",
+      "status_raw": "Novo",
+      "status_executivo": "📋 Na Fila da Engenharia",
+      "status_cor": "var(--text-sub)",
+      "responsavel": "Mariana Saldanha Coelho",
+      "prioridade": "Normal",
+      "relacao": "causes",
+      "tipo_link": "Problem/Incident",
+      "total_subtasks": 0,
+      "subtasks_concluidas": 0
+    }
+  ],
+  "posse": {
     "tipo": "egsys",
-    "desde": "2026-09-08T11:15:00"
+    "label": "Ação com egSYS",
+    "responsavel": "Erick Vinicius Ferreira da Silva",
+    "tempo_etapa": "21d 11h",
+    "tempo_total": "22 dias"
   },
-  "historico_transicoes": [
-    {"de": "Aberto", "para": "Em Atendimento", "quando": "2026-09-08T11:15:00", "autor": "Atendente N1"}
+  "transicoes": [
+    {"de": "Validação N2", "para": "Análise de Desenvolvimento", "quando": "2026-08-19 13:14:21", "autor": "João Vitor Sopran"},
+    {"de": "Validação N1", "para": "Validação N2", "quando": "2026-08-19 09:16:18", "autor": "Erick Vinicius Ferreira da Silva"},
+    {"de": "Aberto", "para": "Validação N1", "quando": "2026-08-19 09:15:14", "autor": "Erick Vinicius Ferreira da Silva"}
   ]
 }
 ```

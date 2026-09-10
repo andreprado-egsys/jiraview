@@ -14,6 +14,20 @@
       }
     })();
   </script>
+  <!-- Chart.js local com fallback resiliente para CDN -->
+  <script src="vendor/chart.umd.min.js"></script>
+  <script>
+    if (!window.Chart) {
+      var s = document.createElement("script");
+      s.src = (window.location.pathname.startsWith("/painel_sc") ? "/painel_sc" : "") + "/vendor/chart.umd.min.js";
+      s.onerror = function() {
+        var cdn = document.createElement("script");
+        cdn.src = "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js";
+        document.head.appendChild(cdn);
+      };
+      document.head.appendChild(s);
+    }
+  </script>
   <style>
     :root {
       color-scheme: light;
@@ -28,7 +42,7 @@
       --header-btn-border: rgba(255, 255, 255, 0.35);
       --th-bg: #fafbfc;
       --tr-border: #ebecf0;
-      --tr-hover: #f8f9fb;
+      --tr-hover: #f0f4f9;
       --input-bg: #ffffff;
       --input-border: #dfe1e6;
       --input-text: #172b4d;
@@ -45,6 +59,17 @@
       --yellow: #ffab00;
       --blue: #0c66e4;
       --red: #de350b;
+      --drawer-bg: #ffffff;
+      --drawer-overlay: rgba(9, 30, 66, 0.54);
+      --posse-egsys-bg: #e9f2ff;
+      --posse-egsys-border: #b3d4ff;
+      --posse-egsys-text: #0052cc;
+      --posse-cliente-bg: #fff7e6;
+      --posse-cliente-border: #ffe380;
+      --posse-cliente-text: #974f00;
+      --step-done: #00875a;
+      --step-active: #0c66e4;
+      --step-pending: #a5b2c6;
     }
 
     [data-theme="dark"], html.dark, body.dark, html[data-theme="dark"], body[data-theme="dark"] {
@@ -77,6 +102,17 @@
       --yellow: #d29922;
       --blue: #388bfd;
       --red: #f85149;
+      --drawer-bg: #161b22;
+      --drawer-overlay: rgba(0, 0, 0, 0.75);
+      --posse-egsys-bg: #1c2b42;
+      --posse-egsys-border: #388bfd66;
+      --posse-egsys-text: #79c0ff;
+      --posse-cliente-bg: #2d2208;
+      --posse-cliente-border: #d2992266;
+      --posse-cliente-text: #f0883e;
+      --step-done: #238636;
+      --step-active: #388bfd;
+      --step-pending: #484f58;
     }
 
     * { box-sizing: border-box; }
@@ -109,7 +145,8 @@
       border-bottom: 1px solid var(--border);
       transition: background 0.2s ease, border-color 0.2s ease;
     }
-    header h1 { font-size: 18px; margin: 0; }
+    header h1 { font-size: 18px; margin: 0; display: flex; align-items: center; gap: 8px; }
+    .header-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 12px; background: rgba(255,255,255,0.2); }
     #theme-btn {
       background: var(--header-btn-bg);
       color: var(--header-text);
@@ -121,36 +158,129 @@
       font-weight: 500;
       transition: all 0.2s ease;
     }
-    #theme-btn:hover {
-      filter: brightness(1.2);
+    #theme-btn:hover { filter: brightness(1.2); }
+    .container { padding: 20px 24px; max-width: 1440px; margin: 0 auto; }
+
+    /* Funil de Atendimento (Cards estilo Jira Dashboard) */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .card {
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s ease;
     }
-    .container { padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-color: var(--accent);
+    }
+    .card.active-filter {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+    .card .label { font-size: 12px; color: var(--text-sub); text-transform: uppercase; letter-spacing: .4px; display: flex; align-items: center; gap: 6px; }
+    .card .value { font-size: 28px; font-weight: 700; margin-top: 6px; color: var(--text); }
+    .card small { color: var(--text-sub); font-size: 11px; }
+    .card-indicator { height: 4px; width: 100%; position: absolute; bottom: 0; left: 0; }
 
-    /* Cards (gadgets estilo Jira Dashboard) */
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 20px; }
-    .card { background-color: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px 18px; transition: background 0.2s ease, border-color 0.2s ease; }
-    .card .label { font-size: 12px; color: var(--text-sub); text-transform: uppercase; letter-spacing: .4px; }
-    .card .value { font-size: 26px; font-weight: 600; margin-top: 4px; color: var(--text); }
-    .card small { color: var(--text-sub); }
+    /* Barra de filtros rápidos de Posse */
+    .quick-posse {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .quick-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .quick-btn:hover { border-color: var(--accent); }
+    .quick-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
 
-    /* Filtros */
-    .filters { background-color: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px; display: flex; gap: 10px; flex-wrap: wrap; align-items: end; margin-bottom: 16px; transition: background 0.2s ease, border-color 0.2s ease; }
+    /* Filtros Avançados & Linha */
+    .filters { background-color: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; display: flex; gap: 10px; flex-wrap: wrap; align-items: end; margin-bottom: 16px; transition: background 0.2s ease, border-color 0.2s ease; }
     .filters label { font-size: 12px; color: var(--text-sub); display: flex; flex-direction: column; gap: 4px; }
-    .filters select, .filters input { height: 34px; padding: 0 10px; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--input-border); border-radius: 4px; min-width: 150px; outline: none; transition: border-color 0.2s ease, background 0.2s ease; }
+    .filters select, .filters input { height: 34px; padding: 0 10px; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--input-border); border-radius: 4px; min-width: 140px; outline: none; transition: border-color 0.2s ease, background 0.2s ease; }
     .filters select:focus, .filters input:focus { border-color: var(--accent); }
     select option { background-color: var(--input-bg); color: var(--input-text); }
-    .btn { height: 34px; padding: 0 16px; border: 0; border-radius: 4px; background: var(--accent); color: #fff; cursor: pointer; font-weight: 600; transition: filter 0.2s ease; }
+    .btn { height: 34px; padding: 0 16px; border: 0; border-radius: 4px; background: var(--accent); color: #fff; cursor: pointer; font-weight: 600; transition: filter 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
     .btn:hover { filter: brightness(1.1); }
     .btn.ghost { background-color: var(--ghost-bg); color: var(--accent); border: 1px solid var(--accent); }
     .btn.danger { background-color: var(--ghost-bg); color: var(--red); border: 1px solid var(--red); }
 
-    /* Tabela (colunas da imagem) */
-    table { width: 100%; border-collapse: collapse; background-color: var(--card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; transition: background 0.2s ease, border-color 0.2s ease; }
-    th { text-align: left; font-size: 12px; color: var(--text-sub); background-color: var(--th-bg); padding: 10px 12px; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: .3px; }
-    td { padding: 10px 12px; border-bottom: 1px solid var(--tr-border); font-size: 13px; vertical-align: middle; color: var(--text); }
-    tr:hover td { background-color: var(--tr-hover); }
+    /* Tabela */
+    .table-responsive {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: var(--card);
+    }
+    table { width: 100%; border-collapse: collapse; transition: background 0.2s ease, border-color 0.2s ease; }
+    th { text-align: left; font-size: 12px; color: var(--text-sub); background-color: var(--th-bg); padding: 12px 14px; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: .3px; }
+    td { padding: 12px 14px; border-bottom: 1px solid var(--tr-border); font-size: 13px; vertical-align: middle; color: var(--text); }
+    tr.clickable-row { cursor: pointer; transition: background-color 0.15s ease; }
+    tr.clickable-row:hover td { background-color: var(--tr-hover); }
     a { color: var(--link-color); text-decoration: none; }
     a:hover { text-decoration: underline; }
+
+    /* Badges */
+    .badge-area {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+    .badge-area.sade { background: rgba(12, 102, 228, 0.15); color: var(--blue); border: 1px solid rgba(12, 102, 228, 0.3); }
+    .badge-area.cidadao { background: rgba(0, 135, 90, 0.15); color: var(--green); border: 1px solid rgba(0, 135, 90, 0.3); }
+    .badge-area.integracao { background: rgba(163, 113, 247, 0.15); color: #a371f7; border: 1px solid rgba(163, 113, 247, 0.3); }
+    .badge-area.operacoes { background: rgba(107, 119, 140, 0.15); color: var(--text-sub); border: 1px solid rgba(107, 119, 140, 0.3); }
+
+    .badge-fase {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--chip-bg);
+      color: var(--chip-text);
+      border: 1px solid var(--chip-border);
+    }
+    .badge-posse {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-posse.egsys { background: var(--posse-egsys-bg); color: var(--posse-egsys-text); border: 1px solid var(--posse-egsys-border); }
+    .badge-posse.cliente { background: var(--posse-cliente-bg); color: var(--posse-cliente-text); border: 1px solid var(--posse-cliente-border); }
+
     .status { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; color: #fff; }
     .pause { color: var(--text-sub); font-size: 12px; }
 
@@ -160,28 +290,325 @@
     .chip button { border: 0; background: none; cursor: pointer; color: var(--chip-text); font-weight: 700; }
 
     /* Construtor visual (estilo Jira) */
-    .builder { background-color: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px; margin-bottom: 16px; transition: background 0.2s ease, border-color 0.2s ease; }
+    .builder { background-color: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 16px; transition: background 0.2s ease, border-color 0.2s ease; }
     .builder .builder-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
     .builder select, .builder input { height: 34px; padding: 0 10px; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--input-border); border-radius: 4px; outline: none; }
     .builder select:focus, .builder input:focus { border-color: var(--accent); }
     .builder select { min-width: 170px; }
     .builder input { min-width: 220px; }
     .builder .and { align-self: center; font-weight: 700; color: var(--text-sub); padding-bottom: 8px; }
-    .builder-hint { color: var(--text-sub) !important; font-size: 12px; margin-top: 8px; }
-    #builder-hint { color: var(--text-sub) !important; }
 
-    /* Gráficos (estilo Jira Dashboard) */
+    /* Gráficos */
     .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; margin-bottom: 20px; }
-    .chart-box { background-color: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px; transition: background 0.2s ease, border-color 0.2s ease; }
+    .chart-box { background-color: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; transition: background 0.2s ease, border-color 0.2s ease; }
     .chart-box h3 { margin: 0 0 8px; font-size: 14px; color: var(--text); }
     .chart-box canvas { max-height: 260px; }
-    .empty-msg { padding: 14px; background-color: var(--empty-bg); border: 1px solid var(--empty-border); border-radius: 6px; color: var(--empty-text); margin: 8px 0; }
+    .empty-msg { padding: 16px; background-color: var(--empty-bg); border: 1px solid var(--empty-border); border-radius: 8px; color: var(--empty-text); margin: 8px 0; }
+
+    /* ======================================================== */
+    /* 🚪 GAVETA LATERAL (DRAWER — JORNADA DO TICKET)           */
+    /* ======================================================== */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--drawer-overlay);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -580px;
+      bottom: 0;
+      width: 540px;
+      max-width: 92vw;
+      background-color: var(--drawer-bg);
+      border-left: 1px solid var(--border);
+      box-shadow: -6px 0 28px rgba(0,0,0,0.3);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .drawer.open {
+      right: 0;
+    }
+
+    .drawer-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--th-bg);
+    }
+    .drawer-header .title-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .drawer-header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .drawer-close {
+      background: none;
+      border: 0;
+      font-size: 20px;
+      color: var(--text-sub);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .drawer-close:hover { background: var(--tr-hover); color: var(--text); }
+
+    .drawer-body {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .drawer-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Caixa de Posse da Bola */
+    .posse-card {
+      padding: 14px 18px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .posse-card.egsys {
+      background: var(--posse-egsys-bg);
+      border: 1px solid var(--posse-egsys-border);
+      color: var(--posse-egsys-text);
+    }
+    .posse-card.cliente {
+      background: var(--posse-cliente-bg);
+      border: 1px solid var(--posse-cliente-border);
+      color: var(--posse-cliente-text);
+    }
+    .posse-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .posse-card-detail {
+      font-size: 13px;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    /* Stepper Vertical de 5 Fases */
+    .stepper {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+      margin: 10px 0;
+    }
+    .step-node {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      position: relative;
+      padding-bottom: 20px;
+    }
+    .step-node:last-child {
+      padding-bottom: 0;
+    }
+    .step-node:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      left: 15px;
+      top: 30px;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+    .step-node.concluido:not(:last-child)::before {
+      background: var(--step-done);
+    }
+    .step-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      z-index: 2;
+      background: var(--card);
+      border: 2px solid var(--step-pending);
+      color: var(--text-sub);
+    }
+    .step-node.concluido .step-icon {
+      background: var(--step-done);
+      border-color: var(--step-done);
+      color: #ffffff;
+    }
+    .step-node.ativo .step-icon {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 0 0 4px rgba(56, 139, 253, 0.25);
+    }
+    .step-content {
+      padding-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .step-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .step-node.ativo .step-name {
+      color: var(--accent);
+    }
+    .step-status-tag {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    /* Grid de Metadados */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      background: var(--th-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .meta-item-label {
+      font-size: 11px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+    }
+    .meta-item-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Linha do tempo de transições */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .timeline-item {
+      padding: 10px 14px;
+      border-left: 3px solid var(--accent);
+      background: var(--th-bg);
+      border-radius: 0 6px 6px 0;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-sub);
+      font-size: 11px;
+    }
+
+    /* Cards de Rastreabilidade de Engenharia */
+    .derivacoes-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .derivacao-card {
+      background: var(--th-bg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 6px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .derivacao-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .derivacao-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      gap: 8px;
+    }
+    .derivacao-sub {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .derivacao-meta {
+      font-size: 11px;
+      color: var(--text-sub);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border);
+    }
+    .derivacao-subtasks-bar {
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
   </style>
 </head>
 <body>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <header>
-    <h1>egSYS Painel do Cliente Jira</h1>
+    <h1>
+      egSYS Painel do Cliente Jira
+      <span class="header-badge" id="badge-estado">SC / PMSC</span>
+    </h1>
     <div style="display:flex;align-items:center;gap:10px;">
       <button id="theme-btn" onclick="toggleTheme()" title="Alternar modo claro/escuro">🌙 Escuro</button>
       <div id="user"></div>
@@ -189,19 +616,51 @@
   </header>
 
   <div class="container">
-    <!-- Cards estilo Jira Dashboard -->
+    <!-- 🎯 Funil de Atendimento em 4 Estágios -->
     <div class="cards" id="cards">
-      <div class="card"><div class="label">Solicitações abertas <span id="p-label"></span></div><div class="value" id="c-abertas">–</div></div>
-      <div class="card"><div class="label">Em andamento <span id="p-label2"></span></div><div class="value" id="c-andamento">–</div></div>
-      <div class="card"><div class="label">Concluídas <span id="p-label3"></span></div><div class="value" id="c-concluidas">–</div></div>
-      <div class="card"><div class="label">Fechadas (7 dias)</div><div class="value" id="c-fechadas">–</div></div>
-      <div class="card"><div class="label">Projetos do estado</div><div class="value" id="c-projetos">–</div><small>SC</small></div>
+      <div class="card" onclick="filtrarPorFunil('novas')" id="card-novas" title="Clique para filtrar apenas chamados novos">
+        <div class="label">📥 Novas / Não Tratadas <span id="p-label"></span></div>
+        <div class="value" id="c-novas">–</div>
+        <small>Aguardando triagem egSYS</small>
+        <div class="card-indicator" style="background:var(--blue);"></div>
+      </div>
+      <div class="card" onclick="filtrarPorFunil('em_atendimento')" id="card-andamento" title="Clique para filtrar chamados em atendimento">
+        <div class="label">⚙️ Em Atendimento <span id="p-label2"></span></div>
+        <div class="value" id="c-andamento">–</div>
+        <small>Em análise / desenvolvimento</small>
+        <div class="card-indicator" style="background:#a371f7;"></div>
+      </div>
+      <div class="card" onclick="filtrarPorFunil('aguardando_validacao')" id="card-validacao" title="Clique para filtrar chamados aguardando o cliente">
+        <div class="label">⏸️ Aguardando Validação</div>
+        <div class="value" id="c-validacao">–</div>
+        <small>Homologação pelo cliente</small>
+        <div class="card-indicator" style="background:var(--yellow);"></div>
+      </div>
+      <div class="card" onclick="filtrarPorFunil('concluidas')" id="card-concluidas" title="Clique para filtrar chamadas concluídas">
+        <div class="label">✅ Concluídas <span id="p-label3"></span></div>
+        <div class="value" id="c-concluidas">–</div>
+        <small>Resolvidas no período</small>
+        <div class="card-indicator" style="background:var(--green);"></div>
+      </div>
+      <div class="card" style="cursor:default;" id="card-info">
+        <div class="label">🗓️ Fechadas (7 dias)</div>
+        <div class="value" id="c-fechadas">–</div>
+        <small id="c-projetos">Projetos: HDPMSC, SCPMH</small>
+      </div>
     </div>
 
-    <!-- Gráficos estilo Jira Dashboard (barras, donut, gauge) -->
+    <!-- 🔘 Filtros Rápidos de Posse da Bola -->
+    <div class="quick-posse">
+      <span style="font-size:12px;font-weight:700;color:var(--text-sub);text-transform:uppercase;">Posse da Ação:</span>
+      <button class="quick-btn active" id="posse-btn-todos" onclick="setPosseFilter('')">🔘 Todos os Chamados</button>
+      <button class="quick-btn" id="posse-btn-egsys" onclick="setPosseFilter('egsys')">🔵 Ação egSYS (Engenharia / QA)</button>
+      <button class="quick-btn" id="posse-btn-cliente" onclick="setPosseFilter('cliente')">🟡 Ação do Cliente (Homologação)</button>
+    </div>
+
+    <!-- Gráficos estilo Jira Dashboard -->
     <div class="charts">
       <div class="chart-box">
-        <h3>📊 Abertas por status</h3>
+        <h3>📊 Solicitações por status</h3>
         <canvas id="ch-status"></canvas>
       </div>
       <div class="chart-box">
@@ -213,7 +672,7 @@
         <canvas id="ch-solicitante"></canvas>
       </div>
       <div class="chart-box">
-        <h3>🗓️ Criadas nos últimos 30 dias</h3>
+        <h3>🗓️ Criadas nos últimos 15 dias</h3>
         <canvas id="ch-tempo"></canvas>
       </div>
     </div>
@@ -221,10 +680,10 @@
     <!-- Filtros salvos do gestor (JQL) -->
     <div class="saved" id="saved-filters"></div>
 
-    <!-- Construtor visual de filtros — OCULTO por padrão (evocado) -->
+    <!-- Construtor visual de filtros (avançado) -->
     <div style="margin-bottom:10px;">
       <button class="btn ghost" id="btn-builder" onclick="toggleBuilder()">⚙️ Filtros avançados</button>
-      <span id="builder-hint" style="font-size:12px;color:var(--text-sub);"> — oculto por padrão; clique para montar filtro visual (padrão Jira)</span>
+      <span id="builder-hint" style="font-size:12px;color:var(--text-sub);"> — clique para montar filtro visual (padrão Jira)</span>
     </div>
     <div class="builder" id="builder-card" style="display:none;">
       <div class="builder-row">
@@ -257,7 +716,7 @@
       </div>
     </div>
 
-    <!-- Filtros -->
+    <!-- Filtros em Barra -->
     <div class="filters">
       <label>Status
         <select id="f-status"><option value="">Todos</option></select>
@@ -266,7 +725,7 @@
         <select id="f-tipo"><option value="">Todos</option></select>
       </label>
       <label>Apenas abertas
-        <select id="f-abertas"><option value="true">Sim</option><option value="false">Não</option></select>
+        <select id="f-abertas"><option value="true">Sim (Sem resolução)</option><option value="false">Não (Todas)</option></select>
       </label>
       <label>Período
         <select id="f-periodo" onchange="loadAll()">
@@ -281,32 +740,138 @@
         <select id="f-origem"><option value="">Todas</option><option value="cliente">Cliente (portal)</option></select>
       </label>
       <label>JQL (gestor)
-        <input id="f-jql" placeholder="ex.: assignee = currentUser()" style="width:320px" />
+        <input id="f-jql" placeholder="ex.: assignee = currentUser()" style="width:280px" />
       </label>
-      <button class="btn" onclick="load()">Aplicar</button>
-      <button class="btn ghost" onclick="salvarFiltro()">Salvar filtro</button>
+      <button class="btn" onclick="load()">🔍 Aplicar</button>
+      <button class="btn ghost" onclick="salvarFiltro()">💾 Salvar filtro</button>
+      <button class="btn ghost" onclick="resetFiltros()" title="Restaurar visualização padrão">↺ Limpar</button>
     </div>
 
-    <!-- Listagem -->
-    <table>
-      <thead>
-        <tr>
-          <th>Tipo</th><th>Origem</th><th>Referência</th><th>Resumo</th><th>Status</th>
-          <th>Solicitante</th><th>Prioridade</th><th>Data de atualização</th><th>Data de entrega</th>
-        </tr>
-      </thead>
-      <tbody id="rows"><tr><td colspan="9" class="pause">Carregando…</td></tr></tbody>
-    </table>
+    <!-- Listagem Principal -->
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Área</th>
+            <th>Fase</th>
+            <th>Referência</th>
+            <th>Resumo</th>
+            <th>Status</th>
+            <th>Posse</th>
+            <th>Solicitante</th>
+            <th>Prioridade</th>
+            <th>Atualização</th>
+          </tr>
+        </thead>
+        <tbody id="rows">
+          <tr><td colspan="10" class="pause">Carregando solicitações…</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+
+  <!-- ======================================================== -->
+  <!-- 🚪 GAVETA LATERAL (DRAWER — JORNADA DO TICKET)           -->
+  <!-- ======================================================== -->
+  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+  <aside class="drawer" id="drawer">
+    <div class="drawer-header">
+      <div class="title-area">
+        <h2 id="d-key">HDPMSC-0000</h2>
+        <span class="badge-area sade" id="d-area">SADE</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button class="btn ghost" style="height:28px;padding:0 8px;font-size:11px;" onclick="copiarChave()" title="Copiar chave do ticket">📋 Copiar</button>
+        <a id="d-jira-link" href="#" target="_blank" class="btn ghost" style="height:28px;padding:0 8px;font-size:11px;display:inline-flex;align-items:center;" title="Abrir no Jira">↗️ Jira</a>
+        <button class="drawer-close" onclick="closeDrawer()" title="Fechar gaveta">✕</button>
+      </div>
+    </div>
+
+    <div class="drawer-body" id="drawer-body">
+      <!-- Resumo -->
+      <div>
+        <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px;" id="d-summary">–</div>
+        <div style="font-size:12px;color:var(--text-sub);" id="d-status-pill"></div>
+      </div>
+
+      <!-- Card de Posse da Bola -->
+      <div>
+        <div class="drawer-section-title">⏱️ Responsabilidade & Gargalo</div>
+        <div class="posse-card egsys" id="d-posse-card">
+          <div class="posse-card-title" id="d-posse-title">🔵 Ação com a egSYS</div>
+          <div class="posse-card-detail">
+            <span>Responsável: <b id="d-posse-resp">Engenharia</b></span>
+            <span>Nesta etapa: <b id="d-posse-tempo-etapa">–</b></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stepper de 7 Etapas -->
+      <div>
+        <div class="drawer-section-title">📍 Jornada do Chamado (Ciclo de Vida)</div>
+        <div class="stepper" id="d-stepper">
+          <!-- Gerado dinamicamente -->
+        </div>
+      </div>
+
+      <!-- 🔗 Rastreabilidade de Engenharia (Ações Técnicas / Derivações de Projeto) -->
+      <div id="d-derivacoes-section" style="display:none;">
+        <div class="drawer-section-title">🔗 Ações de Engenharia Vinculadas (Rastreabilidade)</div>
+        <div id="d-derivacoes-list" class="derivacoes-container">
+          <!-- Gerado dinamicamente -->
+        </div>
+      </div>
+
+      <!-- Metadados do Chamado -->
+      <div>
+        <div class="drawer-section-title">📋 Detalhes da Solicitação</div>
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-item-label">Solicitante</span>
+            <span class="meta-item-value" id="d-solicitante">–</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-item-label">Origem</span>
+            <span class="meta-item-value" id="d-origem">–</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-item-label">Prioridade</span>
+            <span class="meta-item-value" id="d-prioridade">–</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-item-label">Tempo Total Aberto</span>
+            <span class="meta-item-value" id="d-tempo-total">–</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-item-label">Data de Abertura</span>
+            <span class="meta-item-value" id="d-criacao">–</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-item-label">Data de Entrega</span>
+            <span class="meta-item-value" id="d-entrega">–</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trilha de Auditoria (Transições) -->
+      <div>
+        <div class="drawer-section-title">📜 Trilha de Auditoria (Movimentações)</div>
+        <div class="timeline" id="d-timeline">
+          <!-- Gerado dinamicamente -->
+        </div>
+      </div>
+    </div>
+  </aside>
 
   <script>
     // ==== Config ====
     const ESTADO = "sc";
-    // Base do app: funciona em root (dev) ou sob /painel_sc (prod via Traefik)
     const BASE = window.location.pathname.startsWith("/painel_sc") ? "/painel_sc" : "";
     const API = BASE + "/api/v1";
     let token = localStorage.getItem("jiraview_token") || "";
-    const ROLES = { viewer:1, manager:2, admin:3 };
+    let posseAtiva = "";
+    let activeTicketKey = "";
 
     function auth() { return { "Authorization": "Bearer " + token }; }
 
@@ -315,9 +880,9 @@
       const r = await fetch(API + path, { headers: auth(), ...opcoes });
       if (r.status === 401 && authAttempts < 2 && !opcoes.skipAuth) {
         authAttempts++;
-        try { await relogin(); } catch(e) { /* sem refresh, mostra erro */ }
+        try { await relogin(); } catch(e) { }
         authAttempts = 0;
-        return api(path, { ...opcoes, skipAuth: true });   // retenta 1x
+        return api(path, { ...opcoes, skipAuth: true });
       }
       if (!r.ok) throw new Error("HTTP " + r.status);
       return r.json();
@@ -349,272 +914,400 @@
       bootSeguro(loadSaved); bootSeguro(refreshBuilderValores); bootSeguro(loadCharts);
     }
 
-    // ==== Gráficos (estilo Jira Dashboard) — paleta segue o tema ====
+    // ==== Paleta de gráficos dinâmica ====
+    function chartPalette() {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      return {
+        texto: isDark ? "#f0f6fc" : "#172b4d",
+        sub: isDark ? "#8b949e" : "#6b778c",
+        grid: isDark ? "#30363d" : "#dfe1e6",
+        border: isDark ? "#161b22" : "#ffffff",
+        backdrop: "transparent",
+        tooltipBg: isDark ? "#1c2128" : "#172b4d",
+        cores: isDark
+          ? ["#388bfd", "#238636", "#d29922", "#f85149", "#a371f7", "#58a6ff", "#7ee787"]
+          : ["#0c66e4", "#00875a", "#ffab00", "#de350b", "#6554c0", "#00b8d9", "#36b37e"]
+      };
+    }
+
     let charts = {};
-    function chartPaleta() {
-      const dark = document.documentElement.getAttribute("data-theme") === "dark";
-      return dark
-        ? {
-            cols: ["#388bfd", "#3fb950", "#d29922", "#f85149", "#a371f7", "#39c5cf", "#f0883e", "#db61a2"],
-            texto: "#f0f6fc",
-            sub: "#8b949e",
-            grid: "rgba(255, 255, 255, 0.18)",
-            border: "#161b22",
-            backdrop: "transparent",
-            tooltipBg: "rgba(22, 27, 34, 0.95)"
-          }
-        : {
-            cols: ["#00875a", "#0c66e4", "#ffab00", "#de350b", "#5e4db2", "#00b8d9", "#f7812f", "#6b778c"],
-            texto: "#172b4d",
-            sub: "#6b778c",
-            grid: "rgba(9, 30, 66, 0.10)",
-            border: "#ffffff",
-            backdrop: "rgba(255, 255, 255, 0.75)",
-            tooltipBg: "rgba(9, 30, 66, 0.95)"
-          };
-    }
+    let chartRetryCount = 0;
     async function loadCharts() {
-      const d = await api("/charts?estado=" + ESTADO + "&periodo=" + periodoAtual());
-      if (!window.Chart) return;
-      Object.values(charts).forEach(c => { try { c.destroy(); } catch(e){} });
-      const C = window.Chart;
-      const P = chartPaleta();
-      const cols = P.cols;
-
-      // 1) Barras por status
-      const dataStatus = d.por_status || {};
-      charts.status = new C(document.getElementById("ch-status"), {
-        type: "bar",
-        data: {
-          labels: Object.keys(dataStatus),
-          datasets: [{
-            label: "Solicitações",
-            data: Object.values(dataStatus),
-            backgroundColor: cols,
-            borderRadius: 4
-          }]
-        },
-        options: {
-          indexAxis: "y",
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              titleColor: "#ffffff",
-              bodyColor: "#ffffff",
-              backgroundColor: P.tooltipBg,
-              borderColor: P.grid,
-              borderWidth: 1
-            }
-          },
-          scales: {
-            x: {
-              ticks: { precision: 0, color: P.texto, font: { weight: 500 } },
-              grid: { color: P.grid }
-            },
-            y: {
-              ticks: { color: P.texto, font: { weight: 500 } },
-              grid: { display: false }
-            }
+      try {
+        const C = window.Chart;
+        if (!C) {
+          if (chartRetryCount < 10) {
+            chartRetryCount++;
+            setTimeout(loadCharts, 300);
           }
+          return;
         }
-      });
+        const d = await api("/charts?estado=" + ESTADO + "&periodo=" + periodoAtual());
+        const P = chartPalette();
+        Object.values(charts).forEach(c => { try { c.destroy(); } catch(e) {} });
+        charts = {};
+        const cols = P.cores;
 
-      // 2) Donut por prioridade
-      charts.prioridade = new C(document.getElementById("ch-prioridade"), {
-        type: "doughnut",
-        data: {
-          labels: Object.keys(d.por_prioridade || {}),
-          datasets: [{
-            data: Object.values(d.por_prioridade || {}),
-            backgroundColor: cols,
-            borderColor: P.border,
-            borderWidth: 2
-          }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: "bottom",
-              labels: {
-                color: P.texto,
-                font: { size: 12, weight: 500 },
-                padding: 10
-              }
+        // 1) Barras por status
+        const elStatus = document.getElementById("ch-status");
+        if (elStatus) {
+          charts.status = new C(elStatus, {
+            type: "bar",
+            data: {
+              labels: Object.keys(d.por_status || {}),
+              datasets: [{ data: Object.values(d.por_status || {}), backgroundColor: cols[0], borderRadius: 4 }]
             },
-            tooltip: {
-              titleColor: "#ffffff",
-              bodyColor: "#ffffff",
-              backgroundColor: P.tooltipBg,
-              borderColor: P.grid,
-              borderWidth: 1
-            }
-          }
-        }
-      });
-
-      // 3) Solicitantes top 6 (Polar Area calibrado para visibilidade total)
-      charts.solicitante = new C(document.getElementById("ch-solicitante"), {
-        type: "polarArea",
-        data: {
-          labels: Object.keys(d.por_solicitante || {}),
-          datasets: [{
-            data: Object.values(d.por_solicitante || {}),
-            backgroundColor: cols.slice(0, 6),
-            borderColor: P.border,
-            borderWidth: 2
-          }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: "bottom",
-              labels: {
-                color: P.texto,
-                font: { size: 12, weight: 500 },
-                padding: 12
-              }
-            },
-            tooltip: {
-              titleColor: "#ffffff",
-              bodyColor: "#ffffff",
-              backgroundColor: P.tooltipBg,
-              borderColor: P.grid,
-              borderWidth: 1
-            }
-          },
-          scales: {
-            r: {
-              grid: { color: P.grid, lineWidth: 1.2 },
-              angleLines: { color: P.grid, lineWidth: 1.2 },
-              ticks: {
-                color: P.texto,
-                backdropColor: P.backdrop,
-                font: { size: 11, weight: 600 },
-                precision: 0,
-                z: 10
+            options: {
+              indexAxis: "y",
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: { titleColor: "#fff", bodyColor: "#fff", backgroundColor: P.tooltipBg, borderColor: P.grid, borderWidth: 1 }
               },
-              pointLabels: {
-                color: P.texto,
-                font: { size: 12, weight: 500 }
+              scales: {
+                x: { ticks: { precision: 0, color: P.texto, font: { weight: 500 } }, grid: { color: P.grid } },
+                y: { ticks: { color: P.texto, font: { weight: 500 } }, grid: { display: false } }
               }
             }
-          }
+          });
         }
-      });
 
-      // 4) Linha: criadas nos últimos 15 dias
-      charts.tempo = new C(document.getElementById("ch-tempo"), {
-        type: "line",
-        data: {
-          labels: (d.por_dia || []).map(x => x.dia.slice(5)),
-          datasets: [{
-            label: "Criadas",
-            data: (d.por_dia || []).map(x => x.count),
-            borderColor: cols[0] || "#388bfd",
-            backgroundColor: (document.documentElement.getAttribute("data-theme") === "dark") ? "rgba(56, 139, 253, 0.25)" : "rgba(12, 102, 228, 0.15)",
-            pointBackgroundColor: cols[0] || "#388bfd",
-            pointBorderColor: P.border,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            fill: true,
-            tension: 0.3
-          }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              titleColor: "#ffffff",
-              bodyColor: "#ffffff",
-              backgroundColor: P.tooltipBg,
-              borderColor: P.grid,
-              borderWidth: 1
-            }
-          },
-          scales: {
-            x: {
-              ticks: { color: P.texto, font: { weight: 500 } },
-              grid: { color: P.grid }
+        // 2) Donut por prioridade
+        const elPrio = document.getElementById("ch-prioridade");
+        if (elPrio) {
+          charts.prioridade = new C(elPrio, {
+            type: "doughnut",
+            data: {
+              labels: Object.keys(d.por_prioridade || {}),
+              datasets: [{ data: Object.values(d.por_prioridade || {}), backgroundColor: cols, borderColor: P.border, borderWidth: 2 }]
             },
-            y: {
-              ticks: { color: P.texto, precision: 0, font: { weight: 500 } },
-              grid: { color: P.grid }
+            options: {
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { position: "bottom", labels: { color: P.texto, font: { size: 12, weight: 500 }, padding: 10 } },
+                tooltip: { titleColor: "#fff", bodyColor: "#fff", backgroundColor: P.tooltipBg, borderColor: P.grid, borderWidth: 1 }
+              }
             }
-          }
+          });
         }
-      });
+
+        // 3) Solicitantes top 6
+        const elSol = document.getElementById("ch-solicitante");
+        if (elSol) {
+          charts.solicitante = new C(elSol, {
+            type: "polarArea",
+            data: {
+              labels: Object.keys(d.por_solicitante || {}),
+              datasets: [{ data: Object.values(d.por_solicitante || {}), backgroundColor: cols.slice(0, 6), borderColor: P.border, borderWidth: 2 }]
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { position: "bottom", labels: { color: P.texto, font: { size: 12, weight: 500 }, padding: 12 } },
+                tooltip: { titleColor: "#fff", bodyColor: "#fff", backgroundColor: P.tooltipBg, borderColor: P.grid, borderWidth: 1 }
+              },
+              scales: {
+                r: {
+                  grid: { color: P.grid, lineWidth: 1.2 },
+                  angleLines: { color: P.grid, lineWidth: 1.2 },
+                  ticks: { color: P.texto, backdropColor: P.backdrop, font: { size: 11, weight: 600 }, precision: 0, z: 10 },
+                  pointLabels: { color: P.texto, font: { size: 12, weight: 500 } }
+                }
+              }
+            }
+          });
+        }
+
+        // 4) Linha 15 dias
+        const elTempo = document.getElementById("ch-tempo");
+        if (elTempo) {
+          charts.tempo = new C(elTempo, {
+            type: "line",
+            data: {
+              labels: (d.por_dia || []).map(x => x.dia.slice(5)),
+              datasets: [{
+                label: "Criadas",
+                data: (d.por_dia || []).map(x => x.count),
+                borderColor: cols[0] || "#388bfd",
+                backgroundColor: (document.documentElement.getAttribute("data-theme") === "dark") ? "rgba(56, 139, 253, 0.25)" : "rgba(12, 102, 228, 0.15)",
+                pointBackgroundColor: cols[0] || "#388bfd",
+                pointBorderColor: P.border,
+                pointRadius: 4,
+                fill: true,
+                tension: 0.3
+              }]
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false }, tooltip: { titleColor: "#fff", bodyColor: "#fff", backgroundColor: P.tooltipBg, borderColor: P.grid, borderWidth: 1 } },
+              scales: {
+                x: { ticks: { color: P.texto, font: { weight: 500 } }, grid: { color: P.grid } },
+                y: { ticks: { color: P.texto, precision: 0, font: { weight: 500 } }, grid: { color: P.grid } }
+              }
+            }
+          });
+        }
+      } catch(e) {
+        console.warn("Erro ao renderizar gráficos:", e);
+      }
     }
 
-    // ==== Cards (dashboard) ====
+    // ==== Cards (Funil de 4 Estágios) ====
     async function loadCards() {
       const d = await api("/dashboard?estado=" + ESTADO + "&periodo=" + periodoAtual());
-      document.getElementById("c-abertas").textContent = d.abertas ?? "–";
-      const andamento = (d.por_status || {});
-      document.getElementById("c-andamento").textContent =
-        Object.values(andamento).filter(v => v > 0).length ? Object.entries(andamento)
-          .filter(([k,v]) => k !== "Aberto").reduce((a,[,v]) => a+v, 0) : "–";
-      document.getElementById("c-concluidas").textContent = d.total_com_resolucao ?? "–";
+      const f = d.funil || {};
+      document.getElementById("c-novas").textContent = f.novas ?? (d.abertas ?? "–");
+      document.getElementById("c-andamento").textContent = f.em_atendimento ?? (d.em_andamento ?? "–");
+      document.getElementById("c-validacao").textContent = f.aguardando_validacao ?? "0";
+      document.getElementById("c-concluidas").textContent = f.concluidas ?? (d.total_com_resolucao ?? "–");
       document.getElementById("c-fechadas").textContent = d.fechadas_7d ?? "–";
-      document.getElementById("c-projetos").textContent = (d.projetos || []).join(", ");
-      const rot = { "90d":"(90 dias)", "6m":"(6 meses)", "12m":"(12 meses)", "ano":"(2026)", "":"(tudo)" }[periodoAtual()];
+      document.getElementById("c-projetos").textContent = "Projetos: " + (d.projetos || []).join(", ");
+      const rot = { "90d":"(90d)", "6m":"(6m)", "12m":"(12m)", "ano":"(2026)", "":"(tudo)" }[periodoAtual()];
       ["p-label","p-label2","p-label3"].forEach(id => { const e = document.getElementById(id); if (e) e.textContent = rot || ""; });
+    }
+
+    let funilStageAtivo = "";
+    function filtrarPorFunil(categoria) {
+      const cardMap = {
+        "novas": "card-novas",
+        "em_atendimento": "card-andamento",
+        "aguardando_validacao": "card-validacao",
+        "concluidas": "card-concluidas"
+      };
+
+      if (funilStageAtivo === categoria) {
+        // Alterna/limpa filtro ao clicar no mesmo card
+        funilStageAtivo = "";
+        document.querySelectorAll(".card").forEach(c => c.classList.remove("active-filter"));
+      } else {
+        funilStageAtivo = categoria;
+        document.querySelectorAll(".card").forEach(c => c.classList.remove("active-filter"));
+        if (cardMap[categoria]) {
+          document.getElementById(cardMap[categoria]).classList.add("active-filter");
+        }
+      }
+      load();
+    }
+
+    function setPosseFilter(posse) {
+      posseAtiva = (posseAtiva === posse) ? "" : posse;
+      document.getElementById("posse-btn-todos").classList.toggle("active", posseAtiva === "");
+      document.getElementById("posse-btn-egsys").classList.toggle("active", posseAtiva === "egsys");
+      document.getElementById("posse-btn-cliente").classList.toggle("active", posseAtiva === "cliente");
+      load();
+    }
+
+    function resetFiltros() {
+      document.getElementById("f-status").value = "";
+      document.getElementById("f-tipo").value = "";
+      document.getElementById("f-abertas").value = "true";
+      document.getElementById("f-origem").value = "";
+      document.getElementById("f-jql").value = "";
+      posseAtiva = "";
+      funilStageAtivo = "";
+      document.getElementById("posse-btn-todos").classList.add("active");
+      document.getElementById("posse-btn-egsys").classList.remove("active");
+      document.getElementById("posse-btn-cliente").classList.remove("active");
+      document.querySelectorAll(".card").forEach(c => c.classList.remove("active-filter"));
+      load();
     }
 
     // ==== Meta (filtros dinâmicos com contagem real) ====
     async function loadMeta() {
       const d = await api("/meta?estado=" + ESTADO);
       const selS = document.getElementById("f-status");
+      selS.innerHTML = '<option value="">Todos os status</option>';
       (d.statuses || []).forEach(s => {
         const o = document.createElement("option");
         o.value = s.name;
         o.textContent = `${s.name} (${s.tickets})`;
-        if (!s.tickets) { o.disabled = true; o.textContent += " — sem solicitações"; }
+        if (!s.tickets) { o.disabled = true; o.textContent += " — (0)"; }
         selS.appendChild(o);
       });
       const selT = document.getElementById("f-tipo");
+      selT.innerHTML = '<option value="">Todos os tipos</option>';
       (d.tipos || []).forEach(t => { const o = document.createElement("option"); o.value = t; o.textContent = t; selT.appendChild(o); });
     }
 
-    // ==== Listagem (colunas da imagem) ====
+    // ==== Listagem Principal ====
     async function load() {
       const st = document.getElementById("f-status").value;
       const tp = document.getElementById("f-tipo").value;
       const ab = document.getElementById("f-abertas").value;
       const jql = document.getElementById("f-jql").value;
-      const q = new URLSearchParams({ estado: ESTADO, abertas: ab, periodo: periodoAtual(), max_results: "50" });
+      const q = new URLSearchParams({ estado: ESTADO, abertas: (funilStageAtivo === "concluidas" ? "false" : ab), periodo: periodoAtual(), max_results: "50" });
       if (st) q.set("status_filter", st);
       if (tp) q.set("tipo", tp);
       const org = document.getElementById("f-origem").value;
       if (org) q.set("origem", org);
+      if (posseAtiva) q.set("posse_filter", posseAtiva);
+      if (funilStageAtivo) q.set("funil_stage", funilStageAtivo);
       if (jql) q.set("jql", jql);
-      const d = await api("/issues?" + q);
+
       const rows = document.getElementById("rows");
-      const cores = { done:"var(--green)", indeterminate:"var(--blue)", new:"var(--yellow)" };
-      if (!d.issues.length) {
-        rows.innerHTML = `<tr><td colspan="9">
-          <div class="empty-msg">🔍 <b>0 resultados para esta combinação de filtros.</b><br>
-          A consulta está correta — não há solicitações que atendam: ${esc((jql || st || tp) ? ((jql || "status = " + st + (tp ? " & tipo = " + tp : ""))) : "os filtros atuais")}.<br>
-          Dica: ajuste o status/tipo ou remova a condição no campo JQL.</div>
-        </td></tr>`;
-      } else {
-        rows.innerHTML = d.issues.map(i => `
-        <tr>
-          <td>${esc(i.tipo)}</td>
-          <td><span class="chip">${i.origem === "cliente" ? "👤 Cliente" : "🏢 Interno"}</span></td>
-          <td><a href="https://egsys.atlassian.net/browse/${i.referencia}" target="_blank">${esc(i.referencia)}</a></td>
-          <td>${esc(i.resumo)}</td>
-          <td><span class="status" style="background:${cores[i.statusCategoria] || 'var(--blue)'}">${esc(i.status)}</span></td>
-          <td>${esc(i.solicitante)}</td>
-          <td>${i.prioridade === "Mais alta possível" ? "🔴 " : i.prioridade === "Alta" ? "🟠 " : ""}${esc(i.prioridade)}</td>
-          <td>${esc(i.atualizacao)}</td>
-          <td>${esc(i.entrega || "–")}</td>
-        </tr>`).join("");
+      rows.innerHTML = `<tr><td colspan="10" class="pause">Consultando Jira...</td></tr>`;
+
+      try {
+        const d = await api("/issues?" + q);
+        const cores = { done:"var(--green)", indeterminate:"var(--blue)", new:"var(--yellow)" };
+        const areaClasses = { "SADE":"sade", "Cidadão":"cidadao", "Integração":"integracao", "Operações":"operacoes" };
+
+        if (!d.issues.length) {
+          rows.innerHTML = `<tr><td colspan="10">
+            <div class="empty-msg">🔍 <b>0 solicitações encontradas para este filtro.</b><br>
+            A consulta está correta — não há itens que atendam: ${esc((jql || st || tp || posseAtiva) ? (jql || (st ? "status = " + st : "") || (posseAtiva ? "posse = " + posseAtiva : "")) : "os critérios atuais")}.<br>
+            Dica: clique em "↺ Limpar" para restaurar a listagem.</div>
+          </td></tr>`;
+        } else {
+          rows.innerHTML = d.issues.map(i => {
+            const aClass = areaClasses[i.area] || "operacoes";
+            const posseClass = i.posse === "cliente" ? "cliente" : "egsys";
+            return `
+            <tr class="clickable-row" onclick="openDrawer('${esc(i.referencia)}')">
+              <td><b>${esc(i.tipo)}</b></td>
+              <td><span class="badge-area ${aClass}">${esc(i.area)}</span></td>
+              <td><span class="badge-fase">📊 ${i.faseNum}/7 ${esc(i.faseNome)}</span></td>
+              <td><a href="https://egsys.atlassian.net/browse/${i.referencia}" target="_blank" onclick="event.stopPropagation()">${esc(i.referencia)}</a></td>
+              <td><b>${esc(i.resumo)}</b></td>
+              <td><span class="status" style="background:${cores[i.statusCategoria] || 'var(--blue)'}">${esc(i.status)}</span></td>
+              <td><span class="badge-posse ${posseClass}">${i.posse === "cliente" ? "🟡 Cliente" : "🔵 egSYS"}</span></td>
+              <td>${esc(i.solicitante)}</td>
+              <td>${i.prioridade === "Mais alta possível" ? "🔴 " : i.prioridade === "Alta" ? "🟠 " : ""}${esc(i.prioridade)}</td>
+              <td>${esc(i.atualizacao)}</td>
+            </tr>`;
+          }).join("");
+        }
+      } catch(e) {
+        rows.innerHTML = `<tr><td colspan="10" style="color:var(--red);padding:14px;">Erro ao carregar solicitações: ${esc(e.message)}</td></tr>`;
       }
     }
+
+    // ========================================================
+    // 🚪 GAVETA LATERAL (DRAWER — JORNADA DO TICKET)
+    // ========================================================
+    async function openDrawer(key) {
+      activeTicketKey = key;
+      const drawer = document.getElementById("drawer");
+      const overlay = document.getElementById("drawer-overlay");
+      
+      document.getElementById("d-key").textContent = key;
+      document.getElementById("d-jira-link").href = "https://egsys.atlassian.net/browse/" + key;
+      document.getElementById("d-summary").textContent = "Carregando jornada do ticket…";
+      document.getElementById("d-stepper").innerHTML = "<div class='pause'>Consultando workflow e histórico…</div>";
+      document.getElementById("d-timeline").innerHTML = "";
+      document.getElementById("d-derivacoes-section").style.display = "none";
+      document.getElementById("d-derivacoes-list").innerHTML = "";
+
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+
+      try {
+        const j = await api("/issues/" + key + "/journey?estado=" + ESTADO);
+        
+        // Header & Summary
+        document.getElementById("d-summary").textContent = j.resumo;
+        const areaEl = document.getElementById("d-area");
+        areaEl.textContent = j.area;
+        areaEl.className = "badge-area " + (j.area.toLowerCase().includes("sade") ? "sade" : j.area.toLowerCase().includes("cidad") ? "cidadao" : j.area.toLowerCase().includes("integra") ? "integracao" : "operacoes");
+        
+        const cores = { done:"var(--green)", indeterminate:"var(--blue)", new:"var(--yellow)" };
+        document.getElementById("d-status-pill").innerHTML = `<span class="status" style="background:${cores[j.statusCategoria] || 'var(--blue)'}">${esc(j.status)}</span> &nbsp; • &nbsp; Tipo: <b>${esc(j.tipo)}</b> &nbsp; • &nbsp; Resolução: <b>${esc(j.resolucao || 'Em aberto')}</b>`;
+
+        // Posse da Bola
+        const posseCard = document.getElementById("d-posse-card");
+        const isCliente = j.posse.tipo === "cliente";
+        posseCard.className = "posse-card " + (isCliente ? "cliente" : "egsys");
+        document.getElementById("d-posse-title").innerHTML = isCliente ? "🟡 Ação com o Cliente (PMSC / Órgão)" : "🔵 Ação com a egSYS (Engenharia & Suporte)";
+        document.getElementById("d-posse-resp").textContent = j.posse.responsavel;
+        document.getElementById("d-posse-tempo-etapa").textContent = j.posse.tempo_etapa;
+
+        // Metadados
+        document.getElementById("d-solicitante").textContent = j.solicitante;
+        document.getElementById("d-origem").textContent = j.origem === "cliente" ? "👤 Cliente (Portal JSM)" : "🏢 Agente Interno";
+        document.getElementById("d-prioridade").textContent = j.prioridade;
+        document.getElementById("d-tempo-total").textContent = j.posse.tempo_total;
+        document.getElementById("d-criacao").textContent = j.criacao;
+        document.getElementById("d-entrega").textContent = j.entrega || "Não definida";
+
+        // Stepper de 7 Etapas
+        const stepperHtml = (j.etapas || []).map(st => {
+          const iconContent = st.estado === "concluido" ? "✓" : st.num;
+          const tagLabel = st.estado === "concluido" ? "Concluída" : st.estado === "ativo" ? "Etapa Atual" : "Pendente";
+          return `
+          <div class="step-node ${st.estado}">
+            <div class="step-icon">${iconContent}</div>
+            <div class="step-content">
+              <div class="step-name">${st.num}. ${esc(st.nome)}</div>
+              <div class="step-status-tag">${tagLabel}</div>
+            </div>
+          </div>`;
+        }).join("");
+        document.getElementById("d-stepper").innerHTML = stepperHtml;
+
+        // 🔗 Rastreabilidade de Engenharia (Derivações de Projeto)
+        const derivSection = document.getElementById("d-derivacoes-section");
+        const derivList = document.getElementById("d-derivacoes-list");
+        if (j.derivacoes_engenharia && j.derivacoes_engenharia.length > 0) {
+          derivSection.style.display = "block";
+          derivList.innerHTML = j.derivacoes_engenharia.map(d => `
+            <div class="derivacao-card">
+              <div class="derivacao-header">
+                <span>🛠️ <a href="https://egsys.atlassian.net/browse/${esc(d.chave)}" target="_blank" style="color:var(--link-color);font-weight:700;">${esc(d.chave)}</a> • ${esc(d.tipo)}</span>
+                <span class="status" style="background:${d.status_cor || 'var(--blue)'};">${esc(d.status_executivo)}</span>
+              </div>
+              <div class="derivacao-sub"><b>Resumo:</b> ${esc(d.resumo)}</div>
+              <div class="derivacao-meta">
+                <span>👤 <b>Responsável Técnico:</b> ${esc(d.responsavel)}</span>
+                <span>🏷️ <b>Prioridade:</b> ${esc(d.prioridade)}</span>
+                <span>🔗 <b>Relação:</b> ${esc(d.relacao)}</span>
+              </div>
+              ${d.total_subtasks > 0 ? `
+                <div class="derivacao-subtasks-bar">
+                  <span>📊 <b>Subtarefas de Engenharia:</b> ${d.subtasks_concluidas}/${d.total_subtasks} concluídas</span>
+                </div>` : ''}
+            </div>
+          `).join("");
+        } else {
+          derivSection.style.display = "none";
+          derivList.innerHTML = "";
+        }
+
+        // Linha do tempo de transições
+        if (j.transicoes && j.transicoes.length) {
+          document.getElementById("d-timeline").innerHTML = j.transicoes.map(tr => `
+            <div class="timeline-item">
+              <div class="timeline-header">
+                <span>Por: <b>${esc(tr.autor)}</b></span>
+                <span>${esc(tr.quando)}</span>
+              </div>
+              <div>De: <b>${esc(tr.de || 'Início')}</b> ➔ Para: <b style="color:var(--accent);">${esc(tr.para)}</b></div>
+            </div>
+          `).join("");
+        } else {
+          document.getElementById("d-timeline").innerHTML = `<div style="font-size:12px;color:var(--text-sub);">Nenhuma transição de status registrada até o momento.</div>`;
+        }
+
+      } catch(e) {
+        document.getElementById("d-summary").textContent = "Erro ao carregar dados do chamado: " + e.message;
+      }
+    }
+
+    function closeDrawer() {
+      document.getElementById("drawer").classList.remove("open");
+      document.getElementById("drawer-overlay").classList.remove("open");
+    }
+
+    function copiarChave() {
+      if (!activeTicketKey) return;
+      navigator.clipboard.writeText(activeTicketKey).then(() => {
+        alert("Chave " + activeTicketKey + " copiada para a área de transferência!");
+      });
+    }
+
+    // Fechar gaveta com a tecla Escape
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeDrawer();
+    });
 
     // ==== Construtor visual (estilo Jira) ====
     let builderChips = [];
@@ -641,9 +1334,9 @@
       const v = (sel.style.display === "none" ? txt.value : (vals.length ? vals.join(",") : sel.value));
       if (!v) { alert("Escolha um valor"); return; }
       let cond;
-      if (op === "in" && !v.includes(",")) v = v; // in com 1 valor funciona igual
+      if (op === "in" && !v.includes(",")) v = v;
       cond = `${campo} ${op} ${op === "in" ? "("+v.split(",").map(x=>`"${x.trim()}"`).join(", ")+")" : `"${v.trim()}"`}`;
-      if (builderChips.includes(cond)) { alert("Condição já adicionada"); return; }  // anti-duplicata
+      if (builderChips.includes(cond)) { alert("Condição já adicionada"); return; }
       builderChips.push(cond);
       renderChips();
       document.getElementById("b-valor-texto").value = "";
@@ -718,7 +1411,7 @@
       const cur = document.documentElement.getAttribute("data-theme") || "light";
       const next = cur === "dark" ? "light" : "dark";
       applyTheme(next);
-      try { loadCharts(); } catch(e) {}   // redesenha gráficos com nova paleta
+      try { loadCharts(); } catch(e) {}
     }
     applyTheme(localStorage.getItem("theme") || "light");
 
