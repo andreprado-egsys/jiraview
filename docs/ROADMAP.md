@@ -48,16 +48,19 @@
 - [x] Filtros temporais executivos em SC restritos a 4 opções (90d, 6m, 12m, Ano atual)
 - [x] Compatibilidade universal de roteamento Traefik para todo o domínio `suporte-monitor.egsys.siseg.tech`
 
-## v0.4 — Produtividade do Gestor & Exportação
-- [ ] Filtros compartilhados por estado (equipe)
-- [ ] Export CSV/Excel da listagem de tickets e métricas consolidadas
+## v0.4 (concluída) — Esteira Canônica de 8 Etapas, Exportação e Produtividade
+- [x] **Esteira Canônica de 8 Etapas**: Desacoplamento da etapa `5. Testes de Qualidade (QA)` da etapa `6. Validação Interna (Suporte N1)`.
+- [x] **Navegação 1-Click Direta ao Jira Cloud**: Badges de chamados e derivações abrem diretamente a issue oficial no Jira Cloud.
+- [x] **Rastreabilidade de Engenharia (`issuelinks`)**: Renderização visual de derivações técnicas vinculadas em ambos os painéis.
+- [x] **Exportação Multi-Formato (.MD, .XLSX, .CSV)**: Botão corporativo de download para auditorias e relatórios.
+- [x] **Governança de Janelas Temporais**: Inclusão de `60d` e restrição estrita de `todos` à Coordenação/Admin.
+- [x] **Roteamento Soberano no Traefik (`priority: 1000`)**: Resolução de conflito com container legado e entrega sem erros de `/coordenador`.
+- [x] **Sincronização de Usuários em Produção**: Base de dados `auth.db` com 10 usuários ativos auditados.
 - [ ] Widgets de alerta antecipado ("issues em risco de SLA" e "paradas há mais de X dias")
 - [ ] Notificação visual de tickets atualizados recentemente
-- [ ] Estados TO/AM/PR/GM ativados (bloco YAML + clientes + papéis)
-- [ ] Dashboard consolidado por estado (seletor multi-estado para perfil gestor global)
-- [ ] Mapeamento dinâmico de áreas por tenant
+- [ ] Estados TO/AM/PR/GM com dashboards dedicados ativados
 
-## v0.5 — Automação e Governança
+## v0.5 — Automação e Governança Multi-Estado
 - [ ] Regra de automação JSM (workflow/conclusão) substituindo script-timer quando permitido
 - [ ] Métricas de SLA por área/estado com histórico de conformidade
 - [ ] Descomissionamento do painel Node-RED `noc-jira` legado

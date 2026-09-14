@@ -18,10 +18,6 @@ services:
         max-file: "3"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jiraview.rule=Host(`painel.egsys.siseg.tech`)"
-      - "traefik.http.routers.jiraview.entrypoints=websecure"
-      - "traefik.http.routers.jiraview.tls=true"
-      - "traefik.http.routers.jiraview.tls.certresolver=letsencrypt"
       - "traefik.http.services.jiraview.loadbalancer.server.port=8090"
     networks:
       - webproxy

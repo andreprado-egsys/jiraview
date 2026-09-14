@@ -1,5 +1,23 @@
 # egSYS JiraView — Changelog
 
+## [0.4.0] — 2026-09-14
+
+### Added
+- `feat(stepper): Esteira Canônica de 8 Etapas` — desacoplamento estrito e oficial da etapa `5. Testes de Qualidade (QA)` (homologação técnica e automações de testes do time de QA) da etapa `6. Validação Interna (Suporte N1)` (conferência do analista de sustentação e encerramento operacional).
+- `feat(export): Exportação Multi-Formato (.MD, .XLSX, .CSV)` — componente dropdown corporativo de exportação (`btn-export`) com download direto das tabelas e métricas consolidadas em Markdown, Excel nativo (`xlsx`) e CSV padronizado.
+- `feat(links): Navegação 1-Click Direta ao Jira Cloud` — links de acesso direto com a URL oficial (`https://egsys.atlassian.net/browse/{chave}`) nos badges de chamados e derivações técnicas no modal e tabelas.
+- `feat(traceability): Exibição Unificada de Derivações Técnicas (issuelinks)` — mapeamento dinâmico e renderização visual das tarefas vinculadas da engenharia de software tanto no painel estadual (`/painel_sc`) quanto na visão executiva de coordenação (`/coordenador`).
+- `feat(filters): Filtro Temporal 60 Dias e Governança de Janela Irrestrita` — inclusão da opção `60d` (últimos 60 dias) e restrição estrita da opção `todos` (sem restrição de data) exclusivamente para os painéis de coordenação/administração, prevenindo degradação de performance nos painéis de clientes.
+- `feat(auth): Sincronização e Auditoria de Usuários em Produção` — persistência e sincronização de 10 usuários ativos na base de produção (`auth.db`), incluindo perfis estaduais (SC, TO, AM, RO, PR, MT, GM) e coordenação geral.
+
+### Changed
+- `infra(traefik): Prioridade Soberana no Roteamento (priority: 1000)` — configuração explícita de prioridade na regra do Traefik (`/var/egsys-docker/container/traefik/dynamic/jiraview.yml`) para garantir que o router de produção do JiraView sobreponha containers legados no host (`egsys-noc-jira`).
+- `infra(compose): Limpeza de Hostname Inexistente` — remoção da label de rota órfã `painel.egsys.siseg.tech` de `docker-compose.prod.yml`.
+
+### Fixed
+- `fix(traefik): Resolução de 'Cannot GET /coordenador'` — eliminação definitiva do conflito de hostname entre Node-RED e JiraView no Traefik do host de monitoramento.
+- `fix(stepper): Mapeamento de Status JSM para Fase 6 de Validação N1` — inclusão cirúrgica de status como `Validação N1`, `Desenvolvimento Concluído` e `Resolução Suporte` na etapa de validação interna.
+
 ## [0.3.0] — 2026-09-10
 
 ### Added

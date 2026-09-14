@@ -226,6 +226,41 @@
     .btn:hover { filter: brightness(1.1); }
     .btn.ghost { background-color: var(--ghost-bg); color: var(--accent); border: 1px solid var(--accent); }
     .btn.danger { background-color: var(--ghost-bg); color: var(--red); border: 1px solid var(--red); }
+    .export-dropdown { position: relative; display: inline-block; }
+    .export-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      min-width: 180px;
+      margin-top: 4px;
+      padding: 4px 0;
+    }
+    .export-menu.show { display: block; }
+    .export-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .export-item:hover {
+      background: var(--tr-hover);
+      color: var(--accent);
+    }
 
     /* Tabela */
     .table-responsive {
@@ -730,6 +765,7 @@
       </label>
       <label>Período
         <select id="f-periodo" onchange="loadAll()">
+          <option value="60d">Últimos 60 dias</option>
           <option value="90d" selected>Últimos 90 dias</option>
           <option value="6m">Últimos 6 meses</option>
           <option value="12m">Últimos 12 meses</option>
@@ -745,6 +781,15 @@
       <button class="btn" onclick="load()">🔍 Aplicar</button>
       <button class="btn ghost" onclick="salvarFiltro()">💾 Salvar filtro</button>
       <button class="btn ghost" onclick="resetFiltros()" title="Restaurar visualização padrão">↺ Limpar</button>
+      <div class="export-dropdown">
+        <button class="btn ghost" onclick="toggleExportMenu('export-menu-index', event)" id="btn-exportar" title="Salvar listagem filtrada em Markdown, Excel ou CSV">📥 Salvar Listagem ▾</button>
+        <div id="export-menu-index" class="export-menu">
+          <button class="export-item" onclick="exportarTabelaMarkdown();fecharExportMenus()">📄 Markdown (.md)</button>
+          <button class="export-item" onclick="exportarTabelaExcel();fecharExportMenus()">📊 Excel (.xlsx)</button>
+          <button class="export-item" onclick="exportarTabelaCSV();fecharExportMenus()">📋 CSV (.csv)</button>
+        </div>
+      </div>
+      <span id="contagem-tabela" style="font-size:12px;color:var(--text-sub);font-weight:700;margin-left:auto;align-self:center;"></span>
     </div>
 
     <!-- Listagem Principal -->
@@ -778,7 +823,7 @@
   <aside class="drawer" id="drawer">
     <div class="drawer-header">
       <div class="title-area">
-        <h2 id="d-key">HDPMSC-0000</h2>
+        <h2><a id="d-key" href="#" target="_blank" style="color:inherit;text-decoration:none;" title="Abrir chamado no Jira Oficial">HDPMSC-0000 ↗️</a></h2>
         <span class="badge-area sade" id="d-area">SADE</span>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
@@ -1080,7 +1125,7 @@
       document.getElementById("c-concluidas").textContent = f.concluidas ?? (d.total_com_resolucao ?? "–");
       document.getElementById("c-fechadas").textContent = d.fechadas_7d ?? "–";
       document.getElementById("c-projetos").textContent = "Projetos: " + (d.projetos || []).join(", ");
-      const rot = { "90d":"(90d)", "6m":"(6m)", "12m":"(12m)", "ano":"(" + new Date().getFullYear() + ")" }[periodoAtual()] || "(90d)";
+      const rot = { "60d":"(60d)", "90d":"(90d)", "6m":"(6m)", "12m":"(12m)", "ano":"(" + new Date().getFullYear() + ")", "todos":"(todos)" }[periodoAtual()] || "(90d)";
       ["p-label","p-label2","p-label3"].forEach(id => { const e = document.getElementById(id); if (e) e.textContent = rot || ""; });
     }
 
@@ -1167,10 +1212,16 @@
 
       try {
         const d = await api("/issues?" + q);
+        window.currentIssues = d.issues || [];
+        const contagemEl = document.getElementById("contagem-tabela");
+        if (contagemEl) {
+          contagemEl.textContent = `Exibindo ${window.currentIssues.length} solicitações`;
+        }
         const cores = { done:"var(--green)", indeterminate:"var(--blue)", new:"var(--yellow)" };
         const areaClasses = { "SADE":"sade", "Cidadão":"cidadao", "Integração":"integracao", "Operações":"operacoes" };
 
         if (!d.issues.length) {
+          if (contagemEl) contagemEl.textContent = "0 solicitações";
           rows.innerHTML = `<tr><td colspan="10">
             <div class="empty-msg">🔍 <b>0 solicitações encontradas para este filtro.</b><br>
             A consulta está correta — não há itens que atendam: ${esc((jql || st || tp || posseAtiva) ? (jql || (st ? "status = " + st : "") || (posseAtiva ? "posse = " + posseAtiva : "")) : "os critérios atuais")}.<br>
@@ -1184,7 +1235,7 @@
             <tr class="clickable-row" onclick="openDrawer('${esc(i.referencia)}')">
               <td><b>${esc(i.tipo)}</b></td>
               <td><span class="badge-area ${aClass}">${esc(i.area)}</span></td>
-              <td><span class="badge-fase">📊 ${i.faseNum}/7 ${esc(i.faseNome)}</span></td>
+              <td><span class="badge-fase">📊 ${i.faseNum}/8 ${esc(i.faseNome)}</span></td>
               <td><a href="https://egsys.atlassian.net/browse/${i.referencia}" target="_blank" onclick="event.stopPropagation()">${esc(i.referencia)}</a></td>
               <td><b>${esc(i.resumo)}</b></td>
               <td><span class="status" style="background:${cores[i.statusCategoria] || 'var(--blue)'}">${esc(i.status)}</span></td>
@@ -1196,6 +1247,9 @@
           }).join("");
         }
       } catch(e) {
+        window.currentIssues = [];
+        const contagemEl = document.getElementById("contagem-tabela");
+        if (contagemEl) contagemEl.textContent = "";
         rows.innerHTML = `<tr><td colspan="10" style="color:var(--red);padding:14px;">Erro ao carregar solicitações: ${esc(e.message)}</td></tr>`;
       }
     }
@@ -1208,8 +1262,13 @@
       const drawer = document.getElementById("drawer");
       const overlay = document.getElementById("drawer-overlay");
       
-      document.getElementById("d-key").textContent = key;
-      document.getElementById("d-jira-link").href = "https://egsys.atlassian.net/browse/" + key;
+      const keyEl = document.getElementById("d-key");
+      if (keyEl) {
+        keyEl.textContent = key + " ↗️";
+        keyEl.href = "https://egsys.atlassian.net/browse/" + key;
+      }
+      const jiraLinkEl = document.getElementById("d-jira-link");
+      if (jiraLinkEl) jiraLinkEl.href = "https://egsys.atlassian.net/browse/" + key;
       document.getElementById("d-summary").textContent = "Carregando jornada do ticket…";
       document.getElementById("d-stepper").innerHTML = "<div class='pause'>Consultando workflow e histórico…</div>";
       document.getElementById("d-timeline").innerHTML = "";
@@ -1390,6 +1449,156 @@
       ev.stopPropagation();
       await fetch(API + "/filtros/" + id + "?estado=" + ESTADO, { method:"DELETE", headers: auth() });
       loadSaved();
+    }
+
+    // ==== Exportação da Listagem Filtrada (CSV, Excel, Markdown) ====
+    function toggleExportMenu(id, ev) {
+      if (ev) ev.stopPropagation();
+      const m = document.getElementById(id);
+      const isVisible = m.classList.contains("show");
+      fecharExportMenus();
+      if (!isVisible) m.classList.add("show");
+    }
+
+    function fecharExportMenus() {
+      document.querySelectorAll(".export-menu").forEach(m => m.classList.remove("show"));
+    }
+
+    window.addEventListener("click", () => fecharExportMenus());
+
+    function exportarTabelaCSV() {
+      const tickets = window.currentIssues || [];
+      if (!tickets.length) {
+        alert("Nenhum chamado disponível na listagem para exportar.");
+        return;
+      }
+      const cabecalhos = [
+        "Referência", "Tipo", "Área", "Fase", "Resumo", "Status",
+        "Posse", "Solicitante", "Responsável", "Prioridade",
+        "Criação", "Atualização", "Resolução"
+      ];
+      const linhas = tickets.map(i => [
+        i.referencia || "",
+        i.tipo || "",
+        i.area || "",
+        `${i.faseNum || ""}/8 ${i.faseNome || ""}`.trim(),
+        (i.resumo || "").replace(/"/g, '""'),
+        i.status || "",
+        i.posseLabel || (i.posse === "cliente" ? "Ação com Cliente" : "Ação com egSYS"),
+        i.solicitante || "",
+        i.responsavel || "",
+        i.prioridade || "",
+        i.criacao || "",
+        i.atualizacao || "",
+        i.resolucao || "Sem resolução"
+      ]);
+
+      const csvContent = "\uFEFF" + [
+        cabecalhos.map(c => `"${c}"`).join(";"),
+        ...linhas.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(";"))
+      ].join("\r\n");
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const dataHoje = new Date().toISOString().slice(0, 10);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `jiraview_${ESTADO}_listagem_${dataHoje}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function exportarTabelaExcel() {
+      const tickets = window.currentIssues || [];
+      if (!tickets.length) {
+        alert("Nenhum chamado disponível na listagem para exportar.");
+        return;
+      }
+      const cabecalhos = [
+        "Referência", "Tipo", "Área", "Macro-Fase", "Status Jira",
+        "Posse da Bola", "Solicitante", "Responsável", "Prioridade",
+        "Criação", "Atualização", "Resolução", "Resumo"
+      ];
+      const escXml = (v) => String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+      let xml = `<?xml version="1.0"?>\r\n<?mso-application progid="Excel.Sheet"?>\r\n` +
+        `<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"\r\n` +
+        ` xmlns:o="urn:schemas-microsoft-com:office:office"\r\n` +
+        ` xmlns:x="urn:schemas-microsoft-com:office:excel"\r\n` +
+        ` xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">\r\n` +
+        `<Styles>\r\n` +
+        ` <Style ss:ID="Default" ss:Name="Normal"><Font ss:FontName="Segoe UI" ss:Size="10"/></Style>\r\n` +
+        ` <Style ss:ID="Header"><Font ss:FontName="Segoe UI" ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#0052CC" ss:Pattern="Solid"/></Style>\r\n` +
+        ` <Style ss:ID="RowEven"><Interior ss:Color="#F4F5F7" ss:Pattern="Solid"/></Style>\r\n` +
+        `</Styles>\r\n` +
+        `<Worksheet ss:Name="JiraView_${ESTADO.toUpperCase()}">\r\n` +
+        `<Table>\r\n`;
+
+      xml += ` <Row ss:StyleID="Header">\r\n` + cabecalhos.map(h => `  <Cell><Data ss:Type="String">${escXml(h)}</Data></Cell>`).join("\r\n") + `\r\n </Row>\r\n`;
+
+      tickets.forEach((i, idx) => {
+        const style = idx % 2 === 1 ? ` ss:StyleID="RowEven"` : "";
+        const dados = [
+          i.referencia || "",
+          i.tipo || "",
+          i.area || "",
+          `${i.faseNum || ""}/8 ${i.faseNome || ""}`.trim(),
+          i.status || "",
+          i.posseLabel || (i.posse === "cliente" ? "Cliente" : "egSYS"),
+          i.solicitante || "",
+          i.responsavel || "",
+          i.prioridade || "",
+          i.criacao || "",
+          i.atualizacao || "",
+          i.resolucao || "Sem resolução",
+          i.resumo || ""
+        ];
+        xml += ` <Row${style}>\r\n` + dados.map(d => `  <Cell><Data ss:Type="String">${escXml(d)}</Data></Cell>`).join("\r\n") + `\r\n </Row>\r\n`;
+      });
+
+      xml += `</Table>\r\n</Worksheet>\r\n</Workbook>`;
+
+      const blob = new Blob([xml], { type: "application/vnd.ms-excel;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const dataHoje = new Date().toISOString().slice(0, 10);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `jiraview_${ESTADO}_listagem_${dataHoje}.xls`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function exportarTabelaMarkdown() {
+      const tickets = window.currentIssues || [];
+      if (!tickets.length) {
+        alert("Nenhum chamado disponível na listagem para exportar.");
+        return;
+      }
+      const dataHoje = new Date().toISOString().slice(0, 10);
+      let md = `# 📋 Listagem de Chamados Jira — ${ESTADO.toUpperCase()}\n\n`;
+      md += `* **Data de Exportação:** ${dataHoje}\n`;
+      md += `* **Total de Chamados:** ${tickets.length}\n\n`;
+      md += `| Referência | Tipo | Área | Fase | Status | Posse | Solicitante | Prioridade | Atualização | Resumo |\n`;
+      md += `|:---:|:---:|:---:|---|---|:---:|---|:---:|:---:|---|\n`;
+
+      tickets.forEach(i => {
+        const resLimpo = (i.resumo || "").replace(/\|/g, "&#124;").replace(/\r?\n/g, " ");
+        md += `| **${i.referencia}** | ${i.tipo || ""} | ${i.area || ""} | ${i.faseNum}/8 ${i.faseNome} | ${i.status} | ${i.posseLabel || i.posse} | ${i.solicitante || ""} | ${i.prioridade || ""} | ${i.atualizacao || ""} | ${resLimpo} |\n`;
+      });
+
+      const blob = new Blob([md], { type: "text/markdown;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `jiraview_${ESTADO}_listagem_${dataHoje}.md`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     }
 
     function esc(s) { return (s ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])); }

@@ -396,6 +396,61 @@
       font-size: 12px;
       outline: none;
     }
+    .btn-export {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0 12px;
+      height: 34px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-export:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--tr-hover);
+    }
+    .export-dropdown { position: relative; display: inline-block; }
+    .export-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      min-width: 180px;
+      margin-top: 4px;
+      padding: 4px 0;
+    }
+    .export-menu.show { display: block; }
+    .export-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .export-item:hover {
+      background: var(--tr-hover);
+      color: var(--accent);
+    }
 
     /* Tabela */
     .table-container {
@@ -594,6 +649,61 @@
       font-size: 11px;
       color: var(--text-sub);
       margin-top: 2px;
+    }
+
+    /* Cards de Rastreabilidade de Engenharia & Ações Vinculadas */
+    .derivacoes-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .derivacao-card {
+      background: var(--th-bg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 6px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .derivacao-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .derivacao-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      gap: 8px;
+    }
+    .derivacao-sub {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .derivacao-meta {
+      font-size: 11px;
+      color: var(--text-sub);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border);
+    }
+    .derivacao-subtasks-bar {
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     /* Abas de Navegação Superior */
@@ -990,9 +1100,25 @@
           <option value="egsys">Ação com egSYS</option>
           <option value="cliente">Ação com Cliente</option>
         </select>
+        <select id="filtroPeriodo" class="filter-select" onchange="aplicarFiltros()">
+          <option value="todos">Todos os Períodos</option>
+          <option value="60d">Últimos 60 dias</option>
+          <option value="90d" selected>Últimos 90 dias</option>
+          <option value="6m">Últimos 6 meses</option>
+          <option value="12m">Últimos 12 meses</option>
+          <option value="ano">Ano atual</option>
+        </select>
       </div>
-      <div>
+      <div style="display:flex;align-items:center;gap:12px;">
         <span id="contagemTabela" style="font-size: 12px; color: var(--text-sub); font-weight: 700;">Carregando...</span>
+        <div class="export-dropdown">
+          <button class="btn-export" onclick="toggleExportMenu('export-menu-coord', event)" id="btn-exportar-coord" title="Salvar listagem filtrada em Markdown, Excel ou CSV">📥 Salvar Listagem ▾</button>
+          <div id="export-menu-coord" class="export-menu">
+            <button class="export-item" onclick="exportarTabelaCoordenadorMarkdown();fecharExportMenus()">📄 Markdown (.md)</button>
+            <button class="export-item" onclick="exportarTabelaCoordenadorExcel();fecharExportMenus()">📊 Excel (.xlsx)</button>
+            <button class="export-item" onclick="exportarTabelaCoordenadorCSV();fecharExportMenus()">📋 CSV (.csv)</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1142,9 +1268,13 @@
   <div class="drawer-overlay" id="drawerOverlay" onclick="fecharDrawer()"></div>
   <div class="drawer" id="drawer">
     <div class="drawer-header">
-      <div>
-        <span id="drawerKey" class="badge badge-state">HDPMSC-399</span>
-        <h2 id="drawerTitle">Operação coordenada para atualização de servidores</h2>
+      <div style="display:flex;flex-direction:column;gap:6px;flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <a id="drawerKey" href="#" target="_blank" class="badge badge-state" style="text-decoration:none;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;gap:4px;" title="Abrir no Jira Oficial">HDPMSC-399 ↗️</a>
+          <a id="drawerJiraBtn" href="#" target="_blank" class="btn-sm-action" style="text-decoration:none;font-size:11px;padding:3px 8px;display:inline-flex;align-items:center;gap:4px;" title="Abrir chamado no Jira Oficial">↗️ Jira Oficial</a>
+          <button class="btn-sm-action" onclick="copiarChaveDrawer()" title="Copiar chave do chamado">📋 Copiar</button>
+        </div>
+        <h2 id="drawerTitle" style="margin:2px 0 0;font-size:16px;line-height:1.3;">Operação coordenada para atualização de servidores</h2>
       </div>
       <button class="btn-close" onclick="fecharDrawer()">✕</button>
     </div>
@@ -1157,9 +1287,19 @@
       </div>
 
       <h4 style="margin: 16px 0 8px; font-size: 13px; text-transform: uppercase; color: var(--text-sub);">
-        🧭 Jornada do Ticket na Esteira (7 Fases Canônicas)
+        🧭 Jornada do Ticket na Esteira (8 Fases Canônicas)
       </h4>
       <div class="stepper" id="drawerStepper">
+      </div>
+
+      <!-- 🔗 Rastreabilidade de Engenharia (Ações Técnicas / Derivações de Projeto) -->
+      <div id="drawerDerivacoesSection" style="margin-top: 20px;">
+        <h4 style="margin: 0 0 10px; font-size: 13px; text-transform: uppercase; color: var(--text-sub); display: flex; align-items: center; gap: 6px;">
+          🔗 Ações de Engenharia Vinculadas (Rastreabilidade & Dependências)
+        </h4>
+        <div id="drawerDerivacoesList" class="derivacoes-container">
+          <!-- Gerado dinamicamente -->
+        </div>
       </div>
 
       <div style="background: var(--th-bg); padding: 14px; border-radius: 8px; border: 1px solid var(--border); margin-top: 20px;">
@@ -1182,9 +1322,10 @@
       "2. Triagem (N2)",
       "3. Análise de Desenvolvimento",
       "4. Em Desenvolvimento",
-      "5. Validação Interna / QA",
-      "6. Validação / Homologação Cliente",
-      "7. Concluído"
+      "5. Testes de Qualidade (QA)",
+      "6. Validação Interna (Suporte N1)",
+      "7. Validação / Homologação Cliente",
+      "8. Concluído"
     ];
 
     async function carregarDadosIniciais() {
@@ -1453,6 +1594,7 @@
       const termo = document.getElementById("searchInput").value.toLowerCase();
       const area = document.getElementById("filtroArea").value;
       const posse = document.getElementById("filtroPosse").value;
+      const periodo = document.getElementById("filtroPeriodo") ? document.getElementById("filtroPeriodo").value : "todos";
 
       const filtrados = baseTickets.filter(t => {
         const bateTexto = t.chave.toLowerCase().includes(termo) || 
@@ -1463,9 +1605,32 @@
         const batePosse = posse === "todas" || t.posse === posse;
         const bateEstagio = !estagioFiltro || t.estagio === estagioFiltro;
 
-        return bateTexto && bateArea && batePosse && bateEstagio;
+        let batePeriodo = true;
+        if (periodo && periodo !== "todos" && periodo !== "tudo") {
+          if (t.criacao) {
+            const dt = new Date(t.criacao);
+            const agora = new Date();
+            const diasDiff = (agora - dt) / (1000 * 60 * 60 * 24);
+            if (periodo === "60d") batePeriodo = diasDiff <= 60;
+            else if (periodo === "90d") batePeriodo = diasDiff <= 90;
+            else if (periodo === "6m") batePeriodo = diasDiff <= 180;
+            else if (periodo === "12m") batePeriodo = diasDiff <= 365;
+            else if (periodo === "ano") batePeriodo = dt.getFullYear() === agora.getFullYear();
+          } else {
+            const matchDias = (t.tempoTotal || "").match(/(\d+)\s*d/);
+            const dias = matchDias ? parseInt(matchDias[1], 10) : 0;
+            if (periodo === "60d") batePeriodo = dias <= 60;
+            else if (periodo === "90d") batePeriodo = dias <= 90;
+            else if (periodo === "6m") batePeriodo = dias <= 180;
+            else if (periodo === "12m") batePeriodo = dias <= 365;
+            else if (periodo === "ano") batePeriodo = true;
+          }
+        }
+
+        return bateTexto && bateArea && batePosse && bateEstagio && batePeriodo;
       });
 
+      window.ticketsFiltradosCoordenador = filtrados;
       renderizarTabela(filtrados);
     }
 
@@ -1484,11 +1649,11 @@
 
         tr.innerHTML = `
           <td><span class="badge badge-state">${t.espaco}</span></td>
-          <td><strong style="color: var(--link-color);">${t.chave}</strong></td>
+          <td><a href="https://egsys.atlassian.net/browse/${t.chave}" target="_blank" onclick="event.stopPropagation()" style="color: var(--link-color); font-weight: 700; text-decoration: none;" title="Abrir chamado no Jira Oficial">${t.chave} ↗️</a></td>
           <td><span style="font-size: 11px; color: var(--text-sub);">${t.tipo || "Demanda"}</span></td>
           <td>${t.resumo}</td>
           <td><span class="badge badge-area">${t.area}</span></td>
-          <td><span class="badge badge-fase">Etapa ${t.etapaNum}/7 (${t.etapaNome})</span></td>
+          <td><span class="badge badge-fase">Etapa ${t.etapaNum}/8 (${t.etapaNome})</span></td>
           <td><span class="badge ${badgePosseClass}">${t.posseLabel}</span></td>
           <td><span style="font-size: 12px; font-weight: 500;">${t.status}</span></td>
           <td><span class="badge ${badgeSlaClass}">${badgeSlaText}</span></td>
@@ -1499,8 +1664,165 @@
       document.getElementById("contagemTabela").innerText = `Exibindo ${tickets.length} chamados`;
     }
 
-    function abrirDrawer(ticket) {
-      document.getElementById("drawerKey").innerText = ticket.chave;
+    // ==== Exportação da Listagem Filtrada (CSV, Excel, Markdown) ====
+    function toggleExportMenu(id, ev) {
+      if (ev) ev.stopPropagation();
+      const m = document.getElementById(id);
+      const isVisible = m.classList.contains("show");
+      fecharExportMenus();
+      if (!isVisible) m.classList.add("show");
+    }
+
+    function fecharExportMenus() {
+      document.querySelectorAll(".export-menu").forEach(m => m.classList.remove("show"));
+    }
+
+    window.addEventListener("click", () => fecharExportMenus());
+
+    function exportarTabelaCoordenadorCSV() {
+      const tickets = window.ticketsFiltradosCoordenador || [];
+      if (!tickets.length) {
+        alert("Nenhum chamado disponível na listagem para exportar.");
+        return;
+      }
+      const cabecalhos = [
+        "Espaço", "Chave", "Tipo", "Resumo", "Área",
+        "Macro-Fase", "Posse da Bola", "Status Jira", "SLA", "Tempo na Fase", "Tempo Total"
+      ];
+      const linhas = tickets.map(t => [
+        t.espaco || "",
+        t.chave || "",
+        t.tipo || "Demanda",
+        (t.resumo || "").replace(/"/g, '""'),
+        t.area || "",
+        `Etapa ${t.etapaNum || ""}/8 (${t.etapaNome || ""})`,
+        t.posseLabel || (t.posse === "egsys" ? "egSYS" : "Cliente"),
+        t.status || "",
+        t.sla === "ok" ? "Em dia" : "Atenção SLA",
+        t.tempoFase || "",
+        t.tempoTotal || ""
+      ]);
+
+      const csvContent = "\uFEFF" + [
+        cabecalhos.map(c => `"${c}"`).join(";"),
+        ...linhas.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(";"))
+      ].join("\r\n");
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const escopo = document.getElementById("spaceSelector").value || "escopo";
+      const dataHoje = new Date().toISOString().slice(0, 10);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `jiraview_coordenador_${escopo}_${dataHoje}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function exportarTabelaCoordenadorExcel() {
+      const tickets = window.ticketsFiltradosCoordenador || [];
+      if (!tickets.length) {
+        alert("Nenhum chamado disponível na listagem para exportar.");
+        return;
+      }
+      const cabecalhos = [
+        "Espaço", "Chave", "Tipo", "Resumo", "Área",
+        "Macro-Fase", "Posse da Bola", "Status Jira", "SLA", "Tempo na Fase", "Tempo Total"
+      ];
+      const escXml = (v) => String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      const escopo = document.getElementById("spaceSelector").value || "escopo";
+
+      let xml = `<?xml version="1.0"?>\r\n<?mso-application progid="Excel.Sheet"?>\r\n` +
+        `<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"\r\n` +
+        ` xmlns:o="urn:schemas-microsoft-com:office:office"\r\n` +
+        ` xmlns:x="urn:schemas-microsoft-com:office:excel"\r\n` +
+        ` xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">\r\n` +
+        `<Styles>\r\n` +
+        ` <Style ss:ID="Default" ss:Name="Normal"><Font ss:FontName="Segoe UI" ss:Size="10"/></Style>\r\n` +
+        ` <Style ss:ID="Header"><Font ss:FontName="Segoe UI" ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#0052CC" ss:Pattern="Solid"/></Style>\r\n` +
+        ` <Style ss:ID="RowEven"><Interior ss:Color="#F4F5F7" ss:Pattern="Solid"/></Style>\r\n` +
+        `</Styles>\r\n` +
+        `<Worksheet ss:Name="JiraView_${escopo}">\r\n` +
+        `<Table>\r\n`;
+
+      xml += ` <Row ss:StyleID="Header">\r\n` + cabecalhos.map(h => `  <Cell><Data ss:Type="String">${escXml(h)}</Data></Cell>`).join("\r\n") + `\r\n </Row>\r\n`;
+
+      tickets.forEach((t, idx) => {
+        const style = idx % 2 === 1 ? ` ss:StyleID="RowEven"` : "";
+        const dados = [
+          t.espaco || "",
+          t.chave || "",
+          t.tipo || "Demanda",
+          t.resumo || "",
+          t.area || "",
+          `Etapa ${t.etapaNum || ""}/8 (${t.etapaNome || ""})`,
+          t.posseLabel || (t.posse === "egsys" ? "egSYS" : "Cliente"),
+          t.status || "",
+          t.sla === "ok" ? "Em dia" : "Atenção SLA",
+          t.tempoFase || "",
+          t.tempoTotal || ""
+        ];
+        xml += ` <Row${style}>\r\n` + dados.map(d => `  <Cell><Data ss:Type="String">${escXml(d)}</Data></Cell>`).join("\r\n") + `\r\n </Row>\r\n`;
+      });
+
+      xml += `</Table>\r\n</Worksheet>\r\n</Workbook>`;
+
+      const blob = new Blob([xml], { type: "application/vnd.ms-excel;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const dataHoje = new Date().toISOString().slice(0, 10);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `jiraview_coordenador_${escopo}_${dataHoje}.xls`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function exportarTabelaCoordenadorMarkdown() {
+      const tickets = window.ticketsFiltradosCoordenador || [];
+      if (!tickets.length) {
+        alert("Nenhum chamado disponível na listagem para exportar.");
+        return;
+      }
+      const escopo = document.getElementById("spaceSelector").value || "escopo";
+      const dataHoje = new Date().toISOString().slice(0, 10);
+      let md = `# 📋 Listagem Tática de Chamados Jira — ${escopo}\n\n`;
+      md += `* **Data de Exportação:** ${dataHoje}\n`;
+      md += `* **Total de Chamados:** ${tickets.length}\n\n`;
+      md += `| Espaço | Chave | Tipo | Área | Macro-Fase | Status Jira | Posse | SLA | Resumo |\n`;
+      md += `|:---:|:---:|:---:|:---:|---|---|:---:|:---:|---|\n`;
+
+      tickets.forEach(t => {
+        const resLimpo = (t.resumo || "").replace(/\|/g, "&#124;").replace(/\r?\n/g, " ");
+        md += `| ${t.espaco} | **${t.chave}** | ${t.tipo || "Demanda"} | ${t.area} | Etapa ${t.etapaNum}/8 (${t.etapaNome}) | ${t.status} | ${t.posseLabel || t.posse} | ${t.sla === 'ok' ? 'Em dia' : 'Atenção SLA'} | ${resLimpo} |\n`;
+      });
+
+      const blob = new Blob([md], { type: "text/markdown;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `jiraview_coordenador_${escopo}_${dataHoje}.md`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function esc(v) {
+      return String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    async function abrirDrawer(ticket) {
+      const drawerKeyEl = document.getElementById("drawerKey");
+      drawerKeyEl.innerText = ticket.chave + " ↗️";
+      drawerKeyEl.href = "https://egsys.atlassian.net/browse/" + ticket.chave;
+      
+      const jiraBtn = document.getElementById("drawerJiraBtn");
+      if (jiraBtn) jiraBtn.href = "https://egsys.atlassian.net/browse/" + ticket.chave;
+
       document.getElementById("drawerTitle").innerText = ticket.resumo;
       document.getElementById("drawerEspaco").innerText = ticket.espacoNome || ticket.espaco;
       document.getElementById("drawerArea").innerText = ticket.area;
@@ -1544,8 +1866,68 @@
         stepper.appendChild(item);
       });
 
+      // 🔗 Rastreabilidade de Engenharia (Ações Técnicas / Derivações de Projeto)
+      const derivSection = document.getElementById("drawerDerivacoesSection");
+      const derivList = document.getElementById("drawerDerivacoesList");
+      if (derivSection && derivList) {
+        derivSection.style.display = "block";
+        derivList.innerHTML = `<div style="font-size:12px;color:var(--text-sub);padding:8px 0;">Consultando tarefas técnicas vinculadas no Jira...</div>`;
+      }
+
       document.getElementById("drawerOverlay").classList.add("open");
       document.getElementById("drawer").classList.add("open");
+
+      // Buscar jornada / derivações via API oficial ou local
+      if (derivSection && derivList) {
+        try {
+          const estadoQuery = (ticket.espaco || "sc").toLowerCase();
+          const res = await fetch(`/api/v1/issues/${ticket.chave}/journey?estado=${estadoQuery}`, {
+            headers: authHeaders()
+          });
+          if (res.ok) {
+            const j = await res.json();
+            if (j.derivacoes_engenharia && j.derivacoes_engenharia.length > 0) {
+              derivList.innerHTML = j.derivacoes_engenharia.map(d => `
+                <div class="drawer-derivacao-card">
+                  <div class="drawer-derivacao-header">
+                    <span>🛠️ <a href="https://egsys.atlassian.net/browse/${esc(d.chave)}" target="_blank" style="color:var(--accent);font-weight:700;text-decoration:none;">${esc(d.chave)} ↗️</a> • ${esc(d.tipo || 'Tarefa')}</span>
+                    <span class="badge" style="background:${d.status_cor || 'var(--blue)'};color:#fff;font-size:11px;">${esc(d.status_executivo || d.status || 'Em andamento')}</span>
+                  </div>
+                  <div style="font-size:12px;margin-bottom:6px;color:var(--text);"><b>Resumo:</b> ${esc(d.resumo || 'Demanda técnica')}</div>
+                  <div class="drawer-derivacao-meta">
+                    <span>👤 <b>Responsável:</b> ${esc(d.responsavel || 'Engenharia egSYS')}</span>
+                    <span>🏷️ <b>Prioridade:</b> ${esc(d.prioridade || 'Normal')}</span>
+                    <span>🔗 <b>Relação:</b> ${esc(d.relacao || 'vinculada')}</span>
+                  </div>
+                  ${d.total_subtasks > 0 ? `
+                    <div style="font-size:11px;margin-top:6px;padding:4px 8px;background:var(--th-bg);border-radius:4px;color:var(--text-sub);">
+                      📊 <b>Subtarefas:</b> ${d.subtasks_concluidas || 0}/${d.total_subtasks} concluídas
+                    </div>` : ''}
+                </div>
+              `).join("");
+            } else {
+              derivList.innerHTML = `<div style="font-size:12px;color:var(--text-sub);padding:8px 0;">Nenhuma tarefa de engenharia/projeto vinculada a este chamado.</div>`;
+            }
+          } else {
+            derivList.innerHTML = `<div style="font-size:12px;color:var(--text-sub);padding:8px 0;">Sem tarefas de engenharia vinculadas ou endpoint offline.</div>`;
+          }
+        } catch (err) {
+          console.warn("Erro ao buscar derivações de engenharia:", err);
+          derivList.innerHTML = `<div style="font-size:12px;color:var(--text-sub);padding:8px 0;">Sem tarefas técnicas adicionais vinculadas.</div>`;
+        }
+      }
+    }
+
+    function copiarChaveDrawer() {
+      const el = document.getElementById("drawerKey");
+      const key = (el ? el.innerText : "").replace(/[^A-Za-z0-9\-]/g, "");
+      if (key) {
+        navigator.clipboard.writeText(key).then(() => {
+          mostrarToast(`Chave ${key} copiada para a área de transferência!`);
+        }).catch(() => {
+          mostrarToast(`Chave: ${key}`);
+        });
+      }
     }
 
     function fecharDrawer() {

@@ -34,21 +34,25 @@ def _detectar_area(fields: dict) -> str:
 
 
 def _detectar_fase(status_nome: str, status_cat: str) -> dict:
-    """Mapeia status do Jira para a régua canônica de 7 etapas e posse da bola."""
+    """Mapeia status do Jira para a régua canônica de 8 etapas e posse da bola."""
     st = (status_nome or "").lower()
     cat = (status_cat or "").lower()
 
-    # 7. Concluído (Entregue)
-    if cat == "done" or any(x in st for x in ("concluído", "concluido", "resolvido", "fechado", "done", "cancelado", "resolução", "desenvolvimento concluído")):
-        return {"num": 7, "nome": "Concluído", "posse": "egsys", "label_posse": "Finalizado"}
+    # 8. Concluído (Entregue)
+    if cat == "done" or any(x in st for x in ("concluído", "concluido", "resolvido", "fechado", "done", "cancelado")):
+        return {"num": 8, "nome": "Concluído", "posse": "egsys", "label_posse": "Finalizado"}
 
-    # 6. Validação / Homologação Cliente
-    if any(x in st for x in ("homologa", "aguardando cliente", "validação cliente", "pendente cliente", "espera cliente", "aguardando informações", "aguardando resposta", "aguardando")):
-        return {"num": 6, "nome": "Homologação Cliente", "posse": "cliente", "label_posse": "Ação com o Cliente"}
+    # 7. Validação / Homologação Cliente
+    if any(x in st for x in ("homologa", "aguardando cliente", "validação cliente", "validacao cliente", "pendente cliente", "espera cliente", "aguardando informações", "aguardando resposta", "aguardando")):
+        return {"num": 7, "nome": "Homologação Cliente", "posse": "cliente", "label_posse": "Ação com o Cliente"}
 
-    # 5. Validação Interna / QA
-    if any(x in st for x in ("validação interna", "validacao interna", "qa", "testes", "revisão", "revisao", "code review")):
-        return {"num": 5, "nome": "Validação Interna / QA", "posse": "egsys", "label_posse": "Ação com egSYS"}
+    # 6. Validação Interna (Suporte N1 / Atendimento)
+    if any(x in st for x in ("validação n1", "validacao n1", "validação interna", "validacao interna", "resolução suporte", "resolucao suporte", "desenvolvimento concluído", "desenvolvimento concluido")):
+        return {"num": 6, "nome": "Validação Interna (Suporte N1)", "posse": "egsys", "label_posse": "Ação com egSYS"}
+
+    # 5. Testes de Qualidade (QA)
+    if any(x in st for x in ("qa", "testes", "teste", "validação qa", "validacao qa", "revisão", "revisao", "code review", "homologação técnica")):
+        return {"num": 5, "nome": "Testes de Qualidade (QA)", "posse": "egsys", "label_posse": "Ação com egSYS"}
 
     # 4. Em Desenvolvimento
     if any(x in st for x in ("executando", "em desenvolvimento", "desenvolvimento em andamento", "em andamento")):
@@ -59,11 +63,11 @@ def _detectar_fase(status_nome: str, status_cat: str) -> dict:
         return {"num": 3, "nome": "Análise de Dev", "posse": "egsys", "label_posse": "Ação com egSYS"}
 
     # 2. Triagem (N2)
-    if "n2" in st or "validação n2" in st or "validacao n2" in st or "triagem n2" in st:
+    if any(x in st for x in ("n2", "validação n2", "validacao n2", "triagem n2", "suporte avançado", "suporte avancado")):
         return {"num": 2, "nome": "Triagem (N2)", "posse": "egsys", "label_posse": "Ação com egSYS"}
 
     # 1. Triagem (N1)
-    if any(x in st for x in ("n1", "validação n1", "validacao n1", "triagem", "aberto", "novo")):
+    if any(x in st for x in ("n1", "triagem n1", "triagem", "aberto", "novo", "backlog")):
         return {"num": 1, "nome": "Triagem (N1)", "posse": "egsys", "label_posse": "Ação com egSYS"}
 
     if cat == "indeterminate":
@@ -74,12 +78,14 @@ def _detectar_fase(status_nome: str, status_cat: str) -> dict:
 
 def _jql_janela(periodo: Optional[str] = None) -> str:
     """Periodo -> clausula de janela de criacao em JQL (dias; M deprecado no Cloud)."""
-    if not periodo:
+    if not periodo or periodo in ("tudo", "todos", "all"):
         return ""
     if periodo == "ano":
         import datetime
         cur_year = datetime.date.today().year
         return f' AND created >= "{cur_year}-01-01"'
+    if periodo == "60d":
+        return " AND created >= -60d"
     if periodo == "90d":
         return " AND created >= -90d"
     if periodo == "6m":
@@ -487,15 +493,16 @@ async def issue_journey(
     except Exception:
         pass
 
-    # Montar Stepper de 7 Etapas
+    # Montar Stepper de 8 Etapas
     etapas_nomes = [
         (1, "Triagem (N1)"),
         (2, "Triagem (N2)"),
         (3, "Análise de Desenvolvimento"),
         (4, "Em Desenvolvimento"),
-        (5, "Validação Interna / QA"),
-        (6, "Validação / Homologação Cliente"),
-        (7, "Concluído (Entregue)"),
+        (5, "Testes de Qualidade (QA)"),
+        (6, "Validação Interna (Suporte N1)"),
+        (7, "Validação / Homologação Cliente"),
+        (8, "Concluído (Entregue)"),
     ]
     etapas = []
     for num, nome_etapa in etapas_nomes:

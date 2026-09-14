@@ -84,7 +84,7 @@ Listagem principal do painel com colunas normalizadas. **Auth obrigatório** (vi
 - `origem` — filtro por tipo de solicitante (`cliente` para contas `qm:*` vs `interno` para agentes)
 - `jql` — filtro JQL livre ou composto pelo construtor visual
 - `abertas=true` — aplica `resolution is EMPTY`
-- `periodo` — janela de criação (`ano`, `90d`, `6m`, `12m`)
+- `periodo` — janela de criação (`60d`, `90d`, `6m`, `12m`, `ano` nos painéis de clientes; `todos` exclusivo para Coordenação/Admin)
 Resposta:
 ```json
 {
@@ -143,15 +143,17 @@ POST/DELETE exigem `role >= manager`.
 
 ### GET `/api/v1/issues/{key}/journey?estado=sc`
 Retorna a jornada completa e rastreabilidade do ticket para alimentar o **Drawer Lateral (Gaveta de Observabilidade)**:
-- **Stepper Canônico de 7 Etapas**:
+- **Stepper Canônico de 8 Etapas**:
   1. `Triagem (N1)`
   2. `Triagem (N2)`
   3. `Análise de Desenvolvimento`
   4. `Em Desenvolvimento`
-  5. `Validação Interna / QA`
-  6. `Validação / Homologação Cliente`
-  7. `Concluído (Entregue)`
+  5. `Testes de Qualidade (QA)` *(Fase autônoma do time de QA)*
+  6. `Validação Interna (Suporte N1)` *(Fase de validação do Suporte N1)*
+  7. `Validação / Homologação Cliente`
+  8. `Concluído (Entregue)`
 - **Posse da Bola**: `tipo` (`egsys` | `cliente`), `label`, `responsavel`, `tempo_etapa`, `tempo_total`.
+- **Links Diretos 1-Click para o Jira Cloud**: URLs canônicas (`https://egsys.atlassian.net/browse/{key}`) para navegação imediata ao ticket oficial ou itens vinculados.
 - **Rastreabilidade de Engenharia (`derivacoes_engenharia`)**: mapeamento em paralelo via Jira Cloud API de tarefas técnicas vinculadas (`fields.issuelinks` como `PSC-3736` derivado de `HDPMSC-389`), com status executivo sanitizado (`status_executivo`), cor, responsável técnico e progresso de subtarefas (`subtasks_concluidas`/`total_subtasks`).
 - **Trilha de Auditoria (`transicoes`)**: histórico cronológico extraído do changelog do Jira com datas, atores e movimentações de status.
 
@@ -178,9 +180,10 @@ Exemplo de Resposta:
     {"num": 2, "nome": "Triagem (N2)", "estado": "concluido"},
     {"num": 3, "nome": "Análise de Desenvolvimento", "estado": "ativo"},
     {"num": 4, "nome": "Em Desenvolvimento", "estado": "pendente"},
-    {"num": 5, "nome": "Validação Interna / QA", "estado": "pendente"},
-    {"num": 6, "nome": "Validação / Homologação Cliente", "estado": "pendente"},
-    {"num": 7, "nome": "Concluído (Entregue)", "estado": "pendente"}
+    {"num": 5, "nome": "Testes de Qualidade (QA)", "estado": "pendente"},
+    {"num": 6, "nome": "Validação Interna (Suporte N1)", "estado": "pendente"},
+    {"num": 7, "nome": "Validação / Homologação Cliente", "estado": "pendente"},
+    {"num": 8, "nome": "Concluído (Entregue)", "estado": "pendente"}
   ],
   "derivacoes_engenharia": [
     {

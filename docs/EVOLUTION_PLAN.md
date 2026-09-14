@@ -13,10 +13,12 @@ e total sanitização (sem credenciais no client).
 | F0 — Diagnóstico/JSM | Análise do portal, causas (done sem resolução), correção 19+18, snapshots | ✅ |
 | F1 — Base app | FastAPI + SPA + RBAC JWT + Jira read-only + estados.yaml (SC) | ✅ |
 | F2 — Painel & UX | Cards + 4 gráficos + Modo Escuro Full-Window + Calibração Chart.js + Filtros JQL + Skills | ✅ |
-| F2.1 — Observabilidade & Jornada | Funil de 4 estágios + Drawer lateral com Stepper Canônico de 7 etapas + Posse da bola + SLA de etapa + Rastreabilidade de Engenharia | ✅ |
-| F3 — Deploy prod | Traefik `/painel_sc` + hardening (512m/150pids) + cert existente | ✅ |
-| F4 — Identidade & RBAC | Login real + seed papéis por estado + rate limiting | ⏳ v0.2 |
-| F5 — Multi-estado | TO/AM/PR/GM ativados (YAML + papéis) + visão consolidada | ⏳ v0.4 |
+| F2.1 — Observabilidade & Jornada | Funil de 4 estágios + Drawer lateral com Stepper Canônico de 8 etapas + Posse da bola + SLA + Rastreabilidade | ✅ |
+| F3 — Deploy prod | Traefik `/painel_sc` + hardening (512m/150pids) + roteamento com prioridade soberana | ✅ |
+| F4 — Identidade & RBAC | Login unitário real + SQLite nativo + 1º acesso obrigatório + 10 usuários ativos auditados | ✅ |
+| F4.1 — Coordenação Global | Painel da Coordenação com 73 espaços + Gestão de Usuários e Acessos | ✅ |
+| F4.2 — Exportação & 1-Click | Exportação Multi-Formato (.MD, .XLSX, .CSV) + Links 1-Click Jira Cloud + Derivações técnicas | ✅ |
+| F5 — Multi-estado | TO/AM/PR/GM ativados (YAML + papéis) + visão consolidada por estado | ⏳ v0.5 |
 | F6 — Automação | Automação JSM de conclusão + SLA por área + migração Node-RED | ⏳ v0.5 |
 
 ## Invariantes (gate canônico)
