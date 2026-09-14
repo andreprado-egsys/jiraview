@@ -1,6 +1,6 @@
 # egSYS JiraView — Changelog
 
-## [0.4.0] — 2026-09-14
+## [0.4.0] — 2026-09-14 (PSEI-305)
 
 ### Added
 - `feat(stepper): Esteira Canônica de 8 Etapas` — desacoplamento estrito e oficial da etapa `5. Testes de Qualidade (QA)` (homologação técnica e automações de testes do time de QA) da etapa `6. Validação Interna (Suporte N1)` (conferência do analista de sustentação e encerramento operacional).
