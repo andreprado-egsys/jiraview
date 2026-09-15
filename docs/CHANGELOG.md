@@ -1,5 +1,17 @@
 # egSYS JiraView — Changelog
 
+## [0.4.1] — 2026-09-15
+
+### Added
+- `feat(dashboard): Banner Executivo de Síntese Matemática do Backlog` — incorporação de banner de síntese executiva no topo de todos os painéis (`coordenador.html` e `index.html`), evidenciando a decomposição matemática exata da carteira ativa do cliente: `2 Novas + 46 Em Atendimento + 4 Aguardando Validação = 52 Chamados em Aberto`, com isolamento explícito do histórico de 25 entregas finalizadas.
+- `feat(dashboard): Card Total Backlog Ativo & Badges Semânticas do Funil` — card dedicado de fechamento da conta (`Total Backlog Ativo`) e inclusão de badges categorizando os componentes da esteira (`Componente 1/3, 2/3 e 3/3 do Backlog Ativo` vs `Histórico Fora do Backlog Aberto`).
+- `feat(ui): Numeração Sequencial (#: 1 a N) em Todas as Listagens e Exportações` — coluna `#` numerada de 1 a N nas tabelas e integrada aos arquivos exportados (`Markdown`, `Excel` e `CSV`) em ambos os painéis.
+- `feat(ops): Script Canônico de Pareamento e Sincronização de Banco (`scripts/sync_db.py`)` — ferramenta de automação com suporte a `--status`, `--pull` e `--push` para garantir paridade contínua e backups preventivos entre o banco SQLite local e a produção (`monitoramento-egsys`).
+
+### Fixed
+- `fix(stepper): Reatividade Imediata de Status e Etapas no Drawer Lateral` — sincronização em tempo real na memória e na linha da tabela assim que a radiografia de workflow retorna da API/Jira Cloud.
+- `fix(cache): Paridade da Base PMSC com 77 Chamados (52 Abertos + 25 Concluídos)` — atualização fidedigna do snapshot e alinhamento do chamado `HDPMSC-388` na Etapa 2 (Triagem N2).
+
 ## [0.4.0] — 2026-09-14 (PSEI-305)
 
 ### Added
@@ -15,6 +27,10 @@
 - `infra(compose): Limpeza de Hostname Inexistente` — remoção da label de rota órfã `painel.egsys.siseg.tech` de `docker-compose.prod.yml`.
 
 ### Fixed
+- `fix(stepper): Resolução Dinâmica de Estados e Projetos em /journey` — flexibilização do endpoint de radiografia de jornada para resolver o estado automaticamente a partir do código do projeto (ex.: `HDPMSC`), sigla de estado (`sc`) ou prefixo da chave, com acesso irrestrito aos 73 espaços do Jira para perfis de coordenação e administração.
+- `fix(coordenador): Sincronização Reativa do Drawer e Tabela com Status ao Vivo` — atualização dinâmica do status, esteira de 8 etapas, posse da bola, tempos e linha da tabela no painel do coordenador (`coordenador.html`) assim que os dados do Jira Cloud são recebidos, eliminando discrepâncias com snapshots estáticos.
+- `fix(stepper): Mapeamento Canônico de Status N2 para Etapa 2 (Triagem N2)` — cobertura exaustiva de variações de N2 (`Triagem (N2)`, `Triagem N2`, `Validação N2`, `Suporte N2`, `N2`) direcionando com precisão para a Etapa 2.
+- `fix(cache): Atualização do Chamado HDPMSC-388 para Triagem (N2)` — correção no snapshot local `jira_real_cache.json` e servidor de desenvolvimento refletindo a transição de validação para a Etapa 2.
 - `fix(traefik): Resolução de 'Cannot GET /coordenador'` — eliminação definitiva do conflito de hostname entre Node-RED e JiraView no Traefik do host de monitoramento.
 - `fix(stepper): Mapeamento de Status JSM para Fase 6 de Validação N1` — inclusão cirúrgica de status como `Validação N1`, `Desenvolvimento Concluído` e `Resolução Suporte` na etapa de validação interna.
 

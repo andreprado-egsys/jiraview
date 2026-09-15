@@ -289,6 +289,57 @@
       height: 4px;
     }
 
+    /* Banner de Síntese e Decomposição Matemática do Backlog */
+    .summary-banner {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .summary-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .summary-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    .summary-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .summary-sub {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+    .summary-divider {
+      width: 1px;
+      height: 44px;
+      background: var(--border);
+    }
+    @media (max-width: 768px) {
+      .summary-divider { display: none; }
+    }
+    .badge-cat-funil {
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 4px;
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
     /* Big Numbers Grid */
     .kpi-row {
       display: grid;
@@ -986,6 +1037,23 @@
       </div>
     </div>
 
+    <!-- BANNER DE SÍNTESE EXECUTIVA DO BACKLOG (EQUAÇÃO MATEMÁTICA VISÍVEL) -->
+    <div class="summary-banner" id="summaryBanner">
+      <div class="summary-item">
+        <span class="summary-tag">📦 CARTEIRA OPERACIONAL ATIVA (EM ABERTO)</span>
+        <div class="summary-value" id="summaryTotalBacklog">52 Chamados em Aberto</div>
+        <div class="summary-sub" id="summaryFormula">
+          Decomposição das 3 frentes ativas: <b>📥 Triagem (<span id="eq-novas">2</span>)</b> + <b>⚙️ Em Atendimento (<span id="eq-atend">46</span>)</b> + <b>⏸️ Aguardando Cliente (<span id="eq-aguard">4</span>)</b> = <b><span id="eq-total">52</span> Chamados Ativos</b>
+        </div>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-item">
+        <span class="summary-tag" style="color: #238636;">✅ HISTÓRICO DE ENTREGAS</span>
+        <div class="summary-value" id="summaryTotalConcluidas" style="color: #238636;">25 Concluídas</div>
+        <div class="summary-sub">Chamados finalizados e entregues no Jira (fora do backlog ativo)</div>
+      </div>
+    </div>
+
     <!-- NÍVEL 1: FUNIL DE 4 ESTÁGIOS -->
     <div class="funnel-grid">
       <div class="funnel-card" id="card-novas" onclick="filtrarEstagio('novas')">
@@ -995,6 +1063,7 @@
         </div>
         <div class="value" id="val-novas">0</div>
         <div class="subtext">Aguardando início pela egSYS</div>
+        <div class="badge-cat-funil" style="background: rgba(56,139,253,0.15); color: #388bfd;">Componente 1/3 do Backlog Ativo</div>
         <div class="funnel-bar" style="background: #388bfd;"></div>
       </div>
 
@@ -1005,6 +1074,7 @@
         </div>
         <div class="value" id="val-em-atendimento">0</div>
         <div class="subtext">Em execução pela equipe técnica</div>
+        <div class="badge-cat-funil" style="background: rgba(163,113,247,0.15); color: #a371f7;">Componente 2/3 do Backlog Ativo</div>
         <div class="funnel-bar" style="background: #a371f7;"></div>
       </div>
 
@@ -1015,6 +1085,7 @@
         </div>
         <div class="value" id="val-aguardando">0</div>
         <div class="subtext">Homologação / Bloqueio externo</div>
+        <div class="badge-cat-funil" style="background: rgba(210,153,34,0.15); color: #d29922;">Componente 3/3 do Backlog Ativo</div>
         <div class="funnel-bar" style="background: #d29922;"></div>
       </div>
 
@@ -1024,7 +1095,8 @@
           <span style="color: #238636;">Histórico</span>
         </div>
         <div class="value" id="val-concluidas">0</div>
-        <div class="subtext">Resolvidas / Entregues</div>
+        <div class="subtext">Resolvidas / Entregues no Jira</div>
+        <div class="badge-cat-funil" style="background: rgba(35,134,54,0.15); color: #238636;">Histórico Fora do Backlog Aberto</div>
         <div class="funnel-bar" style="background: #238636;"></div>
       </div>
     </div>
@@ -1126,6 +1198,7 @@
       <table>
         <thead>
           <tr>
+            <th style="width: 44px; text-align: center;">#</th>
             <th>Espaço</th>
             <th>Chave</th>
             <th>Tipo</th>
@@ -1464,6 +1537,20 @@
       document.getElementById("kpi-posse").innerText = `${pctEgsys}% egSYS`;
       document.getElementById("kpi-vazao").innerText = `${concluidas} entregas`;
 
+      // Atualizar Banner de Equação do Backlog
+      const elTotBacklog = document.getElementById("summaryTotalBacklog");
+      if (elTotBacklog) elTotBacklog.innerText = `${backlogAtivo} Chamados em Aberto`;
+      const elTotConcl = document.getElementById("summaryTotalConcluidas");
+      if (elTotConcl) elTotConcl.innerText = `${concluidas} Concluídas`;
+      const elEqNovas = document.getElementById("eq-novas");
+      if (elEqNovas) elEqNovas.innerText = novas;
+      const elEqAtend = document.getElementById("eq-atend");
+      if (elEqAtend) elEqAtend.innerText = emAtendimento;
+      const elEqAguard = document.getElementById("eq-aguard");
+      if (elEqAguard) elEqAguard.innerText = aguardando;
+      const elEqTotal = document.getElementById("eq-total");
+      if (elEqTotal) elEqTotal.innerText = backlogAtivo;
+
       // Atualizar Gráficos
       atualizarGraficos(scope, tickets);
 
@@ -1541,13 +1628,16 @@
         });
       }
 
-      // GRÁFICO 2: Gargalos e Distribuição por Macro-Etapa (Horas / Volume)
+      // GRÁFICO 2: Gargalos e Distribuição pelas 8 Fases Canônicas da Esteira
       const ctx2 = document.getElementById("chart2").getContext("2d");
       if (chart2Inst) chart2Inst.destroy();
 
-      const contFases = [0, 0, 0, 0, 0, 0, 0];
+      document.getElementById("chart2Title").innerText = "🧭 Distribuição pelas 8 Fases Canônicas";
+      document.getElementById("chart2Sub").innerText = "Posição de cada demanda na esteira de ponta a ponta";
+
+      const contFases = [0, 0, 0, 0, 0, 0, 0, 0];
       tickets.forEach(t => {
-        if (t.etapaNum >= 1 && t.etapaNum <= 7) {
+        if (t.etapaNum >= 1 && t.etapaNum <= 8) {
           contFases[t.etapaNum - 1]++;
         }
       });
@@ -1555,11 +1645,23 @@
       chart2Inst = new Chart(ctx2, {
         type: "bar",
         data: {
-          labels: ["Triagem N1", "Triagem N2", "Análise Dev", "Em Dev", "QA Interno", "Homologação", "Concluído"],
+          labels: [
+            "1. Triagem N1",
+            "2. Triagem N2",
+            "3. Análise Dev",
+            "4. Em Dev",
+            "5. Testes QA",
+            "6. Validação N1",
+            "7. Homologação",
+            "8. Concluído"
+          ],
           datasets: [{
-            label: "Quantidade de Tickets na Etapa",
+            label: "Chamados na Etapa",
             data: contFases,
-            backgroundColor: ["#388bfd", "#58a6ff", "#8957e5", "#a371f7", "#d29922", "#f0883e", "#238636"],
+            backgroundColor: [
+              "#388bfd", "#58a6ff", "#8957e5", "#a371f7",
+              "#d29922", "#f0883e", "#e3b341", "#238636"
+            ],
             borderRadius: 4
           }]
         },
@@ -1638,9 +1740,10 @@
       const tbody = document.getElementById("tabelaChamados");
       tbody.innerHTML = "";
 
-      tickets.forEach(t => {
+      tickets.forEach((t, idx) => {
         const tr = document.createElement("tr");
         tr.className = "clickable";
+        tr.setAttribute("data-chave", t.chave);
         tr.onclick = () => abrirDrawer(t);
 
         const badgePosseClass = t.posse === "egsys" ? "badge-posse-egsys" : "badge-posse-cliente";
@@ -1648,6 +1751,7 @@
         const badgeSlaText = t.sla === "ok" ? "Em dia" : "Atenção SLA";
 
         tr.innerHTML = `
+          <td style="text-align: center; font-weight: 700; color: var(--text-sub); font-size: 11px;">${idx + 1}</td>
           <td><span class="badge badge-state">${t.espaco}</span></td>
           <td><a href="https://egsys.atlassian.net/browse/${t.chave}" target="_blank" onclick="event.stopPropagation()" style="color: var(--link-color); font-weight: 700; text-decoration: none;" title="Abrir chamado no Jira Oficial">${t.chave} ↗️</a></td>
           <td><span style="font-size: 11px; color: var(--text-sub);">${t.tipo || "Demanda"}</span></td>
@@ -1662,6 +1766,37 @@
       });
 
       document.getElementById("contagemTabela").innerText = `Exibindo ${tickets.length} chamados`;
+    }
+
+    function atualizarTicketEmMemoriaETabela(tAtualizado) {
+      if (!JIRA_DB || !tAtualizado || !tAtualizado.chave) return;
+      Object.keys(JIRA_DB).forEach(k => {
+        const arr = JIRA_DB[k].tickets || [];
+        const idx = arr.findIndex(t => t.chave === tAtualizado.chave);
+        if (idx !== -1) {
+          arr[idx] = { ...arr[idx], ...tAtualizado };
+        }
+      });
+      const tr = document.querySelector(`tr[data-chave="${tAtualizado.chave}"]`);
+      if (tr) {
+        const numCol = tr.children[0] ? tr.children[0].innerHTML : "";
+        const badgePosseClass = tAtualizado.posse === "egsys" ? "badge-posse-egsys" : "badge-posse-cliente";
+        const badgeSlaClass = tAtualizado.sla === "ok" ? "badge-sla-ok" : "badge-sla-risk";
+        const badgeSlaText = tAtualizado.sla === "ok" ? "Em dia" : "Atenção SLA";
+
+        tr.innerHTML = `
+          <td style="text-align: center; font-weight: 700; color: var(--text-sub); font-size: 11px;">${numCol}</td>
+          <td><span class="badge badge-state">${tAtualizado.espaco}</span></td>
+          <td><a href="https://egsys.atlassian.net/browse/${tAtualizado.chave}" target="_blank" onclick="event.stopPropagation()" style="color: var(--link-color); font-weight: 700; text-decoration: none;" title="Abrir chamado no Jira Oficial">${tAtualizado.chave} ↗️</a></td>
+          <td><span style="font-size: 11px; color: var(--text-sub);">${tAtualizado.tipo || "Demanda"}</span></td>
+          <td>${tAtualizado.resumo}</td>
+          <td><span class="badge badge-area">${tAtualizado.area}</span></td>
+          <td><span class="badge badge-fase">Etapa ${tAtualizado.etapaNum}/8 (${tAtualizado.etapaNome})</span></td>
+          <td><span class="badge ${badgePosseClass}">${tAtualizado.posseLabel}</span></td>
+          <td><span style="font-size: 12px; font-weight: 500;">${tAtualizado.status}</span></td>
+          <td><span class="badge ${badgeSlaClass}">${badgeSlaText}</span></td>
+        `;
+      }
     }
 
     // ==== Exportação da Listagem Filtrada (CSV, Excel, Markdown) ====
@@ -1686,10 +1821,11 @@
         return;
       }
       const cabecalhos = [
-        "Espaço", "Chave", "Tipo", "Resumo", "Área",
+        "#", "Espaço", "Chave", "Tipo", "Resumo", "Área",
         "Macro-Fase", "Posse da Bola", "Status Jira", "SLA", "Tempo na Fase", "Tempo Total"
       ];
-      const linhas = tickets.map(t => [
+      const linhas = tickets.map((t, idx) => [
+        idx + 1,
         t.espaco || "",
         t.chave || "",
         t.tipo || "Demanda",
@@ -1728,7 +1864,7 @@
         return;
       }
       const cabecalhos = [
-        "Espaço", "Chave", "Tipo", "Resumo", "Área",
+        "#", "Espaço", "Chave", "Tipo", "Resumo", "Área",
         "Macro-Fase", "Posse da Bola", "Status Jira", "SLA", "Tempo na Fase", "Tempo Total"
       ];
       const escXml = (v) => String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -1752,6 +1888,7 @@
       tickets.forEach((t, idx) => {
         const style = idx % 2 === 1 ? ` ss:StyleID="RowEven"` : "";
         const dados = [
+          idx + 1,
           t.espaco || "",
           t.chave || "",
           t.tipo || "Demanda",
@@ -1792,12 +1929,12 @@
       let md = `# 📋 Listagem Tática de Chamados Jira — ${escopo}\n\n`;
       md += `* **Data de Exportação:** ${dataHoje}\n`;
       md += `* **Total de Chamados:** ${tickets.length}\n\n`;
-      md += `| Espaço | Chave | Tipo | Área | Macro-Fase | Status Jira | Posse | SLA | Resumo |\n`;
-      md += `|:---:|:---:|:---:|:---:|---|---|:---:|:---:|---|\n`;
+      md += `| # | Espaço | Chave | Tipo | Área | Macro-Fase | Status Jira | Posse | SLA | Resumo |\n`;
+      md += `|:---:|:---:|:---:|:---:|:---:|---|---|:---:|:---:|---|\n`;
 
-      tickets.forEach(t => {
+      tickets.forEach((t, idx) => {
         const resLimpo = (t.resumo || "").replace(/\|/g, "&#124;").replace(/\r?\n/g, " ");
-        md += `| ${t.espaco} | **${t.chave}** | ${t.tipo || "Demanda"} | ${t.area} | Etapa ${t.etapaNum}/8 (${t.etapaNome}) | ${t.status} | ${t.posseLabel || t.posse} | ${t.sla === 'ok' ? 'Em dia' : 'Atenção SLA'} | ${resLimpo} |\n`;
+        md += `| ${idx + 1} | ${t.espaco} | **${t.chave}** | ${t.tipo || "Demanda"} | ${t.area} | Etapa ${t.etapaNum}/8 (${t.etapaNome}) | ${t.status} | ${t.posseLabel || t.posse} | ${t.sla === 'ok' ? 'Em dia' : 'Atenção SLA'} | ${resLimpo} |\n`;
       });
 
       const blob = new Blob([md], { type: "text/markdown;charset=utf-8;" });
@@ -1880,12 +2017,66 @@
       // Buscar jornada / derivações via API oficial ou local
       if (derivSection && derivList) {
         try {
-          const estadoQuery = (ticket.espaco || "sc").toLowerCase();
+          const estadoQuery = (ticket.espaco === "HDPMSC" ? "sc" : (ticket.espaco || "sc")).toLowerCase();
           const res = await fetch(`/api/v1/issues/${ticket.chave}/journey?estado=${estadoQuery}`, {
             headers: authHeaders()
           });
           if (res.ok) {
             const j = await res.json();
+
+            // 🔄 Sincronização e Atualização Reativa com o Jira Real
+            if (j.status) {
+              ticket.status = j.status;
+            }
+            if (j.etapa_atual) {
+              ticket.etapaNum = j.etapa_atual;
+              const etAtual = (j.etapas || []).find(e => e.num === j.etapa_atual);
+              if (etAtual) ticket.etapaNome = etAtual.nome;
+            }
+            if (j.posse) {
+              ticket.posse = j.posse.tipo;
+              ticket.posseLabel = j.posse.label;
+              if (j.posse.tempo_etapa) ticket.tempoFase = j.posse.tempo_etapa;
+              if (j.posse.tempo_total) ticket.tempoTotal = j.posse.tempo_total;
+
+              drawerPosse.innerText = ticket.posseLabel;
+              drawerPosse.className = `badge ${ticket.posse === 'egsys' ? 'badge-posse-egsys' : 'badge-posse-cliente'}`;
+              document.getElementById("drawerTempoFase").innerHTML = `Tempo nesta fase: <strong>${ticket.tempoFase}</strong>`;
+              document.getElementById("drawerTempoTotal").innerHTML = `Tempo total no Jira: <strong>${ticket.tempoTotal}</strong>`;
+            }
+
+            // Re-renderiza o Stepper com o status vivo do Jira
+            stepper.innerHTML = "";
+            const etapasLista = (j.etapas && j.etapas.length > 0) ? j.etapas : FASES_CANONICAS.map((nome, i) => ({
+              num: i + 1,
+              nome: nome,
+              estado: (i + 1) < ticket.etapaNum ? "concluido" : ((i + 1) === ticket.etapaNum ? "ativo" : "pendente")
+            }));
+
+            etapasLista.forEach((et) => {
+              const num = et.num;
+              const item = document.createElement("div");
+              item.className = "step-item";
+
+              const isDone = et.estado === "concluido" || num < ticket.etapaNum;
+              const isCurrent = et.estado === "ativo" || num === ticket.etapaNum;
+              const iconClass = isDone ? "done" : (isCurrent ? "current" : "pending");
+              const iconText = isDone ? "✓" : num;
+              const metaText = isCurrent ? `Fase ativa no Jira: ${ticket.status}` : (isDone ? "Concluída" : "Aguardando avanço");
+
+              item.innerHTML = `
+                <div class="step-icon ${iconClass}">${iconText}</div>
+                <div class="step-content">
+                  <div class="step-title">${et.nome.includes(".") ? et.nome : `${num}. ${et.nome}`}</div>
+                  <div class="step-meta">${metaText}</div>
+                </div>
+              `;
+              stepper.appendChild(item);
+            });
+
+            // Atualiza o ticket em memória e a linha na tabela
+            atualizarTicketEmMemoriaETabela(ticket);
+
             if (j.derivacoes_engenharia && j.derivacoes_engenharia.length > 0) {
               derivList.innerHTML = j.derivacoes_engenharia.map(d => `
                 <div class="drawer-derivacao-card">

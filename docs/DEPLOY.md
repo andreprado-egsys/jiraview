@@ -33,6 +33,11 @@ docker compose -f docker-compose.prod.yml down
 ```
 Os dados persistentes (filtros) estão em `./data` (volume).
 
+## Pareamento e Sincronização de Banco (SQLite)
+- `python3 scripts/sync_db.py --status` — Audita paridade e lista usuários entre local e prod
+- `python3 scripts/sync_db.py --pull` — Baixa banco de produção com backup local prévio
+- `python3 scripts/sync_db.py --push` — Envia banco local para produção com backup remoto prévio
+
 ## Backup/restauração de divergências (PSEI-277)
 - `scripts/portal-jsm/corrige_divergentes.py --dry-run|--apply|--audit`
 - `scripts/portal-jsm/restore_divergentes.py --list|--dry-run|--apply`

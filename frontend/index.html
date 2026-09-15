@@ -187,6 +187,57 @@
     .card small { color: var(--text-sub); font-size: 11px; }
     .card-indicator { height: 4px; width: 100%; position: absolute; bottom: 0; left: 0; }
 
+    /* Banner de Síntese e Decomposição Matemática do Backlog */
+    .summary-banner {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .summary-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .summary-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    .summary-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .summary-sub {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+    .summary-divider {
+      width: 1px;
+      height: 44px;
+      background: var(--border);
+    }
+    @media (max-width: 768px) {
+      .summary-divider { display: none; }
+    }
+    .badge-cat-funil {
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 6px;
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
     /* Barra de filtros rápidos de Posse */
     .quick-posse {
       display: flex;
@@ -652,36 +703,66 @@
   </header>
 
   <div class="container">
-    <!-- 🎯 Funil de Atendimento em 4 Estágios -->
+    <!-- BANNER DE SÍNTESE EXECUTIVA DO BACKLOG (EQUAÇÃO MATEMÁTICA VISÍVEL) -->
+    <div class="summary-banner" id="summaryBanner">
+      <div class="summary-item">
+        <span class="summary-tag">📦 CARTEIRA OPERACIONAL ATIVA (EM ABERTO)</span>
+        <div class="summary-value" id="summaryTotalBacklog">52 Chamados em Aberto</div>
+        <div class="summary-sub" id="summaryFormula">
+          Decomposição das 3 frentes ativas: <b>📥 Triagem (<span id="eq-novas">2</span>)</b> + <b>⚙️ Em Atendimento (<span id="eq-atend">46</span>)</b> + <b>⏸️ Aguardando Cliente (<span id="eq-aguard">4</span>)</b> = <b><span id="eq-total">52</span> Chamados Ativos</b>
+        </div>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-item">
+        <span class="summary-tag" style="color: #238636;">✅ HISTÓRICO DE ENTREGAS</span>
+        <div class="summary-value" id="summaryTotalConcluidas" style="color: #238636;">25 Concluídas</div>
+        <div class="summary-sub">Chamados finalizados e entregues no Jira (fora do backlog ativo)</div>
+      </div>
+    </div>
+
+    <!-- 🎯 Funil de Atendimento em 4 Estágios + Total Backlog Ativo -->
     <div class="cards" id="cards">
       <div class="card" onclick="filtrarPorFunil('novas')" id="card-novas" title="Clique para filtrar apenas chamados novos">
-        <div class="label">📥 Novas / Não Tratadas <span id="p-label"></span></div>
+        <div class="label">📥 Novas / Triagem N1-N2 <span id="p-label"></span></div>
         <div class="value" id="c-novas">–</div>
-        <small>Aguardando triagem egSYS</small>
+        <small>Aguardando início pela egSYS</small>
+        <div><span class="badge-cat-funil" style="background: rgba(56,139,253,0.15); color: #388bfd;">Componente 1/3 do Backlog</span></div>
         <div class="card-indicator" style="background:var(--blue);"></div>
       </div>
       <div class="card" onclick="filtrarPorFunil('em_atendimento')" id="card-andamento" title="Clique para filtrar chamados em atendimento">
-        <div class="label">⚙️ Em Atendimento <span id="p-label2"></span></div>
+        <div class="label">⚙️ Em Atendimento Dev/QA <span id="p-label2"></span></div>
         <div class="value" id="c-andamento">–</div>
-        <small>Em análise / desenvolvimento</small>
+        <small>Em análise / desenvolvimento / QA</small>
+        <div><span class="badge-cat-funil" style="background: rgba(163,113,247,0.15); color: #a371f7;">Componente 2/3 do Backlog</span></div>
         <div class="card-indicator" style="background:#a371f7;"></div>
       </div>
       <div class="card" onclick="filtrarPorFunil('aguardando_validacao')" id="card-validacao" title="Clique para filtrar chamados aguardando o cliente">
-        <div class="label">⏸️ Aguardando Validação</div>
+        <div class="label">⏸️ Aguard. Validação Cliente</div>
         <div class="value" id="c-validacao">–</div>
-        <small>Homologação pelo cliente</small>
+        <small>Homologação / Bloqueio externo</small>
+        <div><span class="badge-cat-funil" style="background: rgba(210,153,34,0.15); color: #d29922;">Componente 3/3 do Backlog</span></div>
         <div class="card-indicator" style="background:var(--yellow);"></div>
       </div>
+      <div class="card" onclick="filtrarPorFunil('')" id="card-total-backlog" title="Clique para ver todo o backlog em aberto">
+        <div class="label">📦 Total Backlog Ativo</div>
+        <div class="value" id="c-backlog-total" style="color: var(--accent);">–</div>
+        <small>Soma das 3 frentes ativas (1 + 2 + 3)</small>
+        <div><span class="badge-cat-funil" style="background: rgba(56,139,253,0.2); color: var(--accent);">Fechamento Exato da Carteira</span></div>
+        <div class="card-indicator" style="background:var(--accent);"></div>
+      </div>
       <div class="card" onclick="filtrarPorFunil('concluidas')" id="card-concluidas" title="Clique para filtrar chamadas concluídas">
-        <div class="label">✅ Concluídas <span id="p-label3"></span></div>
+        <div class="label">✅ Concluídas Histórico <span id="p-label3"></span></div>
         <div class="value" id="c-concluidas">–</div>
-        <small>Resolvidas no período</small>
+        <small>Resolvidas / Entregues no período</small>
+        <div><span class="badge-cat-funil" style="background: rgba(35,134,54,0.15); color: #238636;">Histórico Fora do Backlog</span></div>
         <div class="card-indicator" style="background:var(--green);"></div>
       </div>
       <div class="card" style="cursor:default;" id="card-info">
         <div class="label">🗓️ Fechadas (7 dias)</div>
         <div class="value" id="c-fechadas">–</div>
         <small id="c-projetos">Projetos: HDPMSC, SCPMH</small>
+        <div><span class="badge-cat-funil" style="background: rgba(140,149,159,0.15); color: var(--text-sub);">Ritmo de Vazão</span></div>
+        <div class="card-indicator" style="background:var(--text-sub);"></div>
       </div>
     </div>
 
@@ -797,6 +878,7 @@
       <table>
         <thead>
           <tr>
+            <th style="width: 44px; text-align: center;">#</th>
             <th>Tipo</th>
             <th>Área</th>
             <th>Fase</th>
@@ -810,7 +892,7 @@
           </tr>
         </thead>
         <tbody id="rows">
-          <tr><td colspan="10" class="pause">Carregando solicitações…</td></tr>
+          <tr><td colspan="11" class="pause">Carregando solicitações…</td></tr>
         </tbody>
       </table>
     </div>
@@ -1119,12 +1201,35 @@
     async function loadCards() {
       const d = await api("/dashboard?estado=" + ESTADO + "&periodo=" + periodoAtual());
       const f = d.funil || {};
-      document.getElementById("c-novas").textContent = f.novas ?? (d.abertas ?? "–");
-      document.getElementById("c-andamento").textContent = f.em_atendimento ?? (d.em_andamento ?? "–");
-      document.getElementById("c-validacao").textContent = f.aguardando_validacao ?? "0";
-      document.getElementById("c-concluidas").textContent = f.concluidas ?? (d.total_com_resolucao ?? "–");
+      const novasVal = Number(f.novas ?? (d.abertas ?? 0));
+      const andamentoVal = Number(f.em_atendimento ?? (d.em_andamento ?? 0));
+      const validacaoVal = Number(f.aguardando_validacao ?? 0);
+      const concluidasVal = Number(f.concluidas ?? (d.total_com_resolucao ?? 0));
+      const totalAtivo = novasVal + andamentoVal + validacaoVal;
+
+      document.getElementById("c-novas").textContent = novasVal;
+      document.getElementById("c-andamento").textContent = andamentoVal;
+      document.getElementById("c-validacao").textContent = validacaoVal;
+      const bTotalEl = document.getElementById("c-backlog-total");
+      if (bTotalEl) bTotalEl.textContent = totalAtivo;
+      document.getElementById("c-concluidas").textContent = concluidasVal;
       document.getElementById("c-fechadas").textContent = d.fechadas_7d ?? "–";
       document.getElementById("c-projetos").textContent = "Projetos: " + (d.projetos || []).join(", ");
+
+      // Atualizar Banner Executivo de Síntese
+      const sTotalEl = document.getElementById("summaryTotalBacklog");
+      if (sTotalEl) sTotalEl.textContent = `${totalAtivo} Chamados em Aberto`;
+      const sConcEl = document.getElementById("summaryTotalConcluidas");
+      if (sConcEl) sConcEl.textContent = `${concluidasVal} Concluídas`;
+      const eqNovas = document.getElementById("eq-novas");
+      if (eqNovas) eqNovas.textContent = novasVal;
+      const eqAtend = document.getElementById("eq-atend");
+      if (eqAtend) eqAtend.textContent = andamentoVal;
+      const eqAguard = document.getElementById("eq-aguard");
+      if (eqAguard) eqAguard.textContent = validacaoVal;
+      const eqTotal = document.getElementById("eq-total");
+      if (eqTotal) eqTotal.textContent = totalAtivo;
+
       const rot = { "60d":"(60d)", "90d":"(90d)", "6m":"(6m)", "12m":"(12m)", "ano":"(" + new Date().getFullYear() + ")", "todos":"(todos)" }[periodoAtual()] || "(90d)";
       ["p-label","p-label2","p-label3"].forEach(id => { const e = document.getElementById(id); if (e) e.textContent = rot || ""; });
     }
@@ -1138,10 +1243,14 @@
         "concluidas": "card-concluidas"
       };
 
-      if (funilStageAtivo === categoria) {
-        // Alterna/limpa filtro ao clicar no mesmo card
+      if (funilStageAtivo === categoria || categoria === "") {
+        // Alterna/limpa filtro ao clicar no mesmo card ou no Total Backlog Ativo
         funilStageAtivo = "";
         document.querySelectorAll(".card").forEach(c => c.classList.remove("active-filter"));
+        if (categoria === "") {
+          const cTotal = document.getElementById("card-total-backlog");
+          if (cTotal) cTotal.classList.add("active-filter");
+        }
       } else {
         funilStageAtivo = categoria;
         document.querySelectorAll(".card").forEach(c => c.classList.remove("active-filter"));
@@ -1198,7 +1307,7 @@
       const tp = document.getElementById("f-tipo").value;
       const ab = document.getElementById("f-abertas").value;
       const jql = document.getElementById("f-jql").value;
-      const q = new URLSearchParams({ estado: ESTADO, abertas: (funilStageAtivo === "concluidas" ? "false" : ab), periodo: periodoAtual(), max_results: "50" });
+      const q = new URLSearchParams({ estado: ESTADO, abertas: (funilStageAtivo === "concluidas" ? "false" : ab), periodo: periodoAtual(), max_results: "200" });
       if (st) q.set("status_filter", st);
       if (tp) q.set("tipo", tp);
       const org = document.getElementById("f-origem").value;
@@ -1208,7 +1317,7 @@
       if (jql) q.set("jql", jql);
 
       const rows = document.getElementById("rows");
-      rows.innerHTML = `<tr><td colspan="10" class="pause">Consultando Jira...</td></tr>`;
+      rows.innerHTML = `<tr><td colspan="11" class="pause">Consultando Jira...</td></tr>`;
 
       try {
         const d = await api("/issues?" + q);
@@ -1222,17 +1331,18 @@
 
         if (!d.issues.length) {
           if (contagemEl) contagemEl.textContent = "0 solicitações";
-          rows.innerHTML = `<tr><td colspan="10">
+          rows.innerHTML = `<tr><td colspan="11">
             <div class="empty-msg">🔍 <b>0 solicitações encontradas para este filtro.</b><br>
             A consulta está correta — não há itens que atendam: ${esc((jql || st || tp || posseAtiva) ? (jql || (st ? "status = " + st : "") || (posseAtiva ? "posse = " + posseAtiva : "")) : "os critérios atuais")}.<br>
             Dica: clique em "↺ Limpar" para restaurar a listagem.</div>
           </td></tr>`;
         } else {
-          rows.innerHTML = d.issues.map(i => {
+          rows.innerHTML = d.issues.map((i, idx) => {
             const aClass = areaClasses[i.area] || "operacoes";
             const posseClass = i.posse === "cliente" ? "cliente" : "egsys";
             return `
             <tr class="clickable-row" onclick="openDrawer('${esc(i.referencia)}')">
+              <td style="text-align: center; font-weight: 700; color: var(--text-sub); font-size: 11px;">${idx + 1}</td>
               <td><b>${esc(i.tipo)}</b></td>
               <td><span class="badge-area ${aClass}">${esc(i.area)}</span></td>
               <td><span class="badge-fase">📊 ${i.faseNum}/8 ${esc(i.faseNome)}</span></td>
@@ -1250,7 +1360,7 @@
         window.currentIssues = [];
         const contagemEl = document.getElementById("contagem-tabela");
         if (contagemEl) contagemEl.textContent = "";
-        rows.innerHTML = `<tr><td colspan="10" style="color:var(--red);padding:14px;">Erro ao carregar solicitações: ${esc(e.message)}</td></tr>`;
+        rows.innerHTML = `<tr><td colspan="11" style="color:var(--red);padding:14px;">Erro ao carregar solicitações: ${esc(e.message)}</td></tr>`;
       }
     }
 
@@ -1280,6 +1390,34 @@
 
       try {
         const j = await api("/issues/" + key + "/journey?estado=" + ESTADO);
+        
+        // Atualização Reativa Imediata na Tabela e Memória
+        const cores = { done:"var(--green)", indeterminate:"var(--blue)", new:"var(--yellow)" };
+        if (window.currentIssues && window.currentIssues.length) {
+          const itemTbl = window.currentIssues.find(it => it.referencia === key);
+          if (itemTbl) {
+            itemTbl.status = j.status;
+            itemTbl.statusCategoria = j.statusCategoria;
+            itemTbl.faseNum = j.fase_atual?.num || itemTbl.faseNum;
+            itemTbl.faseNome = j.fase_atual?.nome || itemTbl.faseNome;
+            itemTbl.posse = j.posse?.tipo || itemTbl.posse;
+            const rowEl = document.querySelector(`tr[onclick*="${key}"]`);
+            if (rowEl) {
+              const fCell = rowEl.querySelector(".badge-fase");
+              if (fCell && j.fase_atual) fCell.textContent = `📊 ${j.fase_atual.num}/8 ${j.fase_atual.nome}`;
+              const sCell = rowEl.querySelector(".status");
+              if (sCell) {
+                sCell.textContent = j.status;
+                sCell.style.background = cores[j.statusCategoria] || 'var(--blue)';
+              }
+              const pCell = rowEl.querySelector(".badge-posse");
+              if (pCell && j.posse) {
+                pCell.className = "badge-posse " + (j.posse.tipo === "cliente" ? "cliente" : "egsys");
+                pCell.textContent = j.posse.tipo === "cliente" ? "🟡 Cliente" : "🔵 egSYS";
+              }
+            }
+          }
+        }
         
         // Header & Summary
         document.getElementById("d-summary").textContent = j.resumo;
@@ -1473,11 +1611,12 @@
         return;
       }
       const cabecalhos = [
-        "Referência", "Tipo", "Área", "Fase", "Resumo", "Status",
+        "#", "Referência", "Tipo", "Área", "Fase", "Resumo", "Status",
         "Posse", "Solicitante", "Responsável", "Prioridade",
         "Criação", "Atualização", "Resolução"
       ];
-      const linhas = tickets.map(i => [
+      const linhas = tickets.map((i, idx) => [
+        idx + 1,
         i.referencia || "",
         i.tipo || "",
         i.area || "",
@@ -1517,7 +1656,7 @@
         return;
       }
       const cabecalhos = [
-        "Referência", "Tipo", "Área", "Macro-Fase", "Status Jira",
+        "#", "Referência", "Tipo", "Área", "Macro-Fase", "Status Jira",
         "Posse da Bola", "Solicitante", "Responsável", "Prioridade",
         "Criação", "Atualização", "Resolução", "Resumo"
       ];
@@ -1541,6 +1680,7 @@
       tickets.forEach((i, idx) => {
         const style = idx % 2 === 1 ? ` ss:StyleID="RowEven"` : "";
         const dados = [
+          idx + 1,
           i.referencia || "",
           i.tipo || "",
           i.area || "",
@@ -1582,12 +1722,12 @@
       let md = `# 📋 Listagem de Chamados Jira — ${ESTADO.toUpperCase()}\n\n`;
       md += `* **Data de Exportação:** ${dataHoje}\n`;
       md += `* **Total de Chamados:** ${tickets.length}\n\n`;
-      md += `| Referência | Tipo | Área | Fase | Status | Posse | Solicitante | Prioridade | Atualização | Resumo |\n`;
-      md += `|:---:|:---:|:---:|---|---|:---:|---|:---:|:---:|---|\n`;
+      md += `| # | Referência | Tipo | Área | Fase | Status | Posse | Solicitante | Prioridade | Atualização | Resumo |\n`;
+      md += `|:---:|:---:|:---:|:---:|---|---|:---:|---|:---:|:---:|---|\n`;
 
-      tickets.forEach(i => {
+      tickets.forEach((i, idx) => {
         const resLimpo = (i.resumo || "").replace(/\|/g, "&#124;").replace(/\r?\n/g, " ");
-        md += `| **${i.referencia}** | ${i.tipo || ""} | ${i.area || ""} | ${i.faseNum}/8 ${i.faseNome} | ${i.status} | ${i.posseLabel || i.posse} | ${i.solicitante || ""} | ${i.prioridade || ""} | ${i.atualizacao || ""} | ${resLimpo} |\n`;
+        md += `| ${idx + 1} | **${i.referencia}** | ${i.tipo || ""} | ${i.area || ""} | ${i.faseNum}/8 ${i.faseNome} | ${i.status} | ${i.posseLabel || i.posse} | ${i.solicitante || ""} | ${i.prioridade || ""} | ${i.atualizacao || ""} | ${resLimpo} |\n`;
       });
 
       const blob = new Blob([md], { type: "text/markdown;charset=utf-8;" });

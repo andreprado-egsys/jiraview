@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from ..core.security import TokenPayload, get_current_user, jsm, require_role
-from ..core.estados import estado_por_sigla
+from ..core.estados import estado_por_sigla, projeto_em_estado
 from ..core.filtros import FiltroRepo
 
 router = APIRouter(prefix="/api/v1", tags=["jiraview"])
@@ -63,7 +63,7 @@ def _detectar_fase(status_nome: str, status_cat: str) -> dict:
         return {"num": 3, "nome": "Análise de Dev", "posse": "egsys", "label_posse": "Ação com egSYS"}
 
     # 2. Triagem (N2)
-    if any(x in st for x in ("n2", "validação n2", "validacao n2", "triagem n2", "suporte avançado", "suporte avancado")):
+    if any(x in st for x in ("n2", "validação n2", "validacao n2", "triagem n2", "triagem (n2)", "suporte n2", "suporte avançado", "suporte avancado")):
         return {"num": 2, "nome": "Triagem (N2)", "posse": "egsys", "label_posse": "Ação com egSYS"}
 
     # 1. Triagem (N1)
@@ -357,10 +357,29 @@ async def issue_journey(
     import httpx
     from datetime import datetime
 
-    cfg = estado_por_sigla(estado)
+    # Resolução dinâmica e resiliente do estado (suporta sigla 'sc', projeto 'HDPMSC' ou prefixo da chave)
+    cfg = estado_por_sigla(estado) if estado else None
+    if not cfg and estado:
+        siglas = projeto_em_estado(estado)
+        if siglas:
+            cfg = estado_por_sigla(siglas[0])
+            estado = siglas[0]
+
+    if not cfg and "-" in key:
+        proj = key.split("-")[0]
+        siglas = projeto_em_estado(proj)
+        if siglas:
+            cfg = estado_por_sigla(siglas[0])
+            estado = siglas[0]
+
+    is_global_coord = user.role in ("admin", "coordenador") or getattr(user, "state", "") in ("todos", "all")
     if not cfg:
-        raise HTTPException(404, "Estado não configurado")
-    if user.role == "viewer" and user.state != estado:
+        if is_global_coord:
+            cfg = {"display_name": "Coordenação Geral", "projects": []}
+        else:
+            raise HTTPException(404, "Estado não configurado")
+
+    if not is_global_coord and user.role == "viewer" and user.state != estado:
         raise HTTPException(403, "Fora do estado do usuário")
 
     hdr = JSM._basic()

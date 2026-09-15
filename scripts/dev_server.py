@@ -219,7 +219,8 @@ class JiraViewDevHandler(http.server.SimpleHTTPRequestHandler):
 
             derivacoes = []
             if "388" in issue_key:
-                etapa_num = 6
+                etapa_num = 2
+                status = "Triagem (N2)"
                 derivacoes.append({
                     "chave": "PSC-3742",
                     "resumo": "Correção de concorrência e sobreposição de protocolos no SADE PMSC",
