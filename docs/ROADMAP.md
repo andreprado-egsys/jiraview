@@ -56,6 +56,17 @@
 - [x] **Governança de Janelas Temporais**: Inclusão de `60d` e restrição estrita de `todos` à Coordenação/Admin.
 - [x] **Roteamento Soberano no Traefik (`priority: 1000`)**: Resolução de conflito com container legado e entrega sem erros de `/coordenador`.
 - [x] **Sincronização de Usuários em Produção**: Base de dados `auth.db` com 10 usuários ativos auditados.
+
+## v0.4.1 (concluída) — Síntese Executiva de Backlog, Numeração e Sincronização de Banco
+- [x] **Síntese Matemática do Backlog Ativo**:
+  - Banner executivo e card de destaque: `Total Backlog Ativo: 52 Chamados em Aberto` (2 Novas + 46 Em Atendimento + 4 Aguardando Validação).
+  - Isolamento estrito das 25 tarefas Concluídas, eliminando qualquer distorção visual entre demanda reprimida e entregas realizadas.
+- [x] **Indexação Sequencial Dinâmica (`#`)**:
+  - Adição de numeração sequencial (1 a N) na tabela principal e em todas as exportações (`.md`, `.xlsx`, `.csv`), facilitando auditorias e reuniões de alinhamento com clientes.
+- [x] **Utilitário de Sincronização Soberana de Banco (`scripts/sync_db.py`)**:
+  - Ferramenta CLI para checagem de paridade (`--status`), download (`--pull`) e upload (`--push`) da base `auth.db` entre desenvolvimento e produção (`monitoramento-egsys`), com backup automático `.bak`.
+- [x] **Calibração de Reatividade do Stepper**:
+  - Reconhecimento automático e visual de tickets em `Triagem (N2)` (ex: `HDPMSC-388`).
 - [ ] Widgets de alerta antecipado ("issues em risco de SLA" e "paradas há mais de X dias")
 - [ ] Notificação visual de tickets atualizados recentemente
 - [ ] Estados TO/AM/PR/GM com dashboards dedicados ativados

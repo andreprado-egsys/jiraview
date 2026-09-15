@@ -1,6 +1,6 @@
 # egSYS JiraView — Changelog
 
-## [0.4.1] — 2026-09-15
+## [0.4.1] — 2026-09-15 (PSEI-309)
 
 ### Added
 - `feat(dashboard): Banner Executivo de Síntese Matemática do Backlog` — incorporação de banner de síntese executiva no topo de todos os painéis (`coordenador.html` e `index.html`), evidenciando a decomposição matemática exata da carteira ativa do cliente: `2 Novas + 46 Em Atendimento + 4 Aguardando Validação = 52 Chamados em Aberto`, com isolamento explícito do histórico de 25 entregas finalizadas.

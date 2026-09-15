@@ -78,13 +78,15 @@ Alive + checagem leve do Jira. **Público** (sem auth).
 Visão resumida das solicitações do estado do usuário logado (`role >= viewer`).
 Retorna: `role`, `state`, `issues[]`.
 
-### GET `/api/v1/issues?estado=sc&status_filter=&tipo=&origem=&jql=&abertas=true&periodo=90d&max_results=50`
+### GET `/api/v1/issues?estado=sc&status_filter=&tipo=&origem=&jql=&abertas=true&periodo=90d&max_results=200&funil_stage=`
 Listagem principal do painel com colunas normalizadas. **Auth obrigatório** (viewer do estado).
 - `status_filter` / `tipo` — filtros visuais por dropdown
 - `origem` — filtro por tipo de solicitante (`cliente` para contas `qm:*` vs `interno` para agentes)
 - `jql` — filtro JQL livre ou composto pelo construtor visual
 - `abertas=true` — aplica `resolution is EMPTY`
 - `periodo` — janela de criação (`60d`, `90d`, `6m`, `12m`, `ano` nos painéis de clientes; `todos` exclusivo para Coordenação/Admin)
+- `max_results` — limite de tickets retornados (suporte a até `200` para carteira integral de estados densos)
+- `funil_stage` — filtro semântico por estágio da esteira: `novas`, `em_atendimento`, `aguardando_validacao` ou `concluidas`
 Resposta:
 ```json
 {
@@ -111,8 +113,19 @@ Resposta:
 
 ### GET `/api/v1/dashboard?estado=sc&periodo=90d`
 Cards métricos agregados estilo Jira Dashboard:
+- `funil` — objeto com contagens do funil de atendimento:
+  ```json
+  {
+    "novas": 2,
+    "em_atendimento": 46,
+    "aguardando_validacao": 4,
+    "concluidas": 25
+  }
+  ```
 - `abertas` (novas / statusCategory `new`)
 - `em_andamento` (em tratamento / statusCategory `indeterminate`)
+- `aguardando_validacao` (homologação / bloqueio externo)
+- `concluidas` (resolvidas no período)
 - `fechadas_7d` (concluídas nos últimos 7 dias)
 - `por_status` (mapa nome_status ➔ total)
 - `por_origem` (`cliente_new`, `cliente_ind`, `cliente_done`, `interno_new`, etc.)

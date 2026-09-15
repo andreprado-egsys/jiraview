@@ -18,6 +18,7 @@ e total sanitização (sem credenciais no client).
 | F4 — Identidade & RBAC | Login unitário real + SQLite nativo + 1º acesso obrigatório + 10 usuários ativos auditados | ✅ |
 | F4.1 — Coordenação Global | Painel da Coordenação com 73 espaços + Gestão de Usuários e Acessos | ✅ |
 | F4.2 — Exportação & 1-Click | Exportação Multi-Formato (.MD, .XLSX, .CSV) + Links 1-Click Jira Cloud + Derivações técnicas | ✅ |
+| F4.3 — Síntese & Sincronia | Síntese de 52 tarefas abertas + Numeração `#` + sync_db.py soberano (v0.4.1) | ✅ |
 | F5 — Multi-estado | TO/AM/PR/GM ativados (YAML + papéis) + visão consolidada por estado | ⏳ v0.5 |
 | F6 — Automação | Automação JSM de conclusão + SLA por área + migração Node-RED | ⏳ v0.5 |
 
