@@ -30,7 +30,7 @@ def get_local_users() -> list[dict]:
     conn.row_factory = sqlite3.Row
     try:
         cur = conn.cursor()
-        rows = cur.execute("SELECT id, username, nome, role, estado, is_active, must_change_password FROM users ORDER BY id").fetchall()
+        rows = cur.execute("SELECT id, username, nome, role, estado, COALESCE(espacos, '') as espacos, is_active, must_change_password FROM users ORDER BY id").fetchall()
         return [dict(r) for r in rows]
     except Exception as e:
         print(f"[!] Erro ao ler banco local: {e}")
@@ -44,7 +44,7 @@ def get_remote_users() -> list[dict]:
         "ssh", REMOTE_HOST,
         "python3 -c \"import sqlite3; conn = sqlite3.connect('" + REMOTE_PATH + "/auth.db'); "
         "conn.row_factory = sqlite3.Row; cur = conn.cursor(); "
-        "import json; print(json.dumps([dict(r) for r in cur.execute('SELECT id, username, nome, role, estado, is_active, must_change_password FROM users ORDER BY id')]))\""
+        "import json; print(json.dumps([dict(r) for r in cur.execute('SELECT id, username, nome, role, estado, COALESCE(espacos, \\'\\') as espacos, is_active, must_change_password FROM users ORDER BY id')]))\""
     ]
     try:
         res = subprocess.run(cmd, capture_output=True, text=True, check=True)
@@ -82,7 +82,7 @@ def check_status():
         loc = local_dict.get(k)
         rem = remote_dict.get(k)
         if loc and rem:
-            diff = [f"{field}: {loc[field]} != {rem[field]}" for field in ("role", "estado", "is_active", "must_change_password") if loc[field] != rem[field]]
+            diff = [f"{field}: {loc[field]} != {rem[field]}" for field in ("role", "estado", "espacos", "is_active", "must_change_password") if loc[field] != rem[field]]
             if diff:
                 divergencias.append(f"{k} com divergências de dados: {', '.join(diff)}")
                 print(f"{k:<20} | Presente (ID {loc['id']})   | Presente (ID {rem['id']})   | ⚠️ DIFERENTE")

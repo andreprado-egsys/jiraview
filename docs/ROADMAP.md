@@ -65,11 +65,27 @@
   - Adição de numeração sequencial (1 a N) na tabela principal e em todas as exportações (`.md`, `.xlsx`, `.csv`), facilitando auditorias e reuniões de alinhamento com clientes.
 - [x] **Utilitário de Sincronização Soberana de Banco (`scripts/sync_db.py`)**:
   - Ferramenta CLI para checagem de paridade (`--status`), download (`--pull`) e upload (`--push`) da base `auth.db` entre desenvolvimento e produção (`monitoramento-egsys`), com backup automático `.bak`.
-- [x] **Calibração de Reatividade do Stepper**:
-  - Reconhecimento automático e visual de tickets em `Triagem (N2)` (ex: `HDPMSC-388`).
-- [ ] Widgets de alerta antecipado ("issues em risco de SLA" e "paradas há mais de X dias")
-- [ ] Notificação visual de tickets atualizados recentemente
-- [ ] Estados TO/AM/PR/GM com dashboards dedicados ativados
+## v0.4.2 (concluída) — Arquitetura Multi-Espaço para Clientes & Coordenação
+- [x] **Suporte a Múltiplos Espaços para Clientes & Gestores**:
+  - Armazenamento em coluna `espacos` no SQLite (`auth.db`) com isolamento RBAC.
+  - Barra executiva reativa `#barSeletorEspacosCliente` no painel do cliente com chips dinâmicos (ex.: `HDPMSC + SSC`).
+- [x] **Seletor e Customização Multi-Espaço para Coordenação (`coordenador.html`)**:
+  - Ferramenta de seleção personalizada permitindo consolidar múltiplos projetos em tempo real com atalhos de 1 clique.
+  - Comparativo side-by-side de volume por espaço no Gráfico 1.
+- [x] **Gestão de Usuários & Modal de Edição**:
+  - CRUD completo com edição de espaços, redefinição de senha e alteração de perfil via modal `#modalEditarUsuario`.
+
+## v0.4.3 (concluída) — Paridade Canônica de Funil, Cursor Pagination Jira Cloud v3 e Coerência Temporal Estrita
+- [x] **Cursor Pagination Oficial Jira Cloud v3 (`nextPageToken`)**:
+  - Implementação de `search_full` em `security.py`, eliminando a duplicação de páginas causada pela depreciação do `startAt` na API v3 da Atlassian.
+- [x] **Alinhamento do Funil (`funil_stage=novas`)**:
+  - Inclusão do status `Validação N2` na esteira de triagem, eliminando o erro de "0 solicitações encontradas" ao clicar no card.
+- [x] **Unificação e Coerência Temporal Estrita**:
+  - Equalização completa: cada janela temporal (`30d`, `60d`, `90d`, `6m`, `ano`, `12m`) governa com 100% de consistência os cards de backlog ativo, concluídas, banner e tabela.
+  - No ciclo padrão de 90 dias: 22 ativas + 23 concluídas = 45 chamados no total.
+  - Restrição da opção "Todos os Períodos" (58 ativas + 292 concluídas = 350 total) com exclusividade à governança da Coordenação (`coordenador.html`).
+- [x] **Fim do Truncamento de 50 Itens**:
+  - Ampliação do cap padrão para 250 itens com leitor por cursor, exibindo 100% da carteira sem cortes.
 
 ## v0.5 — Automação e Governança Multi-Estado
 - [ ] Regra de automação JSM (workflow/conclusão) substituindo script-timer quando permitido

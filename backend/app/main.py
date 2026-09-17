@@ -35,7 +35,11 @@ class DefensiveHeaders(BaseHTTPMiddleware):
         resp.headers["Content-Security-Policy"] = "frame-ancestors 'self'"
         resp.headers["Server"] = "egSYS-Shield"
         resp.headers["X-Permitted-Cross-Domain-Policies"] = "none"
-        resp.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        path = request.url.path
+        if path.endswith(".json") or path.endswith(".html") or path in ("/coordenador", "/painel_sc", "/login", "/"):
+            resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+            resp.headers["Pragma"] = "no-cache"
+            resp.headers["Expires"] = "0"
         if is_prod:
             resp.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
         return resp

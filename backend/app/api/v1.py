@@ -84,6 +84,8 @@ def _jql_janela(periodo: Optional[str] = None) -> str:
         import datetime
         cur_year = datetime.date.today().year
         return f' AND created >= "{cur_year}-01-01"'
+    if periodo == "30d":
+        return " AND created >= -30d"
     if periodo == "60d":
         return " AND created >= -60d"
     if periodo == "90d":
@@ -114,15 +116,8 @@ def _build_jql(
     if status:
         parts.append(f'status = "{status}"')
     
-    # Tratamento semântico do Funil de Atendimento
-    if funil_stage == "novas":
-        parts.append('(statusCategory in ("To Do") OR status in ("Novo", "Aberto", "Backlog", "Triagem"))')
-        parts.append("resolution is EMPTY")
-    elif funil_stage == "em_atendimento":
-        parts.append('(statusCategory in ("In Progress") AND status not in ("Aguardando Informações", "Aguardando Homologação", "Homologação", "Aguardando Cliente", "Validação Cliente", "Pendente"))')
-        parts.append("resolution is EMPTY")
-    elif funil_stage == "aguardando_validacao":
-        parts.append('status in ("Aguardando Informações", "Aguardando Homologação", "Homologação", "Aguardando Cliente", "Validação Cliente", "Pendente")')
+    # Tratamento semântico do Funil de Atendimento (alinhado rigorosamente a _detectar_fase)
+    if funil_stage in ("novas", "em_atendimento", "aguardando_validacao"):
         parts.append("resolution is EMPTY")
     elif funil_stage == "concluidas":
         parts.append('(statusCategory in ("Done") OR resolution is not EMPTY)')
@@ -136,9 +131,78 @@ def _build_jql(
     return " AND ".join(parts) + janela + " ORDER BY updated DESC"
 
 
+def _resolver_projetos_e_permissoes(
+    estado: Optional[str],
+    projetos_req: Optional[str],
+    user: TokenPayload,
+) -> tuple[list[str], list[dict], str]:
+    """
+    Resolve a lista de projetos Jira a serem consultados e valida permissões RBAC.
+    Retorna (lista_projetos, lista_reporters, nome_exibicao).
+    Suporta coordenador/admin (acesso aos 73 espaços) e clientes com múltiplos espaços (ex.: HDPMSC + SSC).
+    """
+    from ..core.estados import clientes_do_estado
+
+    is_coord = user.role in ("admin", "coordenador") or user.state in ("todos", "all") or user.sub in ("coordenador", "admin")
+
+    # 1. Coordenador / Administrador Geral: Acesso irrestrito a qualquer espaço ou combinação de espaços
+    if is_coord:
+        if projetos_req:
+            projs = [p.strip().upper() for p in projetos_req.split(",") if p.strip()]
+            return projs, [], f"Personalizado ({', '.join(projs)})"
+        if estado and estado not in ("todos", "all"):
+            cfg = estado_por_sigla(estado)
+            if cfg:
+                only_rep = cfg.get("only_reporter")
+                reps = [{"accountId": only_rep}] if only_rep else []
+                return cfg.get("projects", [estado.upper()]), reps, cfg.get("display_name", estado.upper())
+            return [estado.upper()], [], estado.upper()
+        return ["HDPMSC"], [], "Geral"
+
+    # 2. Cliente / Gestor Estadual (viewer ou manager):
+    user_espacos_raw = getattr(user, "espacos", "") or ""
+    cfg_estado = estado_por_sigla(user.state)
+
+    projetos_autorizados = set()
+    if user_espacos_raw:
+        for p in user_espacos_raw.split(","):
+            if p.strip():
+                projetos_autorizados.add(p.strip().upper())
+    if cfg_estado and cfg_estado.get("projects"):
+        for p in cfg_estado["projects"]:
+            projetos_autorizados.add(p.upper())
+    if not projetos_autorizados:
+        projetos_autorizados.add("HDPMSC")
+
+    if projetos_req:
+        projs_pedidos = [p.strip().upper() for p in projetos_req.split(",") if p.strip()]
+        for p in projs_pedidos:
+            if p not in projetos_autorizados:
+                raise HTTPException(
+                    status.HTTP_403_FORBIDDEN,
+                    f"Espaço '{p}' não autorizado para o usuário '{user.sub}'."
+                )
+        projs_finais = projs_pedidos
+    elif estado and estado != user.state:
+        cfg_solicitado = estado_por_sigla(estado)
+        projs_do_estado = [p.upper() for p in (cfg_solicitado.get("projects", []) if cfg_solicitado else [])]
+        if not any(p in projetos_autorizados for p in projs_do_estado):
+            raise HTTPException(status.HTTP_403_FORBIDDEN, "Fora do escopo do usuário")
+        projs_finais = [p for p in projs_do_estado if p in projetos_autorizados]
+    else:
+        projs_finais = sorted(list(projetos_autorizados))
+
+    only_rep = cfg_estado.get("only_reporter") if cfg_estado else None
+    reporters = [{"accountId": only_rep}] if only_rep else []
+    display = cfg_estado.get("display_name", ", ".join(projs_finais)) if cfg_estado else ", ".join(projs_finais)
+    return projs_finais, reporters, display
+
+
 @router.get("/issues")
 async def list_issues(
-    estado: str,
+    estado: Optional[str] = None,
+    projetos: Optional[str] = None,
+    espacos: Optional[str] = None,
     status_filter: Optional[str] = None,
     tipo: Optional[str] = None,
     origem: Optional[str] = None,
@@ -147,20 +211,17 @@ async def list_issues(
     jql: Optional[str] = None,
     abertas: bool = True,
     periodo: Optional[str] = None,
-    max_results: int = 50,
+    max_results: int = 250,
     user: TokenPayload = Depends(get_current_user),
 ):
-    cfg = estado_por_sigla(estado)
-    if not cfg:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "Estado não configurado")
-    if user.role == "viewer" and user.state != estado:
-        raise HTTPException(status.HTTP_403_FORBIDDEN, "Fora do estado do usuário")
-
-    from ..core.estados import clientes_do_estado
-    q = _build_jql(cfg["projects"], status_filter, tipo, jql, abertas,
-                   reporters=clientes_do_estado(estado), janela=_jql_janela(periodo),
+    projs_req = projetos or espacos
+    projs, reporters, _ = _resolver_projetos_e_permissoes(estado, projs_req, user)
+    # A janela temporal de período aplica-se a toda a consulta (ativas e concluídas)
+    janela_jql = _jql_janela(periodo)
+    q = _build_jql(projs, status_filter, tipo, jql, abertas,
+                   reporters=reporters, janela=janela_jql,
                    funil_stage=funil_stage)
-    issues = await JSM.search(q, max_results)
+    issues = await JSM.search_full(q, cap=max_results)
     if origem in ("cliente", "interno"):
         def _eh_origem(it):
             acct = str(((it.get("fields", {}).get("reporter") or {}).get("accountId") or ""))
@@ -176,14 +237,33 @@ async def list_issues(
         st_cat = (f.get("status") or {}).get("statusCategory", {}).get("key") or "new"
         area = _detectar_area(f)
         fase_info = _detectar_fase(st_nome, st_cat)
+        is_done = st_cat == "done" or fase_info["num"] == 8 or bool((f.get("resolution") or {}).get("name"))
+
+        # Filtro estrito do Funil de Atendimento (100% idêntico a /dashboard)
+        if funil_stage == "novas":
+            if is_done or fase_info["num"] not in (1, 2):
+                continue
+        elif funil_stage == "em_atendimento":
+            if is_done or fase_info["num"] not in (3, 4, 5, 6):
+                continue
+        elif funil_stage == "aguardando_validacao":
+            if is_done or (fase_info["num"] != 7 and fase_info["posse"] != "cliente"):
+                continue
+        elif funil_stage == "concluidas":
+            if not is_done:
+                continue
 
         if posse_filter and fase_info["posse"] != posse_filter:
             continue
 
+        chave = it.get("key") or ""
+        prefixo_espaco = chave.split("-")[0] if "-" in chave else "JIRA"
+
         out.append({
             "tipo": (f.get("issuetype") or {}).get("name"),
             "origem": origem_da_issue,
-            "referencia": it.get("key"),
+            "referencia": chave,
+            "espaco": prefixo_espaco,
             "resumo": f.get("summary"),
             "status": st_nome,
             "statusCategoria": st_cat,
@@ -204,28 +284,33 @@ async def list_issues(
 
 
 @router.get("/dashboard")
-async def dashboard(estado: str, periodo: Optional[str] = None, user: TokenPayload = Depends(get_current_user)):
-    """Métricas agregadas (funil de 4 estágios + cards estilo Jira Dashboard)."""
-    cfg = estado_por_sigla(estado)
-    if not cfg:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "Estado não configurado")
-    projetos = ", ".join(cfg["projects"])
+async def dashboard(
+    estado: Optional[str] = None,
+    projetos: Optional[str] = None,
+    espacos: Optional[str] = None,
+    periodo: Optional[str] = None,
+    user: TokenPayload = Depends(get_current_user)
+):
+    """Métricas agregadas (funil de 4 estágios + cards estilo Jira Dashboard) com suporte a múltiplos espaços."""
+    projs_req = projetos or espacos
+    projs, reporters, display_name = _resolver_projetos_e_permissoes(estado, projs_req, user)
+    projetos_str = ", ".join(projs)
 
-    async def _todos(pag_jql: str, cap: int = 2000) -> list:
-        """Busca paginada (100/página) até esgotar, com cap de segurança."""
-        out, start = [], 0
-        while start < cap:
-            chunk = await JSM.search(pag_jql, 100, start_at=start)
-            out.extend(chunk)
-            if len(chunk) < 100:
-                break
-            start += 100
-        return out
-
-    from ..core.estados import clientes_do_estado
-    _rp = ", ".join('"'+c["accountId"]+'"' for c in clientes_do_estado(estado) if c.get("accountId"))
+    _rp = ", ".join('"'+c["accountId"]+'"' for c in reporters if c.get("accountId"))
     _filtro_rp = f" AND reporter in ({_rp})" if _rp else ""
-    todas = await _todos(f"project in ({projetos}){_filtro_rp}{_jql_janela(periodo)} ORDER BY created DESC")
+
+    # Aplica janela temporal de forma unificada e transparente
+    janela = _jql_janela(periodo)
+
+    # 1. Backlog Ativo da janela selecionada
+    abertas_jql = f"project in ({projetos_str}){_filtro_rp} AND resolution is EMPTY{janela} ORDER BY updated DESC"
+    todas_abertas = await JSM.search_full(abertas_jql, cap=1000)
+
+    # 2. Concluídas da janela selecionada
+    conc_jql = f"project in ({projetos_str}){_filtro_rp} AND (resolution is not EMPTY OR statusCategory in ('Done')){janela} ORDER BY updated DESC"
+    todas_concluidas = await JSM.search_full(conc_jql, cap=1000)
+
+    todas = todas_abertas + todas_concluidas
     por_status, cat = {}, {"new": 0, "indeterminate": 0, "done": 0}
     funil = {"novas": 0, "em_atendimento": 0, "aguardando_validacao": 0, "concluidas": 0}
     por_origem = {"cliente_new": 0, "cliente_ind": 0, "cliente_done": 0,
@@ -249,14 +334,17 @@ async def dashboard(estado: str, periodo: Optional[str] = None, user: TokenPaylo
         if key in cat:
             cat[key] += 1
 
-        # Classificação do Funil de 4 Estágios
+        # Classificação do Funil de 4 Estágios (Régua Canônica de 8 Etapas)
         fase_info = _detectar_fase(st, key)
-        if key == "done" or fase_info["num"] == 7:
+        fase_num = fase_info["num"]
+        if key == "done" or fase_num == 8 or (f.get("resolution") or {}).get("name"):
             funil["concluidas"] += 1
-        elif fase_info["num"] == 6:
+        elif fase_num == 7 or fase_info["posse"] == "cliente":
             funil["aguardando_validacao"] += 1
-        elif fase_info["num"] in (2, 3, 4, 5):
+        elif fase_num in (3, 4, 5, 6):
             funil["em_atendimento"] += 1
+        elif fase_num in (1, 2):
+            funil["novas"] += 1
         else:
             funil["novas"] += 1
 
@@ -267,8 +355,8 @@ async def dashboard(estado: str, periodo: Optional[str] = None, user: TokenPaylo
         except Exception:
             pass
     return {
-        "estado": cfg["display_name"],
-        "projetos": cfg["projects"],
+        "estado": display_name,
+        "projetos": projs,
         "funil": funil,
         "abertas": funil["novas"],               # 1. Novas / Não Tratadas
         "em_andamento": funil["em_atendimento"], # 2. Em Atendimento
@@ -286,40 +374,51 @@ async def dashboard(estado: str, periodo: Optional[str] = None, user: TokenPaylo
 
 
 @router.get("/meta")
-async def meta(estado: str, user: TokenPayload = Depends(get_current_user)):
+async def meta(
+    estado: Optional[str] = None,
+    projetos: Optional[str] = None,
+    espacos: Optional[str] = None,
+    user: TokenPayload = Depends(get_current_user)
+):
     """Status e tipos disponíveis para os filtros do painel com contagem completa."""
     import json
     import httpx
 
-    cfg = estado_por_sigla(estado)
-    if not cfg:
-        raise HTTPException(404, "Estado não configurado")
-    projetos = ", ".join(cfg["projects"])
+    projs_req = projetos or espacos
+    projs, reporters, _ = _resolver_projetos_e_permissoes(estado, projs_req, user)
+    projetos_str = ", ".join(projs)
     statuses = []
     tipos = []
     hdr = JSM._basic()
     async with httpx.AsyncClient() as c:
         # tipos
-        for p in cfg["projects"]:
-            r = await c.get("https://egsys.atlassian.net/rest/api/3/issue/createmeta",
-                            params={"projectKeys": p}, headers=hdr)
-            if r.status_code == 200:
-                data = r.json()
-                for proj in data.get("projects", []):
-                    for it in proj.get("issuetypes", []):
-                        tipos.append(it.get("name"))
+        for p in projs:
+            try:
+                r = await c.get("https://egsys.atlassian.net/rest/api/3/issue/createmeta",
+                                params={"projectKeys": p}, headers=hdr, timeout=4.0)
+                if r.status_code == 200:
+                    data = r.json()
+                    for proj in data.get("projects", []):
+                        for it in proj.get("issuetypes", []):
+                            tipos.append(it.get("name"))
+            except Exception:
+                pass
         # statuses do projeto principal (workflow completo)
-        r = await c.get(f"https://egsys.atlassian.net/rest/api/3/project/{cfg['projects'][0]}/statuses", headers=hdr)
-        if r.status_code == 200:
-            for it in r.json():
-                for st in it.get("statuses", []):
-                    statuses.append(st.get("name"))
+        if projs:
+            try:
+                r = await c.get(f"https://egsys.atlassian.net/rest/api/3/project/{projs[0]}/statuses", headers=hdr, timeout=4.0)
+                if r.status_code == 200:
+                    for it in r.json():
+                        for st in it.get("statuses", []):
+                            statuses.append(st.get("name"))
+            except Exception:
+                pass
     statuses = sorted(set(statuses))
     
     # contagem real por status (issues do estado sem cap de 100)
     contagem = {}
     try:
-        issues_all = await JSM.search(f"project in ({projetos}) ORDER BY created DESC", 1000)
+        issues_all = await JSM.search(f"project in ({projetos_str}) ORDER BY created DESC", 1000)
         for it in issues_all:
             st = (it.get("fields", {}).get("status") or {}).get("name")
             if st:
@@ -587,19 +686,23 @@ async def apagar_filtro(estado: str, fid: str,
 
 
 @router.get("/charts")
-async def charts(estado: str, periodo: Optional[str] = None, user: TokenPayload = Depends(get_current_user)):
-    """Agregados para os gráficos (barras, donut, prioridade, solicitante, tempo)."""
+async def charts(
+    estado: Optional[str] = None,
+    projetos: Optional[str] = None,
+    espacos: Optional[str] = None,
+    periodo: Optional[str] = None,
+    user: TokenPayload = Depends(get_current_user)
+):
+    """Agregados para os gráficos (barras, donut, prioridade, solicitante, tempo) com suporte a múltiplos espaços."""
     from collections import Counter, defaultdict
 
-    cfg = estado_por_sigla(estado)
-    if not cfg:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "Estado não configurado")
-    projetos = ", ".join(cfg["projects"])
-    from ..core.estados import clientes_do_estado
-    _rp = ", ".join('"'+c["accountId"]+'"' for c in clientes_do_estado(estado) if c.get("accountId"))
+    projs_req = projetos or espacos
+    projs, reporters, _ = _resolver_projetos_e_permissoes(estado, projs_req, user)
+    projetos_str = ", ".join(projs)
+    _rp = ", ".join('"'+c["accountId"]+'"' for c in reporters if c.get("accountId"))
     _filtro_rp = f" AND reporter in ({_rp})" if _rp else ""
     issues = await JSM.search(
-        f"project in ({projetos}){_filtro_rp}{_jql_janela(periodo)} ORDER BY created DESC",
+        f"project in ({projetos_str}){_filtro_rp}{_jql_janela(periodo)} ORDER BY created DESC",
         100)
     por_status = Counter()
     por_prioridade = Counter()

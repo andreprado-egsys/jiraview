@@ -13,36 +13,40 @@
         "tipo": "Bug Suporte",
         "resumo": "Falha na sincronização de ocorrências com geolocalização no SADE",
         "area": "SADE",
-        "etapaNum": 1,
-        "etapaNome": "Triagem (N1)",
+        "etapaNum": 8,
+        "etapaNome": "Concluído",
         "posse": "egsys",
         "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "novas",
-        "status": "Triagem N1",
+        "estagio": "concluidas",
+        "status": "Concluído",
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "2h 10m",
-        "tempoTotal": "1d 04h",
+        "tempoTotal": "2d 05h",
         "sla": "ok",
-        "resolucao": null
+        "resolucao": "Resolvido",
+        "statusCategoria": "done",
+        "criacao": "2026-09-15T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-400",
         "tipo": "Melhoria",
         "resumo": "Ajuste de máscara e validação de documentos no portal de atendimento",
         "area": "Cidadão",
-        "etapaNum": 1,
-        "etapaNome": "Triagem (N1)",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Desenvolvimento",
         "posse": "egsys",
         "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "novas",
-        "status": "Triagem N1",
+        "estagio": "em-atendimento",
+        "status": "Análise de Desenvolvimento",
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "5h 30m",
-        "tempoTotal": "2d 08h",
+        "tempoTotal": "3d 05h",
         "sla": "ok",
-        "resolucao": null
+        "resolucao": null,
+        "statusCategoria": "indeterminate",
+        "criacao": "2026-09-14T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-399",
@@ -58,9 +62,10 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
+        "tempoTotal": "6d 05h",
         "sla": "ok",
-        "resolucao": null
+        "resolucao": null,
+        "criacao": "2026-09-11T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-398",
@@ -76,891 +81,30 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
+        "tempoTotal": "9d 05h",
         "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-395",
-        "tipo": "Bug Suporte",
-        "resumo": "OPÇÃO \" SELECIONE \" NÃO DEVE APARECER",
-        "status": "Análise de Desenvolvimento",
-        "area": "Operações",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-394",
-        "tipo": "Bug Suporte",
-        "resumo": "Ticket# 87223 PMSC CIDADÃO COPIA DAS MENSAGENS OCORRÊNCIA POR PMSC CIDADÃO PROTOCOLO SADE 10889749",
-        "status": "Aguardando Informações",
-        "area": "Cidadão",
-        "etapaNum": 7,
-        "etapaNome": "Homologação Cliente",
-        "posse": "cliente",
-        "posseLabel": "🟡 Ação com Cliente",
-        "estagio": "aguardando",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "2d 14h",
-        "tempoTotal": "1d 18h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-393",
-        "tipo": "Bug Suporte",
-        "resumo": "ERRO IMPRESSÃO DE AIAD",
-        "status": "Análise de Desenvolvimento",
-        "area": "Operações",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-392",
-        "tipo": "Melhoria",
-        "resumo": "COMPOSIÇÃO GUARNIÇÃO",
-        "status": "Análise de Desenvolvimento",
-        "area": "Operações",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-389",
-        "tipo": "Bug Suporte",
-        "resumo": "AIT sem agente autuador",
-        "status": "Análise de Desenvolvimento",
-        "area": "SADE",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-388",
-        "tipo": "Bug Suporte",
-        "resumo": "PROTOCOLO 31793700008 SOBREPOSTO SOB OCORRÊNCIA DE 18/08/2025",
-        "status": "Triagem (N2)",
-        "area": "SADE",
-        "etapaNum": 2,
-        "etapaNome": "Triagem (N2)",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-387",
-        "tipo": "Bug Suporte",
-        "resumo": "\"Endereço Inválido\" ao Geocodificar e Cadastrar Logradouros no Município de Ponte Serrada",
-        "status": "Análise de Desenvolvimento",
-        "area": "Operações",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-386",
-        "tipo": "Bug Suporte",
-        "resumo": "FOTOS NÃO SÃO ENVIADAS PARA O AIT",
-        "status": "Análise de Desenvolvimento",
-        "area": "SADE",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-381",
-        "tipo": "Melhoria",
-        "resumo": "Ausência da Opção \"ÍNDIA\" na Lista de Países / Nacionalidade",
-        "status": "Análise de Desenvolvimento",
-        "area": "Operações",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-380",
-        "tipo": "Bug Suporte",
-        "resumo": "Solicitação de Melhoria: Tratar/Ocultar Falso Positivo de Erro \"NÚMERO DO AUTO/CÓDIGO DE INFRAÇÃO JÁ CADASTRADO\" na Fila de AITs",
-        "status": "Análise de Desenvolvimento",
-        "area": "SADE",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-379",
-        "tipo": "Bug Suporte",
-        "resumo": "SENHA ACESSO SADE [SC]",
-        "status": "Análise de Desenvolvimento",
-        "area": "SADE",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-374",
-        "tipo": "Bug Suporte",
-        "resumo": "Investigar ausência de informações de trânsito no protocolo 11051724",
-        "status": "Análise de Desenvolvimento",
-        "area": "Operações",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-372",
-        "tipo": "Bug Suporte",
-        "resumo": "USUÁRIOS EXCLUÍDOS ( PRODUÇÃO E HOMOLOGAÇÃO ) - CB MAZZOLA",
-        "status": "Executando",
-        "area": "Operações",
-        "etapaNum": 4,
-        "etapaNome": "Em Desenvolvimento",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-370",
-        "tipo": "Bug Suporte",
-        "resumo": "Ausência de AIT na Retaguarda SADE mesmo com ARVC Vinculado Sincronizado",
-        "status": "Análise de Desenvolvimento",
-        "area": "Integração",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-368",
-        "tipo": "Bug Suporte",
-        "resumo": "Protocolos abertos pendentes - GU alega encerramento.",
-        "status": "Análise de Desenvolvimento",
-        "area": "Operações",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-366",
-        "tipo": "Bug Suporte",
-        "resumo": "PMSC CIDADÃO COM INCONSISTÊNCIA AO REGISTRAR OCORRÊNCIA",
-        "status": "Análise de Desenvolvimento",
-        "area": "Cidadão",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-364",
-        "tipo": "Bug Suporte",
-        "resumo": "ERRO ABRIR PDF SADE [SC]",
-        "status": "Análise de Desenvolvimento",
-        "area": "SADE",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-362",
-        "tipo": "Bug Suporte",
-        "resumo": "Vazamento de Código JavaScript (XSS/Injeção Visual) no PDF de Termo Circunstanciado",
-        "status": "Análise de Desenvolvimento",
-        "area": "Operações",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-358",
-        "tipo": "Bug Suporte",
-        "resumo": "Reutilização e Duplicidade de Protocolos Manuais de 2025 em Novas Ocorrências de 2026",
-        "status": "Análise de Desenvolvimento",
-        "area": "Cidadão",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-357",
-        "tipo": "Incidente",
-        "resumo": "TRAVAMENTO NA DA FILA DE ENVIO DE POSICOES",
-        "status": "Análise de Desenvolvimento",
-        "area": "Operações",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-354",
-        "tipo": "Bug Suporte",
-        "resumo": "Ticket# 82917 ARVC NÃO ABRE,",
-        "status": "Análise de Desenvolvimento",
-        "area": "Operações",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-353",
-        "tipo": "Bug Suporte",
-        "resumo": "VIATURA SEM ÁREA DE DESPACHO - PM0808",
-        "status": "Análise de Desenvolvimento",
-        "area": "SADE",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-350",
-        "tipo": "Bug Suporte",
-        "resumo": "USUÁRIOS DUPLICADOS",
-        "status": "Análise de Desenvolvimento",
-        "area": "Operações",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4h 20m",
-        "tempoTotal": "1d 18h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-349",
-        "tipo": "Bug Suporte",
-        "resumo": "Inconsistência na listagem de viaturas disponíveis no despacho operacional",
-        "area": "SADE",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Análise de Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "1d 12h",
-        "tempoTotal": "18d 06h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-347",
-        "tipo": "Bug Suporte",
-        "resumo": "Lentidão no carregamento de mapa de calor em horários de pico",
-        "area": "Operações",
-        "etapaNum": 4,
-        "etapaNome": "Em Desenvolvimento",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Em Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "3d 04h",
-        "tempoTotal": "20d 14h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-346",
-        "tipo": "Melhoria",
-        "resumo": "Exportação de relatórios gerenciais consolidados em formato tabular",
-        "area": "Operações",
-        "etapaNum": 5,
-        "etapaNome": "Testes de Qualidade (QA)",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Validação QA",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "2d 06h",
-        "tempoTotal": "21d 02h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-344",
-        "tipo": "Bug Suporte",
-        "resumo": "Erro de autenticação no webservice de integração PMSC / CIASC",
-        "area": "Integração",
-        "etapaNum": 4,
-        "etapaNome": "Em Desenvolvimento",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Em Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4d 08h",
-        "tempoTotal": "24d 18h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-341",
-        "tipo": "Bug Suporte",
-        "resumo": "Falha no envio de notificações push no aplicativo móvel de guarnição",
-        "area": "Cidadão",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Análise de Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "2d 16h",
-        "tempoTotal": "28d 10h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-338",
-        "tipo": "Melhoria",
-        "resumo": "Adequação de campos obrigatórios no formulário de registro de BO",
-        "area": "SADE",
-        "etapaNum": 7,
-        "etapaNome": "Homologação Cliente",
-        "posse": "cliente",
-        "posseLabel": "🟡 Ação com Cliente",
-        "estagio": "aguardando",
-        "status": "Aguardando Informações",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "6d 14h",
-        "tempoTotal": "32d 05h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-337",
-        "tipo": "Bug Suporte",
-        "resumo": "Duplicidade de registros em despacho simultâneo de ocorrência",
-        "area": "SADE",
-        "etapaNum": 4,
-        "etapaNome": "Em Desenvolvimento",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Em Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "5d 10h",
-        "tempoTotal": "35d 12h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-332",
-        "tipo": "Bug Suporte",
-        "resumo": "Falha na validação de CPF de solicitante anônimo no 190 Mobile",
-        "area": "Cidadão",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Análise de Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "4d 20h",
-        "tempoTotal": "40d 08h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-323",
-        "tipo": "Melhoria",
-        "resumo": "Otimização de consulta de histórico de chamadas atendidas pela COPOM",
-        "area": "Operações",
-        "etapaNum": 4,
-        "etapaNome": "Em Desenvolvimento",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Em Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "7d 02h",
-        "tempoTotal": "45d 16h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-318",
-        "tipo": "Bug Suporte",
-        "resumo": "Erro de timeout ao anexar arquivos de mídia pesados na ocorrência",
-        "area": "SADE",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Análise de Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "6d 18h",
-        "tempoTotal": "52d 04h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-305",
-        "tipo": "Melhoria",
-        "resumo": "Implementação de filtros táticos por batalhão e região metropolitana",
-        "area": "Operações",
-        "etapaNum": 6,
-        "etapaNome": "Validação Interna (Suporte N1)",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Validação N1",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "3d 11h",
-        "tempoTotal": "60d 22h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-299",
-        "tipo": "Bug Suporte",
-        "resumo": "Divergência de horário GMT no carimbo temporal de eventos do despacho",
-        "area": "Integração",
-        "etapaNum": 4,
-        "etapaNome": "Em Desenvolvimento",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Em Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "8d 06h",
-        "tempoTotal": "75d 14h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-297",
-        "tipo": "Bug Suporte",
-        "resumo": "Falha no barramento de integração ao receber alertas de câmeras OCR",
-        "area": "Integração",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Análise de Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "5d 22h",
-        "tempoTotal": "82d 08h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-211",
-        "tipo": "Melhoria",
-        "resumo": "Ajuste no tempo de expiração de sessão em terminais embarcados",
-        "area": "SADE",
-        "etapaNum": 7,
-        "etapaNome": "Homologação Cliente",
-        "posse": "cliente",
-        "posseLabel": "🟡 Ação com Cliente",
-        "estagio": "aguardando",
-        "status": "Aguardando Homologação",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "12d 04h",
-        "tempoTotal": "110d 05h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-204",
-        "tipo": "Bug Suporte",
-        "resumo": "Inconsistência no cálculo de distância percorrida por viatura em rota",
-        "area": "SADE",
-        "etapaNum": 4,
-        "etapaNome": "Em Desenvolvimento",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Em Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "9d 14h",
-        "tempoTotal": "125d 18h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-197",
-        "tipo": "Bug Suporte",
-        "resumo": "Falha de renderização de ícones de viaturas em navegadores Chromium",
-        "area": "Operações",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Análise de Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "8d 10h",
-        "tempoTotal": "140d 02h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-190",
-        "tipo": "Melhoria",
-        "resumo": "Padronização de tipos de infração conforme manual brasileiro de trânsito",
-        "area": "SADE",
-        "etapaNum": 4,
-        "etapaNome": "Em Desenvolvimento",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Em Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "11d 08h",
-        "tempoTotal": "155d 16h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-188",
-        "tipo": "Bug Suporte",
-        "resumo": "Interrupção temporária de envio de pacotes via socket de telemetria",
-        "area": "Integração",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Análise de Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "7d 12h",
-        "tempoTotal": "168d 10h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-167",
-        "tipo": "Bug Suporte",
-        "resumo": "Erro ao imprimir comprovante de atendimento com caracteres acentuados",
-        "area": "Operações",
-        "etapaNum": 7,
-        "etapaNome": "Homologação Cliente",
-        "posse": "cliente",
-        "posseLabel": "🟡 Ação com Cliente",
-        "estagio": "aguardando",
-        "status": "Aguardando Cliente",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "15d 06h",
-        "tempoTotal": "190d 14h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-160",
-        "tipo": "Melhoria",
-        "resumo": "Parametrização de raio de busca de ocorrências vizinhas no despacho",
-        "area": "SADE",
-        "etapaNum": 4,
-        "etapaNome": "Em Desenvolvimento",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Em Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "10d 18h",
-        "tempoTotal": "210d 08h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-147",
-        "tipo": "Bug Suporte",
-        "resumo": "Inconsistência de numeração de protocolo sequencial no cadastro SADE",
-        "area": "SADE",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Análise de Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "9d 04h",
-        "tempoTotal": "230d 20h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-133",
-        "tipo": "Bug Suporte",
-        "resumo": "Erro de conexão com gateway de SMS para envio de link de localização",
-        "area": "Cidadão",
-        "etapaNum": 4,
-        "etapaNome": "Em Desenvolvimento",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Em Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "14d 12h",
-        "tempoTotal": "255d 11h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-126",
-        "tipo": "Melhoria",
-        "resumo": "Inclusão de campos adicionais de triagem na tela de atendimento 190",
-        "area": "SADE",
-        "etapaNum": 3,
-        "etapaNome": "Análise de Dev",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Análise de Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "11d 02h",
-        "tempoTotal": "280d 15h",
-        "sla": "ok",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-73",
-        "tipo": "Bug Suporte",
-        "resumo": "Revisão de concorrência em atualização concorrente de ocorrências legado",
-        "area": "SADE",
-        "etapaNum": 4,
-        "etapaNome": "Em Desenvolvimento",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Em Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "18d 08h",
-        "tempoTotal": "340d 06h",
-        "sla": "risk",
-        "resolucao": null
-      },
-      {
-        "chave": "HDPMSC-70",
-        "tipo": "Bug Suporte",
-        "resumo": "Saneamento e conciliação de tabelas de histórico operacional legado",
-        "area": "Operações",
-        "etapaNum": 4,
-        "etapaNome": "Em Desenvolvimento",
-        "posse": "egsys",
-        "posseLabel": "🔵 Ação com egSYS",
-        "estagio": "em-atendimento",
-        "status": "Em Desenvolvimento",
-        "espaco": "HDPMSC",
-        "espacoNome": "Santa Catarina — PMSC",
-        "tempoFase": "22d 10h",
-        "tempoTotal": "365d 18h",
-        "sla": "risk",
-        "resolucao": null
+        "resolucao": null,
+        "criacao": "2026-09-08T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-397",
         "tipo": "Bug Suporte",
         "resumo": "ERRO DE INTEGRAÇÃO NO SISP - Foram detectados problemas na importação de dados do sistema PMSC Mobile. Detalhes do erro: null id in br.gov.sisp.backend.model.comum.Caso entry (don't flush the Session after an exception occurs)",
-        "status": "Desenvolvimento concluído",
+        "status": "Validação QA",
         "area": "Cidadão",
-        "etapaNum": 8,
-        "etapaNome": "Concluído",
+        "etapaNum": 5,
+        "etapaNome": "Validação QA",
         "posse": "egsys",
-        "posseLabel": "✅ Finalizado",
-        "estagio": "concluidas",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "13d 05h",
         "sla": "risk",
-        "resolucao": "Concluído"
+        "resolucao": null,
+        "statusCategoria": "indeterminate",
+        "criacao": "2026-09-04T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-396",
@@ -976,9 +120,86 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "5d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-09-12T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-395",
+        "tipo": "Bug Suporte",
+        "resumo": "OPÇÃO \" SELECIONE \" NÃO DEVE APARECER",
+        "status": "Análise de Desenvolvimento",
+        "area": "Operações",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "16d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-09-01T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-394",
+        "tipo": "Bug Suporte",
+        "resumo": "Ticket# 87223 PMSC CIDADÃO COPIA DAS MENSAGENS OCORRÊNCIA POR PMSC CIDADÃO PROTOCOLO SADE 10889749",
+        "status": "Aguardando Informações",
+        "area": "Cidadão",
+        "etapaNum": 7,
+        "etapaNome": "Homologação Cliente",
+        "posse": "cliente",
+        "posseLabel": "🟡 Ação com Cliente",
+        "estagio": "aguardando",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "2d 14h",
+        "tempoTotal": "18d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-08-30T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-393",
+        "tipo": "Bug Suporte",
+        "resumo": "ERRO IMPRESSÃO DE AIAD",
+        "status": "Análise de Desenvolvimento",
+        "area": "Operações",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "20d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-08-28T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-392",
+        "tipo": "Melhoria",
+        "resumo": "COMPOSIÇÃO GUARNIÇÃO",
+        "status": "Análise de Desenvolvimento",
+        "area": "Operações",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "23d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-08-25T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-391",
@@ -994,9 +215,10 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "8d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-09-09T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-390",
@@ -1012,9 +234,86 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "11d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-09-06T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-389",
+        "tipo": "Bug Suporte",
+        "resumo": "AIT sem agente autuador",
+        "status": "Análise de Desenvolvimento",
+        "area": "SADE",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "26d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-08-22T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-388",
+        "tipo": "Bug Suporte",
+        "resumo": "PROTOCOLO 31793700008 SOBREPOSTO SOB OCORRÊNCIA DE 18/08/2025",
+        "status": "Triagem (N2)",
+        "area": "SADE",
+        "etapaNum": 2,
+        "etapaNome": "Triagem (N2)",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "novas",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "115d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-05-25T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-387",
+        "tipo": "Bug Suporte",
+        "resumo": "\"Endereço Inválido\" ao Geocodificar e Cadastrar Logradouros no Município de Ponte Serrada",
+        "status": "Análise de Desenvolvimento",
+        "area": "Operações",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "30d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-08-18T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-386",
+        "tipo": "Bug Suporte",
+        "resumo": "FOTOS NÃO SÃO ENVIADAS PARA O AIT",
+        "status": "Análise de Desenvolvimento",
+        "area": "SADE",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "33d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-08-15T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-385",
@@ -1030,9 +329,10 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "15d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-09-02T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-384",
@@ -1048,9 +348,10 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "18d 05h",
         "sla": "risk",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-08-30T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-383",
@@ -1066,9 +367,10 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "21d 05h",
         "sla": "risk",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-08-27T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-382",
@@ -1084,9 +386,67 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "25d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-08-23T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-381",
+        "tipo": "Melhoria",
+        "resumo": "Ausência da Opção \"ÍNDIA\" na Lista de Países / Nacionalidade",
+        "status": "Análise de Desenvolvimento",
+        "area": "Operações",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "37d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-08-11T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-380",
+        "tipo": "Bug Suporte",
+        "resumo": "Solicitação de Melhoria: Tratar/Ocultar Falso Positivo de Erro \"NÚMERO DO AUTO/CÓDIGO DE INFRAÇÃO JÁ CADASTRADO\" na Fila de AITs",
+        "status": "Análise de Desenvolvimento",
+        "area": "SADE",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "40d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-08-08T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-379",
+        "tipo": "Bug Suporte",
+        "resumo": "SENHA ACESSO SADE [SC]",
+        "status": "Análise de Desenvolvimento",
+        "area": "SADE",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "43d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-08-05T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-378",
@@ -1102,9 +462,10 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "28d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-08-20T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-377",
@@ -1120,9 +481,10 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "31d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-08-17T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-376",
@@ -1138,9 +500,10 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "35d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-08-13T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-375",
@@ -1156,9 +519,29 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "38d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-08-10T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-374",
+        "tipo": "Bug Suporte",
+        "resumo": "Investigar ausência de informações de trânsito no protocolo 11051724",
+        "status": "Análise de Desenvolvimento",
+        "area": "Operações",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "47d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-08-01T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-373",
@@ -1174,9 +557,29 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "41d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-08-07T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-372",
+        "tipo": "Bug Suporte",
+        "resumo": "USUÁRIOS EXCLUÍDOS ( PRODUÇÃO E HOMOLOGAÇÃO ) - CB MAZZOLA",
+        "status": "Executando",
+        "area": "Operações",
+        "etapaNum": 4,
+        "etapaNome": "Em Desenvolvimento",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "50d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-07-29T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-371",
@@ -1192,9 +595,29 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "44d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-08-04T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-370",
+        "tipo": "Bug Suporte",
+        "resumo": "Ausência de AIT na Retaguarda SADE mesmo com ARVC Vinculado Sincronizado",
+        "status": "Análise de Desenvolvimento",
+        "area": "Integração",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "54d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-07-25T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-369",
@@ -1210,9 +633,29 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "48d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-07-31T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-368",
+        "tipo": "Bug Suporte",
+        "resumo": "Protocolos abertos pendentes - GU alega encerramento.",
+        "status": "Análise de Desenvolvimento",
+        "area": "Operações",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "57d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-07-22T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-367",
@@ -1228,9 +671,29 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "51d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-07-28T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-366",
+        "tipo": "Bug Suporte",
+        "resumo": "PMSC CIDADÃO COM INCONSISTÊNCIA AO REGISTRAR OCORRÊNCIA",
+        "status": "Análise de Desenvolvimento",
+        "area": "Cidadão",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "60d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-07-19T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-365",
@@ -1246,9 +709,29 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "54d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-07-25T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-364",
+        "tipo": "Bug Suporte",
+        "resumo": "ERRO ABRIR PDF SADE [SC]",
+        "status": "Análise de Desenvolvimento",
+        "area": "SADE",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "64d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-07-15T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-363",
@@ -1264,9 +747,29 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "58d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-07-21T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-362",
+        "tipo": "Bug Suporte",
+        "resumo": "Vazamento de Código JavaScript (XSS/Injeção Visual) no PDF de Termo Circunstanciado",
+        "status": "Análise de Desenvolvimento",
+        "area": "Operações",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "67d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-07-12T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-361",
@@ -1282,9 +785,10 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "61d 05h",
         "sla": "risk",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-07-18T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-360",
@@ -1300,9 +804,10 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "64d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-07-15T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-359",
@@ -1318,9 +823,48 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "68d 05h",
         "sla": "risk",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-07-11T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-358",
+        "tipo": "Bug Suporte",
+        "resumo": "Reutilização e Duplicidade de Protocolos Manuais de 2025 em Novas Ocorrências de 2026",
+        "status": "Análise de Desenvolvimento",
+        "area": "Cidadão",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "71d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-07-08T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-357",
+        "tipo": "Incidente",
+        "resumo": "TRAVAMENTO NA DA FILA DE ENVIO DE POSICOES",
+        "status": "Análise de Desenvolvimento",
+        "area": "Operações",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "74d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-07-05T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-356",
@@ -1336,9 +880,10 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "71d 05h",
         "sla": "risk",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-07-08T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-355",
@@ -1354,9 +899,48 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "74d 05h",
         "sla": "risk",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-07-05T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-354",
+        "tipo": "Bug Suporte",
+        "resumo": "Ticket# 82917 ARVC NÃO ABRE,",
+        "status": "Análise de Desenvolvimento",
+        "area": "Operações",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "77d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-07-02T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-353",
+        "tipo": "Bug Suporte",
+        "resumo": "VIATURA SEM ÁREA DE DESPACHO - PM0808",
+        "status": "Análise de Desenvolvimento",
+        "area": "SADE",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "81d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-06-28T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-352",
@@ -1372,9 +956,10 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "77d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-07-02T07:00:00.000-0300"
       },
       {
         "chave": "HDPMSC-351",
@@ -1390,9 +975,504 @@
         "espaco": "HDPMSC",
         "espacoNome": "Santa Catarina — PMSC",
         "tempoFase": "—",
-        "tempoTotal": "3d 08h",
+        "tempoTotal": "81d 05h",
         "sla": "ok",
-        "resolucao": "Concluído"
+        "resolucao": "Concluído",
+        "criacao": "2026-06-28T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-350",
+        "tipo": "Bug Suporte",
+        "resumo": "USUÁRIOS DUPLICADOS",
+        "status": "Análise de Desenvolvimento",
+        "area": "Operações",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4h 20m",
+        "tempoTotal": "98d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-06-11T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-349",
+        "tipo": "Bug Suporte",
+        "resumo": "Inconsistência na listagem de viaturas disponíveis no despacho operacional",
+        "area": "SADE",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Análise de Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "1d 12h",
+        "tempoTotal": "105d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-06-04T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-347",
+        "tipo": "Bug Suporte",
+        "resumo": "Lentidão no carregamento de mapa de calor em horários de pico",
+        "area": "Operações",
+        "etapaNum": 4,
+        "etapaNome": "Em Desenvolvimento",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Em Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "3d 04h",
+        "tempoTotal": "113d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-05-27T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-346",
+        "tipo": "Melhoria",
+        "resumo": "Exportação de relatórios gerenciais consolidados em formato tabular",
+        "area": "Operações",
+        "etapaNum": 5,
+        "etapaNome": "Testes de Qualidade (QA)",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Validação QA",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "2d 06h",
+        "tempoTotal": "120d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-05-20T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-344",
+        "tipo": "Bug Suporte",
+        "resumo": "Erro de autenticação no webservice de integração PMSC / CIASC",
+        "area": "Integração",
+        "etapaNum": 4,
+        "etapaNome": "Em Desenvolvimento",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Em Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4d 08h",
+        "tempoTotal": "128d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-05-12T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-341",
+        "tipo": "Bug Suporte",
+        "resumo": "Falha no envio de notificações push no aplicativo móvel de guarnição",
+        "area": "Cidadão",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Análise de Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "2d 16h",
+        "tempoTotal": "135d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-05-05T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-338",
+        "tipo": "Melhoria",
+        "resumo": "Adequação de campos obrigatórios no formulário de registro de BO",
+        "area": "SADE",
+        "etapaNum": 7,
+        "etapaNome": "Homologação Cliente",
+        "posse": "cliente",
+        "posseLabel": "🟡 Ação com Cliente",
+        "estagio": "aguardando",
+        "status": "Aguardando Informações",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "6d 14h",
+        "tempoTotal": "125d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-05-15T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-337",
+        "tipo": "Bug Suporte",
+        "resumo": "Duplicidade de registros em despacho simultâneo de ocorrência",
+        "area": "SADE",
+        "etapaNum": 4,
+        "etapaNome": "Em Desenvolvimento",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Em Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "5d 10h",
+        "tempoTotal": "143d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-04-27T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-332",
+        "tipo": "Bug Suporte",
+        "resumo": "Falha na validação de CPF de solicitante anônimo no 190 Mobile",
+        "area": "Cidadão",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Análise de Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "4d 20h",
+        "tempoTotal": "150d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-04-20T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-323",
+        "tipo": "Melhoria",
+        "resumo": "Otimização de consulta de histórico de chamadas atendidas pela COPOM",
+        "area": "Operações",
+        "etapaNum": 4,
+        "etapaNome": "Em Desenvolvimento",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Em Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "7d 02h",
+        "tempoTotal": "158d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-04-12T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-318",
+        "tipo": "Bug Suporte",
+        "resumo": "Erro de timeout ao anexar arquivos de mídia pesados na ocorrência",
+        "area": "SADE",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Análise de Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "6d 18h",
+        "tempoTotal": "165d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-04-05T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-305",
+        "tipo": "Melhoria",
+        "resumo": "Implementação de filtros táticos por batalhão e região metropolitana",
+        "area": "Operações",
+        "etapaNum": 6,
+        "etapaNome": "Validação Interna (Suporte N1)",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Validação N1",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "3d 11h",
+        "tempoTotal": "173d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-03-28T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-299",
+        "tipo": "Bug Suporte",
+        "resumo": "Divergência de horário GMT no carimbo temporal de eventos do despacho",
+        "area": "Integração",
+        "etapaNum": 4,
+        "etapaNome": "Em Desenvolvimento",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Em Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "8d 06h",
+        "tempoTotal": "180d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-03-21T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-297",
+        "tipo": "Bug Suporte",
+        "resumo": "Falha no barramento de integração ao receber alertas de câmeras OCR",
+        "area": "Integração",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Análise de Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "5d 22h",
+        "tempoTotal": "188d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-03-13T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-211",
+        "tipo": "Melhoria",
+        "resumo": "Ajuste no tempo de expiração de sessão em terminais embarcados",
+        "area": "SADE",
+        "etapaNum": 7,
+        "etapaNome": "Homologação Cliente",
+        "posse": "cliente",
+        "posseLabel": "🟡 Ação com Cliente",
+        "estagio": "aguardando",
+        "status": "Aguardando Homologação",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "12d 04h",
+        "tempoTotal": "140d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-04-30T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-204",
+        "tipo": "Bug Suporte",
+        "resumo": "Inconsistência no cálculo de distância percorrida por viatura em rota",
+        "area": "SADE",
+        "etapaNum": 4,
+        "etapaNome": "Em Desenvolvimento",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Em Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "9d 14h",
+        "tempoTotal": "195d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-03-06T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-197",
+        "tipo": "Bug Suporte",
+        "resumo": "Falha de renderização de ícones de viaturas em navegadores Chromium",
+        "area": "Operações",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Análise de Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "8d 10h",
+        "tempoTotal": "203d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-02-26T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-190",
+        "tipo": "Melhoria",
+        "resumo": "Padronização de tipos de infração conforme manual brasileiro de trânsito",
+        "area": "SADE",
+        "etapaNum": 4,
+        "etapaNome": "Em Desenvolvimento",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Em Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "11d 08h",
+        "tempoTotal": "210d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-02-19T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-188",
+        "tipo": "Bug Suporte",
+        "resumo": "Interrupção temporária de envio de pacotes via socket de telemetria",
+        "area": "Integração",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Análise de Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "7d 12h",
+        "tempoTotal": "218d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-02-11T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-167",
+        "tipo": "Bug Suporte",
+        "resumo": "Erro ao imprimir comprovante de atendimento com caracteres acentuados",
+        "area": "Operações",
+        "etapaNum": 7,
+        "etapaNome": "Homologação Cliente",
+        "posse": "cliente",
+        "posseLabel": "🟡 Ação com Cliente",
+        "estagio": "aguardando",
+        "status": "Aguardando Cliente",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "15d 06h",
+        "tempoTotal": "155d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-04-15T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-160",
+        "tipo": "Melhoria",
+        "resumo": "Parametrização de raio de busca de ocorrências vizinhas no despacho",
+        "area": "SADE",
+        "etapaNum": 4,
+        "etapaNome": "Em Desenvolvimento",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Em Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "10d 18h",
+        "tempoTotal": "225d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-02-04T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-147",
+        "tipo": "Bug Suporte",
+        "resumo": "Inconsistência de numeração de protocolo sequencial no cadastro SADE",
+        "area": "SADE",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Análise de Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "9d 04h",
+        "tempoTotal": "233d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-01-27T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-133",
+        "tipo": "Bug Suporte",
+        "resumo": "Erro de conexão com gateway de SMS para envio de link de localização",
+        "area": "Cidadão",
+        "etapaNum": 4,
+        "etapaNome": "Em Desenvolvimento",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Em Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "14d 12h",
+        "tempoTotal": "240d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-01-20T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-126",
+        "tipo": "Melhoria",
+        "resumo": "Inclusão de campos adicionais de triagem na tela de atendimento 190",
+        "area": "SADE",
+        "etapaNum": 3,
+        "etapaNome": "Análise de Dev",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Análise de Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "11d 02h",
+        "tempoTotal": "248d 05h",
+        "sla": "ok",
+        "resolucao": null,
+        "criacao": "2026-01-12T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-73",
+        "tipo": "Bug Suporte",
+        "resumo": "Revisão de concorrência em atualização concorrente de ocorrências legado",
+        "area": "SADE",
+        "etapaNum": 4,
+        "etapaNome": "Em Desenvolvimento",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Em Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "18d 08h",
+        "tempoTotal": "255d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2026-01-05T07:00:00.000-0300"
+      },
+      {
+        "chave": "HDPMSC-70",
+        "tipo": "Bug Suporte",
+        "resumo": "Saneamento e conciliação de tabelas de histórico operacional legado",
+        "area": "Operações",
+        "etapaNum": 4,
+        "etapaNome": "Em Desenvolvimento",
+        "posse": "egsys",
+        "posseLabel": "🔵 Ação com egSYS",
+        "estagio": "em-atendimento",
+        "status": "Em Desenvolvimento",
+        "espaco": "HDPMSC",
+        "espacoNome": "Santa Catarina — PMSC",
+        "tempoFase": "22d 10h",
+        "tempoTotal": "263d 05h",
+        "sla": "risk",
+        "resolucao": null,
+        "criacao": "2025-12-28T07:00:00.000-0300"
       }
     ]
   },
@@ -1418,7 +1498,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-34",
@@ -1435,7 +1516,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-33",
@@ -1452,7 +1534,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-32",
@@ -1469,7 +1552,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-31",
@@ -1486,7 +1570,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-30",
@@ -1503,7 +1588,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-29",
@@ -1520,7 +1606,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-28",
@@ -1537,7 +1624,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-27",
@@ -1554,7 +1642,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-26",
@@ -1571,7 +1660,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-25",
@@ -1588,7 +1678,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-24",
@@ -1605,7 +1696,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-23",
@@ -1622,7 +1714,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-22",
@@ -1639,7 +1732,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-20",
@@ -1656,7 +1750,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-19",
@@ -1673,7 +1768,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-18",
@@ -1690,7 +1786,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-17",
@@ -1707,7 +1804,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-16",
@@ -1724,7 +1822,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-15",
@@ -1741,7 +1840,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-14",
@@ -1758,7 +1858,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-13",
@@ -1775,7 +1876,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-12",
@@ -1792,7 +1894,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-11",
@@ -1809,7 +1912,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-10",
@@ -1826,7 +1930,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-9",
@@ -1843,7 +1948,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-8",
@@ -1860,7 +1966,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-7",
@@ -1877,7 +1984,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-6",
@@ -1894,7 +2002,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-5",
@@ -1911,7 +2020,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-4",
@@ -1928,7 +2038,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-3",
@@ -1945,7 +2056,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-2",
@@ -1962,7 +2074,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMTO-1",
@@ -1979,7 +2092,8 @@
         "espacoNome": "Tocantins — PMTO",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       }
     ]
   },
@@ -2005,7 +2119,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-39",
@@ -2022,7 +2137,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-38",
@@ -2039,7 +2155,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-37",
@@ -2056,7 +2173,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-36",
@@ -2073,7 +2191,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-35",
@@ -2090,7 +2209,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-34",
@@ -2107,7 +2227,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-33",
@@ -2124,7 +2245,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-32",
@@ -2141,7 +2263,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-31",
@@ -2158,7 +2281,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-30",
@@ -2175,7 +2299,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-29",
@@ -2192,7 +2317,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-28",
@@ -2209,7 +2335,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-27",
@@ -2226,7 +2353,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-26",
@@ -2243,7 +2371,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-25",
@@ -2260,7 +2389,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-24",
@@ -2277,7 +2407,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-23",
@@ -2294,7 +2425,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-22",
@@ -2311,7 +2443,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-21",
@@ -2328,7 +2461,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-20",
@@ -2345,7 +2479,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-19",
@@ -2362,7 +2497,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-18",
@@ -2379,7 +2515,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-17",
@@ -2396,7 +2533,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-10",
@@ -2413,7 +2551,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-9",
@@ -2430,7 +2569,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-8",
@@ -2447,7 +2587,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-7",
@@ -2464,7 +2605,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-6",
@@ -2481,7 +2623,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-5",
@@ -2498,7 +2641,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-4",
@@ -2515,7 +2659,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-3",
@@ -2532,7 +2677,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-2",
@@ -2549,7 +2695,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDSESDEC-1",
@@ -2566,7 +2713,8 @@
         "espacoNome": "Rondônia — SESDEC",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       }
     ]
   },
@@ -2592,7 +2740,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-439",
@@ -2609,7 +2758,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-438",
@@ -2626,7 +2776,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-437",
@@ -2643,7 +2794,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-436",
@@ -2660,7 +2812,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-435",
@@ -2677,7 +2830,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-434",
@@ -2694,7 +2848,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-433",
@@ -2711,7 +2866,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-432",
@@ -2728,7 +2884,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-431",
@@ -2745,7 +2902,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-430",
@@ -2762,7 +2920,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-429",
@@ -2779,7 +2938,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-428",
@@ -2796,7 +2956,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-427",
@@ -2813,7 +2974,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-426",
@@ -2830,7 +2992,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-425",
@@ -2847,7 +3010,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-424",
@@ -2864,7 +3028,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-423",
@@ -2881,7 +3046,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-422",
@@ -2898,7 +3064,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-421",
@@ -2915,7 +3082,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-420",
@@ -2932,7 +3100,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-417",
@@ -2949,7 +3118,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-416",
@@ -2966,7 +3136,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-415",
@@ -2983,7 +3154,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-414",
@@ -3000,7 +3172,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-413",
@@ -3017,7 +3190,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-412",
@@ -3034,7 +3208,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-411",
@@ -3051,7 +3226,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-410",
@@ -3068,7 +3244,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-409",
@@ -3085,7 +3262,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-408",
@@ -3102,7 +3280,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-407",
@@ -3119,7 +3298,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-406",
@@ -3136,7 +3316,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-405",
@@ -3153,7 +3334,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-404",
@@ -3170,7 +3352,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-403",
@@ -3187,7 +3370,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-402",
@@ -3204,7 +3388,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-401",
@@ -3221,7 +3406,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-398",
@@ -3238,7 +3424,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-397",
@@ -3255,7 +3442,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-396",
@@ -3272,7 +3460,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-395",
@@ -3289,7 +3478,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-394",
@@ -3306,7 +3496,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-393",
@@ -3323,7 +3514,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-392",
@@ -3340,7 +3532,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-391",
@@ -3357,7 +3550,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-390",
@@ -3374,7 +3568,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-389",
@@ -3391,7 +3586,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-388",
@@ -3408,7 +3604,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMPR-387",
@@ -3425,7 +3622,8 @@
         "espacoNome": "Paraná — PMPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       }
     ]
   },
@@ -3451,7 +3649,8 @@
         "espacoNome": "Paraná — Bombeiros CMBPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDCMBPR-1",
@@ -3468,7 +3667,8 @@
         "espacoNome": "Paraná — Bombeiros CMBPR",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       }
     ]
   },
@@ -3494,7 +3694,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-36",
@@ -3511,7 +3712,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-35",
@@ -3528,7 +3730,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-34",
@@ -3545,7 +3748,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-33",
@@ -3562,7 +3766,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-32",
@@ -3579,7 +3784,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-31",
@@ -3596,7 +3802,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-30",
@@ -3613,7 +3820,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-29",
@@ -3630,7 +3838,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-23",
@@ -3647,7 +3856,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-22",
@@ -3664,7 +3874,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-21",
@@ -3681,7 +3892,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-20",
@@ -3698,7 +3910,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-19",
@@ -3715,7 +3928,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-18",
@@ -3732,7 +3946,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-17",
@@ -3749,7 +3964,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-16",
@@ -3766,7 +3982,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-15",
@@ -3783,7 +4000,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-14",
@@ -3800,7 +4018,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-13",
@@ -3817,7 +4036,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-12",
@@ -3834,7 +4054,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-11",
@@ -3851,7 +4072,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-10",
@@ -3868,7 +4090,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-9",
@@ -3885,7 +4108,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-8",
@@ -3902,7 +4126,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-7",
@@ -3919,7 +4144,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-6",
@@ -3936,7 +4162,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-5",
@@ -3953,7 +4180,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-4",
@@ -3970,7 +4198,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-3",
@@ -3987,7 +4216,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-2",
@@ -4004,7 +4234,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMAM-1",
@@ -4021,7 +4252,8 @@
         "espacoNome": "Amazonas — PMAM",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       }
     ]
   },
@@ -4047,7 +4279,8 @@
         "espacoNome": "Mato Grosso — PMMT",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMMT-2",
@@ -4064,7 +4297,8 @@
         "espacoNome": "Mato Grosso — PMMT",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "HDPMMT-1",
@@ -4081,7 +4315,8 @@
         "espacoNome": "Mato Grosso — PMMT",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       }
     ]
   },
@@ -4107,7 +4342,8 @@
         "espacoNome": "Guarda Municipal São José",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "GMSJ-1",
@@ -4124,7 +4360,8 @@
         "espacoNome": "Guarda Municipal São José",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -4150,7 +4387,8 @@
         "espacoNome": "Atendimento N2 e N3",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "ANN-5",
@@ -4167,7 +4405,8 @@
         "espacoNome": "Atendimento N2 e N3",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "risk"
+        "sla": "risk",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "ANN-4",
@@ -4184,7 +4423,8 @@
         "espacoNome": "Atendimento N2 e N3",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "ANN-3",
@@ -4201,7 +4441,8 @@
         "espacoNome": "Atendimento N2 e N3",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "ANN-2",
@@ -4218,7 +4459,8 @@
         "espacoNome": "Atendimento N2 e N3",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "ANN-1",
@@ -4235,7 +4477,8 @@
         "espacoNome": "Atendimento N2 e N3",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       }
     ]
   },
@@ -4261,7 +4504,8 @@
         "espacoNome": "Demandas Suporte",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "DS-5",
@@ -4278,7 +4522,8 @@
         "espacoNome": "Demandas Suporte",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "DS-4",
@@ -4295,7 +4540,8 @@
         "espacoNome": "Demandas Suporte",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "DS-3",
@@ -4312,7 +4558,8 @@
         "espacoNome": "Demandas Suporte",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "DS-2",
@@ -4329,7 +4576,8 @@
         "espacoNome": "Demandas Suporte",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "DS-1",
@@ -4346,7 +4594,8 @@
         "espacoNome": "Demandas Suporte",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       }
     ]
   },
@@ -4372,7 +4621,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-277",
@@ -4389,7 +4639,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-276",
@@ -4406,7 +4657,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-275",
@@ -4423,7 +4675,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-274",
@@ -4440,7 +4693,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-273",
@@ -4457,7 +4711,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-272",
@@ -4474,7 +4729,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-271",
@@ -4491,7 +4747,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-270",
@@ -4508,7 +4765,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-269",
@@ -4525,7 +4783,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-268",
@@ -4542,7 +4801,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-267",
@@ -4559,7 +4819,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-266",
@@ -4576,7 +4837,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-265",
@@ -4593,7 +4855,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-264",
@@ -4610,7 +4873,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-263",
@@ -4627,7 +4891,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-262",
@@ -4644,7 +4909,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-261",
@@ -4661,7 +4927,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-260",
@@ -4678,7 +4945,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-259",
@@ -4695,7 +4963,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-258",
@@ -4712,7 +4981,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-257",
@@ -4729,7 +4999,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-256",
@@ -4746,7 +5017,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-255",
@@ -4763,7 +5035,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-254",
@@ -4780,7 +5053,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-253",
@@ -4797,7 +5071,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-252",
@@ -4814,7 +5089,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-251",
@@ -4831,7 +5107,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-250",
@@ -4848,7 +5125,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-249",
@@ -4865,7 +5143,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-248",
@@ -4882,7 +5161,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-247",
@@ -4899,7 +5179,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-246",
@@ -4916,7 +5197,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-245",
@@ -4933,7 +5215,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-244",
@@ -4950,7 +5233,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-243",
@@ -4967,7 +5251,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-242",
@@ -4984,7 +5269,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-241",
@@ -5001,7 +5287,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-240",
@@ -5018,7 +5305,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-239",
@@ -5035,7 +5323,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-238",
@@ -5052,7 +5341,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-237",
@@ -5069,7 +5359,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-236",
@@ -5086,7 +5377,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-235",
@@ -5103,7 +5395,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-234",
@@ -5120,7 +5413,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-233",
@@ -5137,7 +5431,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-232",
@@ -5154,7 +5449,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-231",
@@ -5171,7 +5467,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-230",
@@ -5188,7 +5485,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PLANTAO-229",
@@ -5205,7 +5503,8 @@
         "espacoNome": "Passagem de Plantão",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       }
     ]
   },
@@ -5231,7 +5530,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-295",
@@ -5248,7 +5548,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-294",
@@ -5265,7 +5566,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-293",
@@ -5282,7 +5584,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-292",
@@ -5299,7 +5602,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-291",
@@ -5316,7 +5620,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-290",
@@ -5333,7 +5638,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-289",
@@ -5350,7 +5656,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-288",
@@ -5367,7 +5674,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-287",
@@ -5384,7 +5692,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-286",
@@ -5401,7 +5710,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-285",
@@ -5418,7 +5728,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-284",
@@ -5435,7 +5746,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-283",
@@ -5452,7 +5764,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-282",
@@ -5469,7 +5782,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-281",
@@ -5486,7 +5800,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-278",
@@ -5503,7 +5818,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-277",
@@ -5520,7 +5836,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-276",
@@ -5537,7 +5854,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-275",
@@ -5554,7 +5872,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-274",
@@ -5571,7 +5890,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-273",
@@ -5588,7 +5908,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-272",
@@ -5605,7 +5926,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-271",
@@ -5622,7 +5944,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-270",
@@ -5639,7 +5962,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-269",
@@ -5656,7 +5980,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-268",
@@ -5673,7 +5998,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-267",
@@ -5690,7 +6016,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-266",
@@ -5707,7 +6034,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-265",
@@ -5724,7 +6052,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-264",
@@ -5741,7 +6070,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-263",
@@ -5758,7 +6088,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-262",
@@ -5775,7 +6106,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-261",
@@ -5792,7 +6124,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-260",
@@ -5809,7 +6142,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-259",
@@ -5826,7 +6160,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-258",
@@ -5843,7 +6178,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-257",
@@ -5860,7 +6196,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-256",
@@ -5877,7 +6214,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-255",
@@ -5894,7 +6232,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-254",
@@ -5911,7 +6250,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-253",
@@ -5928,7 +6268,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-252",
@@ -5945,7 +6286,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-251",
@@ -5962,7 +6304,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-250",
@@ -5979,7 +6322,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-249",
@@ -5996,7 +6340,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-248",
@@ -6013,7 +6358,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-247",
@@ -6030,7 +6376,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "—",
         "tempoTotal": "3d 08h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-14T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-246",
@@ -6047,7 +6394,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       },
       {
         "chave": "PSEI-245",
@@ -6064,7 +6412,8 @@
         "espacoNome": "Suporte & Infraestrutura",
         "tempoFase": "4h 20m",
         "tempoTotal": "1d 18h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6092,7 +6441,8 @@
         "espacoNome": "Automação de testes",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6120,7 +6470,8 @@
         "espacoNome": "Behave",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6148,7 +6499,8 @@
         "espacoNome": "Desenvolvimento",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6176,7 +6528,8 @@
         "espacoNome": "Driverbehave",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6204,7 +6557,8 @@
         "espacoNome": "Ferramentas de Suporte",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6232,7 +6586,8 @@
         "espacoNome": "Guarda Municipal Manaus",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6260,7 +6615,8 @@
         "espacoNome": "HDPMSC-EG",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6288,7 +6644,8 @@
         "espacoNome": "Helpdesk - CMBPR",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6316,7 +6673,8 @@
         "espacoNome": "Helpdesk - PMAM",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6344,7 +6702,8 @@
         "espacoNome": "Helpdesk - PMMT",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6372,7 +6731,8 @@
         "espacoNome": "Helpdesk - PMPR",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6400,7 +6760,8 @@
         "espacoNome": "Helpdesk - PMSC",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6428,7 +6789,8 @@
         "espacoNome": "Helpdesk - PMTO",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6456,7 +6818,8 @@
         "espacoNome": "Helpdesk - SESDEC",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6484,7 +6847,8 @@
         "espacoNome": "Helpdesk - SISEGGM",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6512,7 +6876,8 @@
         "espacoNome": "Helpdesk Driverbehave",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6540,7 +6905,8 @@
         "espacoNome": "Helpdesk SISEG AMAZONAS",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6568,7 +6934,8 @@
         "espacoNome": "Helpdesk SISEGGM",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6596,7 +6963,8 @@
         "espacoNome": "Jira Novo",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6624,7 +6992,8 @@
         "espacoNome": "Medição de Pontos de Função",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6652,7 +7021,8 @@
         "espacoNome": "MOIVI",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6680,7 +7050,8 @@
         "espacoNome": "PMSC v2.0",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6708,7 +7079,8 @@
         "espacoNome": "Projeto - AIT",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6736,7 +7108,8 @@
         "espacoNome": "Projeto - AM",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6764,7 +7137,8 @@
         "espacoNome": "Projeto - Guard",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6792,7 +7166,8 @@
         "espacoNome": "Projeto - HomeLock",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6820,7 +7195,8 @@
         "espacoNome": "Projeto - MT",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6848,7 +7224,8 @@
         "espacoNome": "Projeto - OI",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6876,7 +7253,8 @@
         "espacoNome": "Projeto - PI",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6904,7 +7282,8 @@
         "espacoNome": "Projeto - PMRO Cidadão",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6932,7 +7311,8 @@
         "espacoNome": "Projeto - PR",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6960,7 +7340,8 @@
         "espacoNome": "Projeto - SC",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -6988,7 +7369,8 @@
         "espacoNome": "Projeto - SESDEC RO",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7016,7 +7398,8 @@
         "espacoNome": "Projeto - SISEGGM",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7044,7 +7427,8 @@
         "espacoNome": "Projeto - TO",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7072,7 +7456,8 @@
         "espacoNome": "Projeto - Trocas de Serviços CBMRS",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7100,7 +7485,8 @@
         "espacoNome": "Projeto - ULBRA",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7128,7 +7514,8 @@
         "espacoNome": "Projeto CBMPR",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7156,7 +7543,8 @@
         "espacoNome": "Projeto PMPR",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7184,7 +7572,8 @@
         "espacoNome": "Projeto Pontual Suporte",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7212,7 +7601,8 @@
         "espacoNome": "QA",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7240,7 +7630,8 @@
         "espacoNome": "Recrutamento",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7268,7 +7659,8 @@
         "espacoNome": "Refactor Mobile",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7296,7 +7688,8 @@
         "espacoNome": "SAFER AI",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7324,7 +7717,8 @@
         "espacoNome": "Scrum project",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7352,7 +7746,8 @@
         "espacoNome": "SISEG AMAZONAS",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7380,7 +7775,8 @@
         "espacoNome": "Suporte Drive Behave",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7408,7 +7804,8 @@
         "espacoNome": "Suporte GM Balneário (BCU)",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7436,7 +7833,8 @@
         "espacoNome": "Suporte GM São José",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7464,7 +7862,8 @@
         "espacoNome": "Suporte Guard Solution",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7492,7 +7891,8 @@
         "espacoNome": "Suporte PI",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7520,7 +7920,8 @@
         "espacoNome": "Suporte PMAM",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7548,7 +7949,8 @@
         "espacoNome": "Suporte PMMT",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7576,7 +7978,8 @@
         "espacoNome": "Suporte PMPR",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7604,7 +8007,8 @@
         "espacoNome": "Suporte PMTO",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7632,7 +8036,8 @@
         "espacoNome": "Suporte Rastreamento",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7660,7 +8065,8 @@
         "espacoNome": "Suporte RO",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7688,7 +8094,8 @@
         "espacoNome": "Suporte SC",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7716,7 +8123,8 @@
         "espacoNome": "Suporte SISEG AMAZONAS",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7744,7 +8152,8 @@
         "espacoNome": "SYSAIT-SC",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   },
@@ -7772,7 +8181,8 @@
         "espacoNome": "Tarefas - Jacson",
         "tempoFase": "6h 30m",
         "tempoTotal": "1d 12h",
-        "sla": "ok"
+        "sla": "ok",
+        "criacao": "2026-09-16T09:00:00.000-0300"
       }
     ]
   }

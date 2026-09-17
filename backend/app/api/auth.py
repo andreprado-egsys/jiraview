@@ -19,6 +19,7 @@ class UserInfo(BaseModel):
     nome: str
     role: str
     estado: str
+    espacos: Optional[str] = ""
     painel_url: str
     must_change_password: bool = False
 
@@ -42,11 +43,13 @@ async def login(req: LoginRequest):
         )
 
     must_change = bool(user.get("must_change_password", 0))
+    user_espacos = user.get("espacos") or ""
 
     token = create_access_token(
         sub=user["username"],
         role=user["role"],
         state=user["estado"],
+        espacos=user_espacos,
         nome=user["nome"],
         painel_url=user["painel_url"],
         must_change_password=must_change,
@@ -61,6 +64,7 @@ async def login(req: LoginRequest):
             nome=user["nome"],
             role=user["role"],
             estado=user["estado"],
+            espacos=user_espacos,
             painel_url=user["painel_url"],
             must_change_password=must_change,
         )
@@ -123,6 +127,7 @@ async def me(user: TokenPayload = Depends(get_current_user)):
             "nome": db_user["nome"],
             "role": db_user["role"],
             "estado": db_user["estado"],
+            "espacos": db_user.get("espacos") or "",
             "painel_url": db_user["painel_url"],
             "must_change_password": bool(db_user.get("must_change_password", 0)),
         }
@@ -131,6 +136,7 @@ async def me(user: TokenPayload = Depends(get_current_user)):
         "nome": user.nome or user.sub,
         "role": user.role,
         "estado": user.state,
+        "espacos": getattr(user, "espacos", "") or "",
         "painel_url": user.painel_url or "/painel_sc",
         "must_change_password": user.must_change_password,
     }
@@ -160,6 +166,7 @@ class CreateUserRequest(BaseModel):
     nome: str
     role: str = "manager"
     estado: str = "sc"
+    espacos: Optional[str] = ""
     painel_url: str = "/painel_sc"
     is_active: int = 1
     must_change_password: Optional[int] = 1
@@ -169,6 +176,7 @@ class UpdateUserRequest(BaseModel):
     nome: Optional[str] = None
     role: Optional[str] = None
     estado: Optional[str] = None
+    espacos: Optional[str] = None
     painel_url: Optional[str] = None
     is_active: Optional[int] = None
     must_change_password: Optional[int] = None
@@ -194,6 +202,7 @@ async def create_user_endpoint(
             nome=req.nome,
             role=req.role,
             estado=req.estado,
+            espacos=req.espacos or "",
             painel_url=req.painel_url,
             is_active=req.is_active,
             must_change_password=1 if req.must_change_password is None or req.must_change_password else 0,
@@ -221,6 +230,7 @@ async def update_user_endpoint(
         nome=req.nome,
         role=req.role,
         estado=req.estado,
+        espacos=req.espacos,
         painel_url=req.painel_url,
         is_active=req.is_active,
         must_change_password=req.must_change_password,

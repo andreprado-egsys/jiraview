@@ -17,6 +17,7 @@ class TokenPayload(BaseModel):
     sub: str
     role: str = "viewer"
     state: str = "sc"
+    espacos: Optional[str] = ""
     nome: Optional[str] = None
     painel_url: Optional[str] = None
     must_change_password: bool = False
@@ -51,26 +52,63 @@ class JSMService:
     async def search(self, jql: str, max_results: int = 25,
                      fields: str = "summary,status,resolution,assignee,created,updated,priority,reporter,duedate,issuetype",
                      start_at: int = 0,
+                     next_page_token: Optional[str] = None,
                      ) -> list[dict]:
         import httpx
 
         async with httpx.AsyncClient(timeout=20) as c:
+            params = {
+                "jql": jql,
+                "maxResults": min(max_results, 100),
+                "fields": fields
+            }
+            if next_page_token:
+                params["nextPageToken"] = next_page_token
             r = await c.get(
                 f"{self._s.jira_url}/rest/api/3/search/jql",
-                params={"jql": jql,
-                        "maxResults": min(max_results, 100),
-                        "startAt": start_at,
-                        "fields": fields},
+                params=params,
                 headers=self._basic(),
             )
             r.raise_for_status()
             return r.json().get("issues", [])
+
+    async def search_full(self, jql: str, cap: int = 2000,
+                          fields: str = "summary,status,resolution,assignee,created,updated,priority,reporter,duedate,issuetype") -> list[dict]:
+        """Busca paginada oficial com nextPageToken da API Jira Cloud v3 até esgotar ou atingir cap."""
+        import httpx
+        out = []
+        token = None
+        async with httpx.AsyncClient(timeout=20) as c:
+            while len(out) < cap:
+                params = {
+                    "jql": jql,
+                    "maxResults": 100,
+                    "fields": fields
+                }
+                if token:
+                    params["nextPageToken"] = token
+                r = await c.get(
+                    f"{self._s.jira_url}/rest/api/3/search/jql",
+                    params=params,
+                    headers=self._basic(),
+                )
+                if r.status_code != 200:
+                    break
+                data = r.json()
+                issues = data.get("issues", [])
+                out.extend(issues)
+                token = data.get("nextPageToken")
+                is_last = data.get("isLast", True)
+                if is_last or not token or len(issues) < 100:
+                    break
+        return out
 
 
 def create_access_token(
     sub: str,
     role: str = "viewer",
     state: str = "sc",
+    espacos: Optional[str] = "",
     nome: Optional[str] = None,
     painel_url: Optional[str] = None,
     must_change_password: bool = False,
@@ -83,6 +121,7 @@ def create_access_token(
         "sub": sub,
         "role": role,
         "state": state,
+        "espacos": espacos or "",
         "nome": nome or sub,
         "painel_url": painel_url or "/painel_sc",
         "must_change_password": bool(must_change_password),

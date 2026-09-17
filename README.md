@@ -43,3 +43,14 @@ egsys-jiraview/
 - Produto central: **Painel do Cliente Jira** — estados são dados; cliente acessa pelo mesmo endereço e vê "seu ambiente" (RBAC + escopo do estado).
 - RBAC: `viewer` / `manager` / `admin` por estado; gestores de SC enxergam os 4 ambientes (Cidadão, SADE, Integração, Operações) — sem segregar organizações JSM.
 - Correções (transições/resolução): `--dry-run` → snapshot → `--apply` autorizado; timer systemd roda o mesmo script (escopo estrito do estado configurado).
+
+## 📚 Documentação Técnica & Executiva (Docs-as-Code)
+
+- **[Documento Executivo de Projeto](docs/DOCUMENTO_EXECUTIVO_PROJETO.md)**: Visão plena e ampla cobrindo Engenharia de Software, Observabilidade (3 Níveis e Síntese de Backlog), SRE (Cgroups e Traefik) e Gestão (RBAC, NIST e RACI).
+- **[Apresentação Executiva CEO & Diretoria (Tríade PPTX + PDF + MD)](docs/egSYS-JiraView-CEO-Executivo.md)**: Deck executivo geral de 8 slides widescreen em padrão Dark Glass / Slate ([PPTX](docs/egSYS-JiraView-CEO-Executivo.pptx) / [PDF](docs/egSYS-JiraView-CEO-Executivo.pdf)).
+- **[Apresentação Executiva Santa Catarina — PMSC (Tríade PPTX + PDF + MD)](docs/egSYS-JiraView-PMSC-Executivo.md)**: Deck executivo dedicado para a PMSC abordando as 4 áreas (Cidadão, SADE, Integração, Operações) e a decomposição exata das 52 tarefas ativas ([PPTX](docs/egSYS-JiraView-PMSC-Executivo.pptx) / [PDF](docs/egSYS-JiraView-PMSC-Executivo.pdf)).
+- **[Relatório Executivo de Observabilidade](docs/RELATORIO_EXECUTIVO_OBSERVABILIDADE.md)**: Padrão canônico de transparência e esteira de atendimento.
+- **[Manual de API](docs/API.md)**: Especificação formal dos endpoints REST e autenticação JWT.
+- **[Segurança & Hardening](docs/SECURITY.md)**: Padrão egSYS Orion (ACH-011), headers defensivos e pentest black box.
+- **[Histórico Cumulativo](docs/history.md)**: Registro auditável e cronológico de decisões técnicas e marcos de engenharia.
+

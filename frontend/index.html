@@ -238,6 +238,60 @@
       border-radius: 4px;
     }
 
+    /* Seletor Executivo de Multi-Espaço do Cliente */
+    .client-space-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding: 10px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      flex-wrap: wrap;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .client-space-label {
+      font-size: 12px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .client-space-chips {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .client-chip {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--th-bg);
+      color: var(--text);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .client-chip:hover {
+      border-color: var(--accent);
+      background: rgba(56, 139, 253, 0.08);
+    }
+    .client-chip.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+      box-shadow: 0 2px 6px rgba(56, 139, 253, 0.3);
+    }
+
     /* Barra de filtros rápidos de Posse */
     .quick-posse {
       display: flex;
@@ -703,19 +757,29 @@
   </header>
 
   <div class="container">
+    <!-- SELETOR EXECUTIVO DE ESPAÇOS (MULTI-ESPAÇO DO CLIENTE) -->
+    <div id="barSeletorEspacosCliente" class="client-space-bar" style="display:none;">
+      <div class="client-space-label">
+        <span>🏢 <strong>Espaço em Visualização:</strong></span>
+      </div>
+      <div class="client-space-chips" id="clientSpaceChips">
+        <!-- Injetado dinamicamente via JavaScript -->
+      </div>
+    </div>
+
     <!-- BANNER DE SÍNTESE EXECUTIVA DO BACKLOG (EQUAÇÃO MATEMÁTICA VISÍVEL) -->
     <div class="summary-banner" id="summaryBanner">
       <div class="summary-item">
         <span class="summary-tag">📦 CARTEIRA OPERACIONAL ATIVA (EM ABERTO)</span>
-        <div class="summary-value" id="summaryTotalBacklog">52 Chamados em Aberto</div>
+        <div class="summary-value" id="summaryTotalBacklog">– Chamados em Aberto</div>
         <div class="summary-sub" id="summaryFormula">
-          Decomposição das 3 frentes ativas: <b>📥 Triagem (<span id="eq-novas">2</span>)</b> + <b>⚙️ Em Atendimento (<span id="eq-atend">46</span>)</b> + <b>⏸️ Aguardando Cliente (<span id="eq-aguard">4</span>)</b> = <b><span id="eq-total">52</span> Chamados Ativos</b>
+          Decomposição das 3 frentes ativas: <b>📥 Triagem (<span id="eq-novas">–</span>)</b> + <b>⚙️ Em Atendimento (<span id="eq-atend">–</span>)</b> + <b>⏸️ Aguardando Cliente (<span id="eq-aguard">–</span>)</b> = <b><span id="eq-total">–</span> Chamados Ativos</b>
         </div>
       </div>
       <div class="summary-divider"></div>
       <div class="summary-item">
         <span class="summary-tag" style="color: #238636;">✅ HISTÓRICO DE ENTREGAS</span>
-        <div class="summary-value" id="summaryTotalConcluidas" style="color: #238636;">25 Concluídas</div>
+        <div class="summary-value" id="summaryTotalConcluidas" style="color: #238636;">– Concluídas</div>
         <div class="summary-sub">Chamados finalizados e entregues no Jira (fora do backlog ativo)</div>
       </div>
     </div>
@@ -760,7 +824,7 @@
       <div class="card" style="cursor:default;" id="card-info">
         <div class="label">🗓️ Fechadas (7 dias)</div>
         <div class="value" id="c-fechadas">–</div>
-        <small id="c-projetos">Projetos: HDPMSC, SCPMH</small>
+        <small id="c-projetos">Projetos: HDPMSC</small>
         <div><span class="badge-cat-funil" style="background: rgba(140,149,159,0.15); color: var(--text-sub);">Ritmo de Vazão</span></div>
         <div class="card-indicator" style="background:var(--text-sub);"></div>
       </div>
@@ -846,6 +910,7 @@
       </label>
       <label>Período
         <select id="f-periodo" onchange="loadAll()">
+          <option value="30d">Últimos 30 dias</option>
           <option value="60d">Últimos 60 dias</option>
           <option value="90d" selected>Últimos 90 dias</option>
           <option value="6m">Últimos 6 meses</option>
@@ -879,6 +944,7 @@
         <thead>
           <tr>
             <th style="width: 44px; text-align: center;">#</th>
+            <th id="th-espaco" style="display:none;">Espaço</th>
             <th>Tipo</th>
             <th>Área</th>
             <th>Fase</th>
@@ -1031,6 +1097,136 @@
       window.location.href = "/login";
     }
 
+    let espacoClienteAtivo = "";
+    let listaEspacosCliente = [];
+
+    function nomeAmigavelEspaco(sigla) {
+      const nomes = {
+        "HDPMSC": "PMSC [HDPMSC]",
+        "SSC": "Suporte SC [SSC]",
+        "SCPMH": "Helpdesk PMSC [SCPMH]",
+        "GMSJ": "GM São José [GMSJ]",
+        "SGSJ": "Suporte GM SJ [SGSJ]",
+        "HDPMTO": "PMTO [HDPMTO]",
+        "STO": "Suporte TO [STO]",
+        "HDPMAM": "PMAM [HDPMAM]",
+        "SPAM": "Suporte AM [SPAM]",
+        "SSA": "Suporte SISEG AM [SSA]",
+        "HDSESDEC": "SESDEC [HDSESDEC]",
+        "SRO": "Suporte RO [SRO]",
+        "HDPMPR": "PMPR [HDPMPR]",
+        "SPR": "Suporte PR [SPR]",
+        "HDCMBPR": "CMBPR [HDCMBPR]",
+        "HDPMMT": "PMMT [HDPMMT]",
+        "SPMT": "Suporte MT [SPMT]",
+        "ANN": "Atendimento N2/N3 [ANN]",
+        "DS": "Demandas Suporte [DS]",
+        "PLANTAO": "Plantão [PLANTAO]"
+      };
+      return nomes[sigla] || sigla;
+    }
+
+    function inicializarSeletorEspacosCliente() {
+      const bar = document.getElementById("barSeletorEspacosCliente");
+      const containerChips = document.getElementById("clientSpaceChips");
+      if (!bar || !containerChips) return;
+
+      let espacosConfig = "";
+      try {
+        const u = JSON.parse(localStorage.getItem("jiraview_user") || "{}");
+        if (u && u.espacos) {
+          espacosConfig = u.espacos;
+        }
+      } catch(e) {}
+
+      if (!espacosConfig) {
+        bar.style.display = "none";
+        const thEspaco = document.getElementById("th-espaco");
+        if (thEspaco) thEspaco.style.display = "none";
+        return;
+      }
+
+      const partes = espacosConfig.split(",").map(p => p.trim().toUpperCase()).filter(Boolean);
+      listaEspacosCliente = partes;
+
+      if (partes.length <= 1) {
+        bar.style.display = "none";
+        const thEspaco = document.getElementById("th-espaco");
+        if (thEspaco) thEspaco.style.display = "none";
+        return;
+      }
+
+      bar.style.display = "flex";
+      const thEspaco = document.getElementById("th-espaco");
+      if (thEspaco) thEspaco.style.display = "";
+
+      const todosParam = partes.join(",");
+      if (!espacoClienteAtivo) {
+        espacoClienteAtivo = todosParam;
+      }
+
+      let htmlChips = `
+        <button class="client-chip ${espacoClienteAtivo === todosParam ? 'active' : ''}" 
+                onclick="aoMudarEspacoCliente('${todosParam}')" 
+                data-espaco="${todosParam}" 
+                title="Consolidar todos os espaços autorizados">
+          🌐 Todos os Meus Espaços (${partes.join(" + ")})
+        </button>
+      `;
+
+      partes.forEach(esp => {
+        const nomeAmigavel = nomeAmigavelEspaco(esp);
+        const isActive = espacoClienteAtivo === esp;
+        htmlChips += `
+          <button class="client-chip ${isActive ? 'active' : ''}" 
+                  onclick="aoMudarEspacoCliente('${esp}')" 
+                  data-espaco="${esp}" 
+                  title="Visualizar apenas o projeto ${esp}">
+            🏢 ${nomeAmigavel}
+          </button>
+        `;
+      });
+
+      containerChips.innerHTML = htmlChips;
+
+      const bEstado = document.getElementById("badge-estado");
+      if (bEstado) {
+        if (espacoClienteAtivo.includes(",")) {
+          bEstado.textContent = `SC / Multi-Espaço (${partes.join(", ")})`;
+        } else {
+          bEstado.textContent = `SC / ${nomeAmigavelEspaco(espacoClienteAtivo)}`;
+        }
+      }
+    }
+
+    function aoMudarEspacoCliente(espaco) {
+      espacoClienteAtivo = espaco;
+      document.querySelectorAll(".client-chip").forEach(c => {
+        c.classList.toggle("active", c.getAttribute("data-espaco") === espaco);
+      });
+      const bEstado = document.getElementById("badge-estado");
+      if (bEstado && listaEspacosCliente.length > 1) {
+        if (espaco.includes(",")) {
+          bEstado.textContent = `SC / Multi-Espaço (${listaEspacosCliente.join(", ")})`;
+        } else {
+          bEstado.textContent = `SC / ${nomeAmigavelEspaco(espaco)}`;
+        }
+      }
+      loadAll();
+      loadMeta();
+    }
+
+    function queryEspacos() {
+      if (espacoClienteAtivo) return "&projetos=" + encodeURIComponent(espacoClienteAtivo);
+      try {
+        const u = JSON.parse(localStorage.getItem("jiraview_user") || "{}");
+        if (u && u.espacos) {
+          return "&projetos=" + encodeURIComponent(u.espacos);
+        }
+      } catch(e) {}
+      return "";
+    }
+
     function renderUserInfo() {
       const uEl = document.getElementById("user");
       if (!uEl) return;
@@ -1038,10 +1234,12 @@
         const u = JSON.parse(localStorage.getItem("jiraview_user") || "{}");
         if (u && u.nome) {
           uEl.innerHTML = `<span style="font-size:12px;color:var(--text-sub);" title="Conectado como ${u.username}">👤 <strong>${u.nome}</strong></span>`;
+          inicializarSeletorEspacosCliente();
           return;
         }
       } catch(e) {}
       uEl.innerHTML = `<span style="font-size:12px;color:var(--text-sub);">👤 <strong>Gestor</strong></span>`;
+      inicializarSeletorEspacosCliente();
     }
 
     function bootSeguro(fn) {
@@ -1087,7 +1285,7 @@
           }
           return;
         }
-        const d = await api("/charts?estado=" + ESTADO + "&periodo=" + periodoAtual());
+        const d = await api("/charts?estado=" + ESTADO + "&periodo=" + periodoAtual() + queryEspacos());
         const P = chartPalette();
         Object.values(charts).forEach(c => { try { c.destroy(); } catch(e) {} });
         charts = {};
@@ -1199,7 +1397,7 @@
 
     // ==== Cards (Funil de 4 Estágios) ====
     async function loadCards() {
-      const d = await api("/dashboard?estado=" + ESTADO + "&periodo=" + periodoAtual());
+      const d = await api("/dashboard?estado=" + ESTADO + "&periodo=" + periodoAtual() + queryEspacos());
       const f = d.funil || {};
       const novasVal = Number(f.novas ?? (d.abertas ?? 0));
       const andamentoVal = Number(f.em_atendimento ?? (d.em_andamento ?? 0));
@@ -1230,7 +1428,7 @@
       const eqTotal = document.getElementById("eq-total");
       if (eqTotal) eqTotal.textContent = totalAtivo;
 
-      const rot = { "60d":"(60d)", "90d":"(90d)", "6m":"(6m)", "12m":"(12m)", "ano":"(" + new Date().getFullYear() + ")", "todos":"(todos)" }[periodoAtual()] || "(90d)";
+      const rot = { "30d":"(30d)", "60d":"(60d)", "90d":"(90d)", "6m":"(6m)", "12m":"(12m)", "ano":"(" + new Date().getFullYear() + ")", "todos":"(Total)" }[periodoAtual()] || "(90d)";
       ["p-label","p-label2","p-label3"].forEach(id => { const e = document.getElementById(id); if (e) e.textContent = rot || ""; });
     }
 
@@ -1286,7 +1484,7 @@
 
     // ==== Meta (filtros dinâmicos com contagem real) ====
     async function loadMeta() {
-      const d = await api("/meta?estado=" + ESTADO);
+      const d = await api("/meta?estado=" + ESTADO + queryEspacos());
       const selS = document.getElementById("f-status");
       selS.innerHTML = '<option value="">Todos os status</option>';
       (d.statuses || []).forEach(s => {
@@ -1308,6 +1506,7 @@
       const ab = document.getElementById("f-abertas").value;
       const jql = document.getElementById("f-jql").value;
       const q = new URLSearchParams({ estado: ESTADO, abertas: (funilStageAtivo === "concluidas" ? "false" : ab), periodo: periodoAtual(), max_results: "200" });
+      if (espacoClienteAtivo) q.set("projetos", espacoClienteAtivo);
       if (st) q.set("status_filter", st);
       if (tp) q.set("tipo", tp);
       const org = document.getElementById("f-origem").value;
@@ -1316,8 +1515,13 @@
       if (funilStageAtivo) q.set("funil_stage", funilStageAtivo);
       if (jql) q.set("jql", jql);
 
+      const temMultiplos = listaEspacosCliente.length > 1;
+      const thEspaco = document.getElementById("th-espaco");
+      if (thEspaco) thEspaco.style.display = temMultiplos ? "" : "none";
+      const colspanTbl = temMultiplos ? 12 : 11;
+
       const rows = document.getElementById("rows");
-      rows.innerHTML = `<tr><td colspan="11" class="pause">Consultando Jira...</td></tr>`;
+      rows.innerHTML = `<tr><td colspan="${colspanTbl}" class="pause">Consultando Jira...</td></tr>`;
 
       try {
         const d = await api("/issues?" + q);
@@ -1331,7 +1535,7 @@
 
         if (!d.issues.length) {
           if (contagemEl) contagemEl.textContent = "0 solicitações";
-          rows.innerHTML = `<tr><td colspan="11">
+          rows.innerHTML = `<tr><td colspan="${colspanTbl}">
             <div class="empty-msg">🔍 <b>0 solicitações encontradas para este filtro.</b><br>
             A consulta está correta — não há itens que atendam: ${esc((jql || st || tp || posseAtiva) ? (jql || (st ? "status = " + st : "") || (posseAtiva ? "posse = " + posseAtiva : "")) : "os critérios atuais")}.<br>
             Dica: clique em "↺ Limpar" para restaurar a listagem.</div>
@@ -1340,9 +1544,11 @@
           rows.innerHTML = d.issues.map((i, idx) => {
             const aClass = areaClasses[i.area] || "operacoes";
             const posseClass = i.posse === "cliente" ? "cliente" : "egsys";
+            const colEspaco = temMultiplos ? `<td><span class="badge" style="font-size:11px;font-weight:700;background:var(--th-bg);border:1px solid var(--border);padding:2px 6px;border-radius:4px;color:var(--accent);">${esc(i.espaco || (i.referencia.split("-")[0]))}</span></td>` : "";
             return `
             <tr class="clickable-row" onclick="openDrawer('${esc(i.referencia)}')">
               <td style="text-align: center; font-weight: 700; color: var(--text-sub); font-size: 11px;">${idx + 1}</td>
+              ${colEspaco}
               <td><b>${esc(i.tipo)}</b></td>
               <td><span class="badge-area ${aClass}">${esc(i.area)}</span></td>
               <td><span class="badge-fase">📊 ${i.faseNum}/8 ${esc(i.faseNome)}</span></td>
@@ -1360,7 +1566,7 @@
         window.currentIssues = [];
         const contagemEl = document.getElementById("contagem-tabela");
         if (contagemEl) contagemEl.textContent = "";
-        rows.innerHTML = `<tr><td colspan="11" style="color:var(--red);padding:14px;">Erro ao carregar solicitações: ${esc(e.message)}</td></tr>`;
+        rows.innerHTML = `<tr><td colspan="${colspanTbl}" style="color:var(--red);padding:14px;">Erro ao carregar solicitações: ${esc(e.message)}</td></tr>`;
       }
     }
 
@@ -1424,8 +1630,6 @@
         const areaEl = document.getElementById("d-area");
         areaEl.textContent = j.area;
         areaEl.className = "badge-area " + (j.area.toLowerCase().includes("sade") ? "sade" : j.area.toLowerCase().includes("cidad") ? "cidadao" : j.area.toLowerCase().includes("integra") ? "integracao" : "operacoes");
-        
-        const cores = { done:"var(--green)", indeterminate:"var(--blue)", new:"var(--yellow)" };
         document.getElementById("d-status-pill").innerHTML = `<span class="status" style="background:${cores[j.statusCategoria] || 'var(--blue)'}">${esc(j.status)}</span> &nbsp; • &nbsp; Tipo: <b>${esc(j.tipo)}</b> &nbsp; • &nbsp; Resolução: <b>${esc(j.resolucao || 'Em aberto')}</b>`;
 
         // Posse da Bola

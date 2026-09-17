@@ -7,15 +7,16 @@ import secrets
 from pathlib import Path
 from typing import Optional, Dict, Any, List
 
-# Diretório padrão para o arquivo SQLite (suporta volume de produção /app/data)
-_DEFAULT_LOCAL_DIR = Path(__file__).parent.parent.parent / "data"
+# Diretório padrão para o arquivo SQLite (suporta volume de produção /app/data ou ./data)
 _DATA_DIR_ENV = os.getenv("JIRAVIEW_DATA")
 if _DATA_DIR_ENV:
     _DATA_DIR = Path(_DATA_DIR_ENV)
-elif Path("/app/data").exists() or Path("/app").exists():
+elif Path("/app/data").exists():
     _DATA_DIR = Path("/app/data")
+elif (Path(__file__).resolve().parents[3] / "data").exists():
+    _DATA_DIR = Path(__file__).resolve().parents[3] / "data"
 else:
-    _DATA_DIR = _DEFAULT_LOCAL_DIR
+    _DATA_DIR = Path(__file__).resolve().parent.parent.parent / "data"
 
 _DB_PATH = Path(os.getenv("AUTH_DB_PATH", _DATA_DIR / "auth.db"))
 
@@ -59,33 +60,60 @@ def init_db():
     """Inicializa tabelas do SQLite e popula usuários iniciais caso não existam."""
     conn = _get_connection()
     try:
-        with conn:
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS users (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    username TEXT UNIQUE NOT NULL,
-                    password_hash TEXT NOT NULL,
-                    nome TEXT NOT NULL,
-                    role TEXT NOT NULL DEFAULT 'manager',
-                    estado TEXT NOT NULL DEFAULT 'sc',
-                    painel_url TEXT NOT NULL DEFAULT '/painel_sc',
-                    is_active INTEGER NOT NULL DEFAULT 1,
-                    must_change_password INTEGER NOT NULL DEFAULT 1,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                );
-            """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL,
+                nome TEXT NOT NULL,
+                role TEXT NOT NULL DEFAULT 'manager',
+                estado TEXT NOT NULL DEFAULT 'sc',
+                espacos TEXT DEFAULT '',
+                painel_url TEXT NOT NULL DEFAULT '/painel_sc',
+                is_active INTEGER NOT NULL DEFAULT 1,
+                must_change_password INTEGER NOT NULL DEFAULT 1,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """)
+        conn.commit()
 
-            # Migração automática: adiciona coluna must_change_password caso a tabela já exista
-            try:
-                conn.execute("ALTER TABLE users ADD COLUMN must_change_password INTEGER NOT NULL DEFAULT 1;")
-            except Exception:
-                pass
+        # Inspeciona colunas existentes para migração idempotente
+        cur = conn.execute("PRAGMA table_info(users);")
+        colunas = [r["name"] for r in cur.fetchall()]
 
-            # Verifica se já há usuários cadastrados
-            cur = conn.execute("SELECT COUNT(*) as total FROM users;")
-            row = cur.fetchone()
-            if row and row["total"] == 0:
-                _seed_initial_users(conn)
+        if "must_change_password" not in colunas:
+            conn.execute("ALTER TABLE users ADD COLUMN must_change_password INTEGER NOT NULL DEFAULT 1;")
+            conn.commit()
+
+        if "espacos" not in colunas:
+            conn.execute("ALTER TABLE users ADD COLUMN espacos TEXT DEFAULT '';")
+            conn.commit()
+
+        # Verifica se já há usuários cadastrados
+        cur = conn.execute("SELECT COUNT(*) as total FROM users;")
+        row = cur.fetchone()
+        if row and row["total"] == 0:
+            _seed_initial_users(conn)
+            conn.commit()
+        else:
+            # Garante que o usuário de demonstração Mazzola (com múltiplos espaços) exista
+            cur_m = conn.execute("SELECT id FROM users WHERE username = 'mazzola';")
+            if not cur_m.fetchone():
+                conn.execute("""
+                    INSERT INTO users (username, password_hash, nome, role, estado, espacos, painel_url, is_active, must_change_password)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+                """, (
+                    "mazzola",
+                    hash_password("egsys@mazzola2026"),
+                    "João Mário Mazzola",
+                    "manager",
+                    "sc",
+                    "HDPMSC,SSC",
+                    "/painel_sc",
+                    1,
+                    0
+                ))
+                conn.commit()
     finally:
         conn.close()
 
@@ -220,7 +248,7 @@ def list_users() -> List[Dict[str, Any]]:
     """Lista usuários cadastrados (sem password_hash)."""
     conn = _get_connection()
     try:
-        cur = conn.execute("SELECT id, username, nome, role, estado, painel_url, is_active, must_change_password, created_at FROM users ORDER BY id;")
+        cur = conn.execute("SELECT id, username, nome, role, estado, espacos, painel_url, is_active, must_change_password, created_at FROM users ORDER BY id;")
         return [dict(r) for r in cur.fetchall()]
     finally:
         conn.close()
@@ -230,7 +258,7 @@ def get_user_by_id(user_id: int) -> Optional[Dict[str, Any]]:
     """Obtém registro do usuário por ID."""
     conn = _get_connection()
     try:
-        cur = conn.execute("SELECT id, username, nome, role, estado, painel_url, is_active, must_change_password, created_at FROM users WHERE id = ?;", (user_id,))
+        cur = conn.execute("SELECT id, username, nome, role, estado, espacos, painel_url, is_active, must_change_password, created_at FROM users WHERE id = ?;", (user_id,))
         row = cur.fetchone()
         if row:
             return dict(row)
@@ -245,6 +273,7 @@ def create_user(
     nome: str,
     role: str = "manager",
     estado: str = "sc",
+    espacos: str = "",
     painel_url: str = "/painel_sc",
     is_active: int = 1,
     must_change_password: int = 1,
@@ -259,9 +288,9 @@ def create_user(
     try:
         with conn:
             cur = conn.execute("""
-                INSERT INTO users (username, password_hash, nome, role, estado, painel_url, is_active, must_change_password)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-            """, (username, pwd_hash, nome.strip(), role.strip(), estado.strip().lower(), painel_url.strip(), is_active, 1 if must_change_password else 0))
+                INSERT INTO users (username, password_hash, nome, role, estado, espacos, painel_url, is_active, must_change_password)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """, (username, pwd_hash, nome.strip(), role.strip(), estado.strip().lower(), espacos.strip().upper(), painel_url.strip(), is_active, 1 if must_change_password else 0))
             new_id = cur.lastrowid
         return get_user_by_id(new_id)
     finally:
@@ -273,6 +302,7 @@ def update_user(
     nome: Optional[str] = None,
     role: Optional[str] = None,
     estado: Optional[str] = None,
+    espacos: Optional[str] = None,
     painel_url: Optional[str] = None,
     is_active: Optional[int] = None,
     must_change_password: Optional[int] = None,
@@ -295,6 +325,9 @@ def update_user(
     if estado is not None:
         fields.append("estado = ?")
         values.append(estado.strip().lower())
+    if espacos is not None:
+        fields.append("espacos = ?")
+        values.append(espacos.strip().upper())
     if painel_url is not None:
         fields.append("painel_url = ?")
         values.append(painel_url.strip())

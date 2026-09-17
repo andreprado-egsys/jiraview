@@ -54,6 +54,7 @@ Payload:
   "nome": "Gestão PMTO (Tocantins)",
   "role": "manager",
   "estado": "to",
+  "espacos": "HDPMTO,STO",
   "painel_url": "/painel_to",
   "is_active": 1,
   "must_change_password": 1
@@ -61,7 +62,7 @@ Payload:
 ```
 
 ### PUT `/api/v1/auth/users/{user_id}`
-Atualiza dados cadastrais, redefine senha ou ativa/desativa usuário. **Acesso restrito à Coordenação / Admin**.
+Atualiza dados cadastrais, espaços autorizados (`espacos`), redefine senha ou ativa/desativa usuário. **Acesso restrito à Coordenação / Admin**.
 
 ### DELETE `/api/v1/auth/users/{user_id}`
 Remove usuário da base SQLite (impede que o usuário logado exclua a si mesmo). **Acesso restrito à Coordenação / Admin**.
@@ -78,32 +79,40 @@ Alive + checagem leve do Jira. **Público** (sem auth).
 Visão resumida das solicitações do estado do usuário logado (`role >= viewer`).
 Retorna: `role`, `state`, `issues[]`.
 
-### GET `/api/v1/issues?estado=sc&status_filter=&tipo=&origem=&jql=&abertas=true&periodo=90d&max_results=200&funil_stage=`
-Listagem principal do painel com colunas normalizadas. **Auth obrigatório** (viewer do estado).
+### GET `/api/v1/issues?estado=sc&projetos=HDPMSC,SSC&status_filter=&tipo=&origem=&jql=&abertas=true&periodo=90d&max_results=250&funil_stage=`
+Listagem principal do painel com colunas normalizadas e paginação oficial por cursor. **Auth obrigatório** (viewer do estado/espaços autorizados).
+- `estado` — sigla do estado (`sc`, `to`, `am`, etc.).
+- `projetos` ou `espacos` — lista de projetos/espaços Jira separados por vírgula para consolidação multi-espaço (ex.: `HDPMSC,SSC`).
 - `status_filter` / `tipo` — filtros visuais por dropdown
 - `origem` — filtro por tipo de solicitante (`cliente` para contas `qm:*` vs `interno` para agentes)
 - `jql` — filtro JQL livre ou composto pelo construtor visual
 - `abertas=true` — aplica `resolution is EMPTY`
-- `periodo` — janela de criação (`60d`, `90d`, `6m`, `12m`, `ano` nos painéis de clientes; `todos` exclusivo para Coordenação/Admin)
-- `max_results` — limite de tickets retornados (suporte a até `200` para carteira integral de estados densos)
-- `funil_stage` — filtro semântico por estágio da esteira: `novas`, `em_atendimento`, `aguardando_validacao` ou `concluidas`
+- `periodo` — janela temporal estrita (`30d`, `60d`, `90d`, `6m`, `12m`, `ano` nos painéis de clientes; `todos` exclusivo para Coordenação/Admin)
+- `max_results` — limite de tickets retornados (padrão `250`, integrado com `search_full` via cursor `nextPageToken` da API Jira Cloud v3, eliminando truncamento)
+- `funil_stage` — filtro semântico por estágio da esteira: `novas` (inclui Triagem N1 e Validação N2), `em_atendimento` (Análise de Dev, Executando e QA), `aguardando_validacao` ou `concluidas`
 Resposta:
 ```json
 {
   "issues": [
     {
-      "tipo": "Incidente",
-      "origem": "cliente",
-      "referencia": "HDPMSC-1234",
-      "resumo": "Lentidão na consulta CAD",
-      "status": "Em Atendimento",
+      "tipo": "Bug Suporte",
+      "origem": "interno",
+      "referencia": "HDPMSC-403",
+      "espaco": "HDPMSC",
+      "resumo": "ERRO INTEGRAÇÃO SADE WEB E DIFICULDADE DE ACESSO",
+      "status": "Validação N2",
       "statusCategoria": "indeterminate",
-      "solicitante": "Capitão Silva",
-      "responsavel": "Equipe Sustentação SADE",
-      "prioridade": "Alta",
-      "atualizacao": "2026-09-09",
-      "criacao": "2026-09-08",
-      "entrega": "2026-09-15",
+      "area": "Integração",
+      "faseNum": 2,
+      "faseNome": "Triagem (N2)",
+      "posse": "egsys",
+      "posseLabel": "Ação com egSYS",
+      "solicitante": "Erick Vinicius Ferreira da Silva",
+      "responsavel": "Erick Vinicius Ferreira da Silva",
+      "prioridade": "Normal",
+      "atualizacao": "2026-09-17",
+      "criacao": "2026-09-17",
+      "entrega": null,
       "resolucao": null
     }
   ],
@@ -111,26 +120,27 @@ Resposta:
 }
 ```
 
-### GET `/api/v1/dashboard?estado=sc&periodo=90d`
-Cards métricos agregados estilo Jira Dashboard:
+### GET `/api/v1/dashboard?estado=sc&projetos=HDPMSC,SSC&periodo=90d`
+Cards métricos agregados estilo Jira Dashboard com governança estrita de período:
 - `funil` — objeto com contagens do funil de atendimento:
   ```json
   {
     "novas": 2,
-    "em_atendimento": 46,
-    "aguardando_validacao": 4,
-    "concluidas": 25
+    "em_atendimento": 20,
+    "aguardando_validacao": 0,
+    "concluidas": 23
   }
   ```
-- `abertas` (novas / statusCategory `new`)
-- `em_andamento` (em tratamento / statusCategory `indeterminate`)
-- `aguardando_validacao` (homologação / bloqueio externo)
-- `concluidas` (resolvidas no período)
-- `fechadas_7d` (concluídas nos últimos 7 dias)
+- `abertas` (novas / Triagem N1-N2: 2)
+- `em_andamento` (em tratamento técnico Dev/QA: 20)
+- `aguardando_validacao` (homologação cliente: 0)
+- `concluidas` (resolvidas no período: 23)
+- `fechadas_7d` (concluídas nos últimos 7 dias: 2)
 - `por_status` (mapa nome_status ➔ total)
 - `por_origem` (`cliente_new`, `cliente_ind`, `cliente_done`, `interno_new`, etc.)
 - `por_tipo` (mapa nome_tipo ➔ total)
-- `total_geral` e `total_com_resolucao`
+- `total_geral` (soma exata da carteira ativa + concluídas no período: 45 em 90d; 350 em Todos os Períodos)
+- `total_com_resolucao`
 
 ### GET `/api/v1/charts?estado=sc&periodo=90d`
 Agregados formatados para renderização no Chart.js:
