@@ -21,7 +21,7 @@ e total sanitização (sem credenciais no client).
 | F4.3 — Síntese & Sincronia | Síntese de 52 tarefas abertas + Numeração `#` + sync_db.py soberano (v0.4.1) | ✅ |
 | F4.4 — Multi-Espaços | Múltiplos espaços cliente (Mazzola) + customização dinâmica coordenação (v0.4.2) | ✅ |
 | F4.5 — Paridade & Coerência Temporal | Cursor pagination v3 + unificação estrita de período nos cards e tabela (v0.4.3) | ✅ |
-| F5 — Extensões Modulares & Absorção Node-RED | Esteira Dev + Triagem N1/N2 + Relatórios SMTP + Monitor SSL + Layouts Persistentes + Ergonomia TV (v0.5.9) | ✅ |
+| F5 — Extensões Modulares & Absorção Node-RED | Esteira Dev + Triagem N1/N2 + Relatórios SMTP + Monitor SSL + Cards Modulares por Estado + Layouts Persistentes (v0.5.10) | ✅ |
 | F6 — Governança & Multi-Estado Pleno | Descomissionamento definitivo Node-RED + Automação JSM + SLAs corporativos | ⏳ v0.6 |
 
 ## Invariantes (gate canônico)

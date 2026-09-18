@@ -110,11 +110,15 @@
   - Polling a cada 45s nas 4 abas críticas (Observabilidade, Esteira Dev, Triagem N1&N2, Certificados SSL).
   - Bloqueio estrito de refresh ao detectar gaveta de diagnóstico aberta (`#drawer.open`), modais ou inputs ativos.
   - Resiliência operacional sem logouts involuntários e retenção do último estado válido.
-- [x] **Certificados SSL por Estado & Ergonomia Visual para TVs (v0.5.9 — PSEI-321)**:
+- [x] **Certificados SSL por Estado & Ergonomia Visual para TVs (v0.5.9 — PSEI-322)**:
   - Aninhamento hierárquico no banner de alertas com blocos dedicados por estado, contagem de volumetria e ordenação cronológica estrita por vencimento.
   - Eliminação da "sombra vermelha" e fundo avermelhado translúcido de `.row-urgent td` que borrava as fontes em TVs.
   - Calibração de contraste máximo WCAG AAA: Modo Claro com preto absoluto (`#000000`) e Modo Escuro com branco puro (`#ffffff`).
   - Badges sólidos de alto contraste (`#dc2626`, `#d97706`, `#16a34a`) com tipografia branca em negrito.
+- [x] **Certificados SSL em Cards Modulares por Estado & Disposição Esteira NOC (v0.5.10 — PSEI-324)**:
+  - Estruturação dos certificados vencidos e críticos em cards modulares por estado (`.estado-bloco`) no padrão soberano das esteiras de Triagem N1&N2 e Dev.
+  - Drag-and-drop livre entre colunas e integração com o modal `⚙️ Posição dos Cards` com persistência em banco SQLite (`noc_layouts` tipo `cert`).
+  - Hierarquia de tela: Inicialmente os Cards (KPIs e Cards por Estado) e abaixo a Listagem Completa Geral com busca e filtros de status.
 
 ## v0.6 — Governança e Automações Corporativas
 - [ ] Regra de automação JSM (workflow/conclusão) substituindo script-timer quando permitido

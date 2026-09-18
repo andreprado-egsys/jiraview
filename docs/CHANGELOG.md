@@ -1,5 +1,16 @@
 # egSYS JiraView — Changelog
 
+## [0.5.10] — 2026-09-18 (PSEI-324)
+
+### Added
+- `feat(ssl-modular-cards): Disposição em Cards Modulares por Estado e Esteira NOC para Certificados SSL Vencidos/Críticos`:
+  - Reestruturação da visualização de certificados vencidos e em risco crítico ($\le 15$ dias) em cards de estado dedicados (`.estado-bloco`), espelhando o padrão visual consagrado das esteiras NOC de Triagem N1&N2 e Análise de Desenvolvimento.
+  - Cabeçalho executivo de cada card com sigla, badge colorido com a cor canônica do estado (`SC`, `PR`, `AM`, `TO`, `RO`, `GM`, `INFRA`), nome por extenso, ícone de criticidade e contador de volumetria.
+  - Tabela interna de alta densidade (`<table class="clean-table">`): Domínio/URL com link HTTPS direto, Host/Ambiente, Vencimento, Dias/Status (badges sólidos de alto contraste `⛔ VENCIDO` e `⚠️ X dias`) e Token/Método de Renovação.
+  - Empacotamento em colunas modulares com Drag-and-Drop livre pelos cabeçalhos e suporte ao modal `⚙️ Posição dos Cards` com persistência em banco SQLite (`noc_layouts` tipo `cert`).
+  - Campo de busca em tempo real dedicado aos cards de certificados (`🔍 Filtrar card por domínio, host ou estado...`).
+  - Hierarquia de tela alinhada: Inicialmente os Cards (KPIs e Esteira de Cards por Estado) e abaixo a Listagem Completa Geral de todos os 92 domínios da infraestrutura.
+
 ## [0.5.9] — 2026-09-18 (PSEI-322)
 
 ### Added

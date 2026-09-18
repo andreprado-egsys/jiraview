@@ -2168,16 +2168,34 @@
         </div>
       </div>
 
-      <!-- CARD DE ALERTA CRÍTICO (CONDICIONAL - ZERO FUNDO VERMELHO ATRÁS) -->
-      <div id="certAlertBanner" style="display:none; background: var(--card); border: 2px solid var(--border); border-left: 6px solid #dc2626; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px;">
-        <div style="display:flex; align-items:center; gap:8px; color:#dc2626; font-weight:900; font-size:14px; margin-bottom:8px;">
-          <span>🚨 ATENÇÃO: CERTIFICADOS EXPIRADOS OU COM VENCIMENTO EM MENOS DE 15 DIAS</span>
+      <!-- SEÇÃO ESTEIRA NOC: CERTIFICADOS VENCIDOS OU EM ALERTA CRÍTICO POR ESTADO -->
+      <div class="noc-esteira-header" id="certEsteiraHeader" style="margin-top: 10px; margin-bottom: 14px;">
+        <div class="noc-esteira-titles">
+          <h2 style="display: flex; align-items: center; gap: 8px;">
+            <span>🚨 NOC SSL &mdash; CERTIFICADOS VENCIDOS OU EM ALERTA CRÍTICO (&le; 15 DIAS)</span>
+          </h2>
+          <div class="noc-sub">Disposição em cards por estado com ordenação por dias restantes e monitoramento de renovação</div>
         </div>
-        <div id="certAlertItems" style="font-size:12px; color:var(--text); line-height:1.6;"></div>
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <input type="text" id="certCardsBuscaInput" class="search-input" placeholder="🔍 Filtrar card por domínio, host ou estado..." oninput="filtrarBlocosCert(this.value)" style="width: 290px; height: 38px;" />
+          <div class="noc-counter-badge alert-state" id="certCounterBadge">
+            <span class="noc-count-label">VENCIDOS / CRÍTICOS</span>
+            <span class="noc-count-value" id="certCriticosCardsCount">0</span>
+          </div>
+          <button class="btn-action" id="btnOrdemCardsCert" onclick="abrirModalOrdemCards('cert')" title="Organizar ordem e colunas dos cards de estado" style="height: 38px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; background: rgba(56, 139, 253, 0.15); border-color: var(--accent); color: var(--accent);">⚙️ Posição dos Cards</button>
+          <button class="btn-action" onclick="carregarCertificados()" style="height: 38px;">🔄 Atualizar Status</button>
+        </div>
+      </div>
+
+      <!-- GRID MODULADA POR ESTADO (MASONRY SEM VAZIOS VERTICAIS) -->
+      <div id="certGridEstados" class="noc-content-grid">
+        <div class="noc-grid-full" style="text-align:center; padding: 30px; color: var(--text-sub);">
+          ⏳ Carregando certificados em risco por estado...
+        </div>
       </div>
 
       <!-- LISTAGEM COMPLETA E DETALHADA DOS CERTIFICADOS -->
-      <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 24px;">
+      <div class="card" style="padding: 0; overflow: hidden; margin-top: 24px; margin-bottom: 24px;">
         <div style="padding: 16px 20px; background: var(--th-bg); border-bottom: 1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
           <div style="display:flex; align-items:center; gap:10px;">
             <span style="font-weight: 700; font-size: 13px; color: var(--text);">Auditoria de Domínios & Certificados SSL</span>
@@ -3699,7 +3717,7 @@
     let modalLayoutTemp = null;
     let modalCardDrag = null;
     let dashboardDraggingItem = null;
-    const layoutServidorCarregado = { dev: false, n1n2: false };
+    const layoutServidorCarregado = { dev: false, n1n2: false, cert: false };
 
     async function sincronizarLayoutDoServidor(tipo) {
       if (layoutServidorCarregado[tipo]) return;
@@ -3796,10 +3814,12 @@
       if (titulo) {
         titulo.textContent = (tipo === "dev")
           ? "⚙️ Disposição dos Cards — Esteira de Desenvolvimento"
-          : "⚙️ Disposição dos Cards — Triagem N1 & N2";
+          : (tipo === "n1n2"
+            ? "⚙️ Disposição dos Cards — Triagem N1 & N2"
+            : "⚙️ Disposição dos Cards — Certificados SSL Vencidos / Críticos");
       }
 
-      const grupos = (tipo === "dev" ? devGruposCache : n1n2GruposCache) || [];
+      const grupos = (tipo === "dev" ? devGruposCache : (tipo === "n1n2" ? n1n2GruposCache : certGruposCache)) || [];
       modalLayoutTemp = JSON.parse(JSON.stringify(obterLayoutColunas(tipo, grupos)));
 
       const selCol = document.getElementById("modalOrdemColunasSelect");
@@ -3851,17 +3871,22 @@
       const container = document.getElementById("modalColunasVisualContainer");
       if (!container || !modalLayoutTemp) return;
 
-      const grupos = (modalOrdemTipoAtual === "dev" ? devGruposCache : n1n2GruposCache) || [];
+      const grupos = (modalOrdemTipoAtual === "dev" ? devGruposCache : (modalOrdemTipoAtual === "n1n2" ? n1n2GruposCache : certGruposCache)) || [];
       const infoMap = new Map();
       grupos.forEach(g => infoMap.set(g.sigla, g));
 
       const defaultInfo = {
-        SC: { sigla: "SC", nome: "Santa Catarina", cor: "#10b981" },
-        PR: { sigla: "PR", nome: "Paraná", cor: "#3b82f6" },
-        AM: { sigla: "AM", nome: "Amazonas", cor: "#f59e0b" },
-        TO: { sigla: "TO", nome: "Tocantins", cor: "#8b5cf6" },
-        RO: { sigla: "RO", nome: "Rondônia", cor: "#ec4899" },
-        GM: { sigla: "GM", nome: "Guarda Municipal", cor: "#06b6d4" }
+        SC: { sigla: "SC", nome: "Santa Catarina", cor: "#7C3AED" },
+        PR: { sigla: "PR", nome: "Paraná", cor: "#1D4ED8" },
+        AM: { sigla: "AM", nome: "Amazonas", cor: "#065F46" },
+        TO: { sigla: "TO", nome: "Tocantins", cor: "#166534" },
+        RO: { sigla: "RO", nome: "Rondônia", cor: "#0369A1" },
+        GM: { sigla: "GM", nome: "Guarda Municipal", cor: "#6D28D9" },
+        SYSGM: { sigla: "SYSGM", nome: "Guarda Municipal", cor: "#6D28D9" },
+        INFRA: { sigla: "INFRA", nome: "Infra Corporativa egSYS", cor: "#0F766E" },
+        EGSYS: { sigla: "EGSYS", nome: "Infra Corporativa egSYS", cor: "#0F766E" },
+        MT: { sigla: "MT", nome: "Mato Grosso", cor: "#92400E" },
+        PI: { sigla: "PI", nome: "Piauí", cor: "#0284C7" }
       };
 
       const totalCols = modalLayoutTemp.columns.length;
@@ -3987,8 +4012,10 @@
 
       if (modalOrdemTipoAtual === "dev") {
         renderizarBlocosDev(devGruposCache);
-      } else {
+      } else if (modalOrdemTipoAtual === "n1n2") {
         renderizarBlocosN1N2(n1n2GruposCache);
+      } else if (modalOrdemTipoAtual === "cert") {
+        renderizarBlocosCert(certGruposCache);
       }
     }
 
@@ -3996,7 +4023,7 @@
       localStorage.removeItem("jiraview_col_layout_" + modalOrdemTipoAtual);
       localStorage.removeItem("jiraview_cols_" + modalOrdemTipoAtual);
 
-      const grupos = (modalOrdemTipoAtual === "dev" ? devGruposCache : n1n2GruposCache) || [];
+      const grupos = (modalOrdemTipoAtual === "dev" ? devGruposCache : (modalOrdemTipoAtual === "n1n2" ? n1n2GruposCache : certGruposCache)) || [];
       modalLayoutTemp = obterLayoutColunas(modalOrdemTipoAtual, grupos);
 
       const selCol = document.getElementById("modalOrdemColunasSelect");
@@ -4006,8 +4033,10 @@
 
       if (modalOrdemTipoAtual === "dev") {
         renderizarBlocosDev(devGruposCache);
-      } else {
+      } else if (modalOrdemTipoAtual === "n1n2") {
         renderizarBlocosN1N2(n1n2GruposCache);
+      } else if (modalOrdemTipoAtual === "cert") {
+        renderizarBlocosCert(certGruposCache);
       }
 
       fecharModalOrdemCards();
@@ -4071,8 +4100,10 @@
 
       if (tipo === "dev") {
         renderizarBlocosDev(devGruposCache);
-      } else {
+      } else if (tipo === "n1n2") {
         renderizarBlocosN1N2(n1n2GruposCache);
+      } else if (tipo === "cert") {
+        renderizarBlocosCert(certGruposCache);
       }
     }
 
@@ -4615,6 +4646,7 @@
     // MÓDULO 4: CERTIFICADOS SSL (DETALHADO COM DATAS, PADRÃO E EXIGÊNCIA DE TOKEN)
     // ============================================================================
     let certsCache = [];
+    let certGruposCache = [];
 
     async function sincronizarGoogleSheetsCertificados() {
       const btn = document.getElementById("btnSyncSheets");
@@ -4688,6 +4720,20 @@
       "INFRA": "Infraestrutura Corporativa egSYS"
     };
 
+    const CORES_ESTADOS_MAP = {
+      "SC": "#7C3AED",
+      "PR": "#1D4ED8",
+      "RO": "#0369A1",
+      "TO": "#166534",
+      "AM": "#065F46",
+      "GM": "#6D28D9",
+      "SYSGM": "#6D28D9",
+      "MT": "#92400E",
+      "PI": "#0284C7",
+      "INFRA": "#0F766E",
+      "EGSYS": "#0F766E"
+    };
+
     function formatarNomeEstado(sigla) {
       const s = (sigla || "INFRA").toUpperCase();
       return NOMES_ESTADOS_MAP[s] ? `${NOMES_ESTADOS_MAP[s]} (${s})` : s;
@@ -4695,8 +4741,10 @@
 
     async function carregarCertificados(silencioso = false) {
       const tbody = document.getElementById("tabelaCertificadosCorpo");
-      if (!silencioso && tbody) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 25px; color: var(--text-sub); font-weight:600;">⏳ Consultando certificados SSL e validade de domínios...</td></tr>`;
+      const grid = document.getElementById("certGridEstados");
+      if (!silencioso) {
+        if (tbody) tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 25px; color: var(--text-sub); font-weight:600;">⏳ Consultando certificados SSL e validade de domínios...</td></tr>`;
+        if (grid) grid.innerHTML = `<div class="noc-grid-full" style="text-align:center; padding: 30px; color: var(--text-sub);">⏳ Carregando certificados em risco por estado...</div>`;
       }
 
       try {
@@ -4717,69 +4765,196 @@
         const badgeCount = document.getElementById("certCountBadge");
         if (badgeCount) badgeCount.textContent = resumo.total || 0;
 
-        // Card / Banner de Alerta Crítico (Agrupado e Aninhado por Estado, Ordenado por Vencimento)
-        const banner = document.getElementById("certAlertBanner");
-        const itemsBox = document.getElementById("certAlertItems");
-        if (resumo.has_alert && resumo.itens_alerta && resumo.itens_alerta.length > 0) {
-          if (banner) banner.style.display = "block";
-          if (itemsBox) {
-            const gruposAlerta = {};
-            resumo.itens_alerta.forEach(it => {
-              const uf = (it.state || 'INFRA').toUpperCase();
-              if (!gruposAlerta[uf]) gruposAlerta[uf] = [];
-              gruposAlerta[uf].push(it);
-            });
+        // Agrupamento dos certificados críticos / vencidos por estado (≤ 15 dias ou vencidos)
+        const itensCriticos = (resumo.itens_alerta && resumo.itens_alerta.length > 0)
+          ? resumo.itens_alerta
+          : (data.certificados || []).filter(c => parseInt(c.dias_restantes, 10) <= 15 || c.status === 'VENCIDO').map(c => ({
+              domain: c.domain,
+              host: c.host || '',
+              state: (c.state || 'INFRA').toUpperCase(),
+              dias: parseInt(c.dias_restantes, 10) || 0,
+              status: (parseInt(c.dias_restantes, 10) <= 0 || c.status === 'VENCIDO') ? 'VENCIDO' : 'CRÍTICO',
+              vence_em: c.valid_until || 'N/A',
+              precisa_token: c.precisa_token || 'Não'
+            }));
 
-            // Ordena dentro do estado por data de vencimento (mais urgentes primeiro)
-            Object.keys(gruposAlerta).forEach(uf => {
-              gruposAlerta[uf].sort((a, b) => (parseInt(a.dias, 10) || 0) - (parseInt(b.dias, 10) || 0));
-            });
+        const totalCriticosEl = document.getElementById("certCriticosCardsCount");
+        if (totalCriticosEl) totalCriticosEl.textContent = itensCriticos.length;
 
-            // Ordena estados pelos que têm vencimentos mais graves
-            const ufsAlerta = Object.keys(gruposAlerta).sort((a, b) => {
-              const minA = Math.min(...gruposAlerta[a].map(x => parseInt(x.dias, 10) || 0));
-              const minB = Math.min(...gruposAlerta[b].map(x => parseInt(x.dias, 10) || 0));
-              return minA - minB;
-            });
-
-            itemsBox.innerHTML = ufsAlerta.map(uf => `
-              <div class="cert-alert-state-group" style="margin-top: 10px; background: var(--card); border: 1px solid var(--border); border-left: 5px solid #dc2626; border-radius: 6px; padding: 12px 16px;">
-                <div style="font-weight: 900; font-size: 13.5px; color: var(--text); display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px;">
-                  <span>🏛️ Estado: <strong style="color:var(--accent);">${formatarNomeEstado(uf)}</strong></span>
-                  <span class="badge" style="background: #dc2626; color: #ffffff; font-size: 11px; font-weight: 900; border: 1px solid #b91c1c;">
-                    ${gruposAlerta[uf].length} certificado(s) crítico(s) ou vencido(s)
-                  </span>
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 6px;">
-                  ${gruposAlerta[uf].map(it => `
-                    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; background: var(--th-bg); padding:8px 14px; border-radius:4px; border: 1px solid var(--border); flex-wrap:wrap;">
-                      <div>
-                        <a href="https://${it.domain}" target="_blank" style="color:var(--link-color); font-weight:800; text-decoration:none; font-size:13px;">🔒 ${it.domain}</a>
-                        <span style="color:var(--text-sub); font-size:12px; margin-left:6px; font-weight:700;">(${it.host || 'Traefik Host'})</span> &mdash;
-                        <span style="color:#dc2626; font-weight:900; font-size:13px;">${it.dias <= 0 ? '⛔ JÁ VENCIDO (' + it.vence_em + ')' : '⚠️ Vence em ' + it.dias + ' dia(s) (' + it.vence_em + ')'}</span>
-                      </div>
-                      <div>
-                        <span style="font-size:12px; font-weight:700; color:var(--text-sub);">Renovação: <strong style="color:var(--text);">${it.precisa_token}</strong></span>
-                      </div>
-                    </div>
-                  `).join('')}
-                </div>
-              </div>
-            `).join('');
+        const badgeCards = document.getElementById("certCounterBadge");
+        if (badgeCards) {
+          if (itensCriticos.length > 0) {
+            badgeCards.classList.add("alert-state");
+          } else {
+            badgeCards.classList.remove("alert-state");
           }
-        } else {
-          if (banner) banner.style.display = "none";
         }
+
+        const mapaGrupos = {};
+        itensCriticos.forEach(it => {
+          const uf = (it.state || 'INFRA').toUpperCase();
+          if (!mapaGrupos[uf]) {
+            mapaGrupos[uf] = {
+              sigla: uf,
+              nome: formatarNomeEstado(uf),
+              cor: CORES_ESTADOS_MAP[uf] || '#26A69A',
+              items: []
+            };
+          }
+          mapaGrupos[uf].items.push(it);
+        });
+
+        // Ordena itens dentro de cada grupo por menor número de dias restantes
+        Object.keys(mapaGrupos).forEach(uf => {
+          mapaGrupos[uf].items.sort((a, b) => (parseInt(a.dias, 10) || 0) - (parseInt(b.dias, 10) || 0));
+          mapaGrupos[uf].total = mapaGrupos[uf].items.length;
+          mapaGrupos[uf].hasVencido = mapaGrupos[uf].items.some(x => parseInt(x.dias, 10) <= 0);
+        });
+
+        // Ordena os grupos priorizando estados com os vencimentos mais urgentes
+        const ufsOrdenadas = Object.keys(mapaGrupos).sort((a, b) => {
+          const minA = Math.min(...mapaGrupos[a].items.map(x => parseInt(x.dias, 10) || 0));
+          const minB = Math.min(...mapaGrupos[b].items.map(x => parseInt(x.dias, 10) || 0));
+          return minA - minB;
+        });
+
+        certGruposCache = ufsOrdenadas.map(uf => mapaGrupos[uf]);
+
+        await sincronizarLayoutDoServidor("cert");
+        renderizarBlocosCert(certGruposCache);
 
         certsCache = data.certificados || [];
         filtrarTabelaCertificados();
 
       } catch (err) {
         console.warn("Falha ao carregar certificados SSL:", err);
-        if (!silencioso && tbody) {
-          tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 25px; color: var(--red); font-weight:700;">${err.message} <br/><button class="btn-action" onclick="carregarCertificados()" style="margin-top:10px;">🔄 Tentar Novamente</button></td></tr>`;
+        if (!silencioso) {
+          if (tbody) tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 25px; color: var(--red); font-weight:700;">${err.message} <br/><button class="btn-action" onclick="carregarCertificados()" style="margin-top:10px;">🔄 Tentar Novamente</button></td></tr>`;
+          if (grid) grid.innerHTML = `<div class="noc-grid-full" style="text-align:center; padding: 30px; color: var(--red);">${err.message}</div>`;
         }
       }
+    }
+
+    function renderizarBlocosCert(grupos) {
+      const grid = document.getElementById("certGridEstados");
+      if (!grid) return;
+
+      if (!grupos || grupos.length === 0) {
+        grid.innerHTML = `
+          <div class="noc-grid-full" style="text-align:center; padding: 45px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 8px;">
+            <div style="font-size: 36px; margin-bottom: 8px;">🎉</div>
+            <h3 style="margin: 0 0 6px 0; color: var(--text);">Zero Certificados SSL Vencidos ou em Risco Crítico</h3>
+            <p style="margin: 0; font-size: 13px; color: var(--text-sub);">Todos os certificados da infraestrutura estão operando com prazos seguros (&gt; 15 dias).</p>
+          </div>
+        `;
+        return;
+      }
+
+      const blocosMap = new Map();
+      grupos.forEach(grupo => {
+        const items = grupo.items || [];
+        const linhas = items.map(it => {
+          const isVencido = (parseInt(it.dias, 10) <= 0);
+          const statusBadge = isVencido
+            ? `<span class="badge" style="background: #dc2626; color: #ffffff; font-weight: 900; font-size: 10.5px; padding: 2px 7px; border-radius: 4px;">⛔ VENCIDO</span>`
+            : `<span class="badge" style="background: #ea580c; color: #ffffff; font-weight: 800; font-size: 10.5px; padding: 2px 7px; border-radius: 4px;">⚠️ ${it.dias} dia${it.dias !== 1 ? 's' : ''}</span>`;
+
+          return `
+            <tr class="${isVencido ? 'row-urgent' : ''}">
+              <td class="col-ticket" style="font-weight: 700;">
+                <a href="https://${escapeHtml(it.domain)}" target="_blank" style="color: var(--link-color); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                  <span>🔒</span> <span>${escapeHtml(it.domain)}</span>
+                </a>
+              </td>
+              <td class="col-summary">
+                <span style="font-size: 11.5px; color: var(--text); font-weight: 600;">${escapeHtml(it.host || 'Traefik Host')}</span>
+              </td>
+              <td class="col-date" style="text-align: center; font-weight: 600; font-size: 11.5px;">
+                ${escapeHtml(it.vence_em || '---')}
+              </td>
+              <td class="col-age" style="text-align: center;">
+                ${statusBadge}
+              </td>
+              <td style="font-size: 11px; color: var(--text); padding: 7px 10px;">
+                <span style="font-weight: 700; color: ${it.precisa_token && it.precisa_token.toLowerCase().includes('sim') ? '#dc2626' : 'var(--text-sub)'};">
+                  ${escapeHtml(it.precisa_token || 'Não (Automático)')}
+                </span>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        const alertIcon = grupo.hasVencido ? `<span class="alerta-icon">⛔</span>` : `<span class="alerta-icon">⚠️</span>`;
+        const alertCounterStyle = grupo.hasVencido
+          ? "background: #dc2626; color: #ffffff; font-weight: 900;"
+          : "background: #ea580c; color: #ffffff; font-weight: 800;";
+
+        const html = `
+          <div class="estado-bloco" id="card-cert-${grupo.sigla}" data-sigla="${grupo.sigla}">
+            <div class="estado-header" draggable="true" 
+                 ondragstart="onDashboardCardDragStart(event, 'cert', '${grupo.sigla}')"
+                 style="border-left-color: ${grupo.cor || '#dc2626'}; cursor: grab;" 
+                 title="Arraste pelo cabeçalho para mover este card para outra coluna">
+              <div class="estado-info">
+                <span style="font-size: 12px; color: var(--text-sub); margin-right: 4px; cursor: grab; user-select:none;" title="Arrastar para outra coluna">⠿</span>
+                <span class="estado-sigla" style="background: ${grupo.cor || '#dc2626'};">${grupo.sigla}</span>
+                <span class="estado-nome">${grupo.nome}</span>
+                ${alertIcon}
+              </div>
+              <div class="estado-counter" style="${alertCounterStyle}">
+                ${grupo.total} crítico${grupo.total !== 1 ? 's' : ''}
+              </div>
+            </div>
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th class="col-ticket" style="min-width: 170px;">DOMÍNIO / URL</th>
+                  <th class="col-summary" style="min-width: 130px;">HOST / AMBIENTE</th>
+                  <th class="col-date" style="text-align: center; width: 105px;">VENCIMENTO</th>
+                  <th class="col-age" style="text-align: center; width: 120px;">DIAS / STATUS</th>
+                  <th style="font-size: 10.5px; font-weight: 800; color: var(--text-sub); text-align: left; padding: 7px 10px; width: 140px;">TOKEN / MÉTODO</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${linhas}
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        blocosMap.set(grupo.sigla, { html, peso: items.length || 1, sigla: grupo.sigla });
+      });
+
+      distribuirEmColunasVisual("certGridEstados", blocosMap, "cert");
+    }
+
+    function filtrarBlocosCert(termo) {
+      const t = (termo || "").toLowerCase().trim();
+      if (!t) {
+        renderizarBlocosCert(certGruposCache);
+        return;
+      }
+
+      const filtrados = [];
+      certGruposCache.forEach(g => {
+        const matchingItems = (g.items || []).filter(it =>
+          (it.domain && it.domain.toLowerCase().includes(t)) ||
+          (it.host && it.host.toLowerCase().includes(t)) ||
+          (it.precisa_token && it.precisa_token.toLowerCase().includes(t)) ||
+          (g.nome && g.nome.toLowerCase().includes(t)) ||
+          (g.sigla && g.sigla.toLowerCase().includes(t))
+        );
+
+        if (matchingItems.length > 0) {
+          filtrados.push({
+            ...g,
+            total: matchingItems.length,
+            items: matchingItems
+          });
+        }
+      });
+
+      renderizarBlocosCert(filtrados);
     }
 
     function filtrarCertificadosPorCard(tipo) {

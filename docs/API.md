@@ -325,7 +325,7 @@ Lê os certificados gerenciados automaticamente pelo Traefik (`acme.json`) no ho
 Audita todos os certificados em estado crítico ou vencido (&le; 15 dias) e em janela de alerta (&le; 30 dias) e dispara e-mail formatado aos destinatários cadastrados com `alertas_certificados = 1`.
 
 ### GET `/api/v1/modules/noc/layout/{tipo}`
-Retorna a disposição customizada de colunas e cards salva para a esteira especificada (`tipo: 'dev'` ou `'n1n2'`).
+Retorna a disposição customizada de colunas e cards salva para a esteira especificada (`tipo: 'dev'`, `'n1n2'` ou `'cert'`).
 ```json
 {
   "status": "ok",
@@ -337,11 +337,11 @@ Retorna a disposição customizada de colunas e cards salva para a esteira espec
 ```
 
 ### POST `/api/v1/modules/noc/layout/{tipo}`
-Persiste a disposição customizada de colunas e cards no banco SQLite (`auth.db`), tabela `noc_layouts`.
+Persiste a disposição customizada de colunas e cards no banco SQLite (`auth.db`), tabela `noc_layouts` (`tipo: 'dev'`, `'n1n2'` ou `'cert'`).
 Payload:
 ```json
 {
-  "tipo": "dev",
+  "tipo": "cert",
   "num_cols": "3",
   "columns": [["SC", "PR"], ["AM", "TO"], ["RO", "GM"]]
 }
