@@ -1,5 +1,87 @@
 # egSYS JiraView — Changelog
 
+## [0.5.9] — 2026-09-18 (PSEI-322)
+
+### Added
+- `feat(ssl-state-grouping): Aninhamento Hierárquico por Estado e Ordenação Cronológica de Certificados SSL` — estruturação das ocorrências críticas e vencidas em cards dedicados por unidade federativa (`🏛️ Estado: [Nome]`), contendo badge de volumetria de risco, ordenação estrita dentro de cada estado por dias restantes (mais urgentes no topo) e ordenação geral dos estados pelo nível de gravidade mais imediato.
+
+### Changed
+- `ui(tv-sharp-contrast): Calibração de Contraste Máximo e Nitidez para Displays NOC e TVs` — redefinição cromática em ambos os temas:
+  - **Modo Claro**: Texto principal em Preto Absoluto (`#000000`) com peso tipográfico reforçado, textos de apoio em Ardósia Escura (`#1e293b`), divisórias e bordas em `#94a3b8` e links/chaves de chamados em Azul Profundo (`#0047b3`).
+  - **Modo Escuro**: Texto principal em Branco Puro (`#ffffff`), textos secundários em Prata Brilhante (`#e2e8f0`), bordas em `#374151` e links em Azul Celeste Elétrico (`#38bdf8`).
+  - **Badges de Status Sólidos**: Substituição de pílulas desbotadas/pastéis por badges com fundo 100% sólido e tipografia branca em negrito (`#dc2626` para Bloqueado/Urgente, `#d97706` para Alerta/Em Andamento, `#16a34a` para Concluído/Normal).
+
+### Fixed
+- `fix(row-urgent-red-shadow): Eliminação de Fundo Avermelhado e Haze em Chamados Urgentes` — remoção completa de `background-color: rgba(248, 81, 73, 0.18)` e texto rosa desbotado `#ff7b72` nas linhas `.clean-table tr.row-urgent td`, sanando o aspecto embaçado/desfocado visualizado à distância nas telas de monitoramento da sala de suporte.
+
+## [0.5.8] — 2026-09-18 (PSEI-321)
+
+### Added
+- `feat(rbac-5-tiers): Matriz Canônica de RBAC em 5 Níveis de Governança` — formalização dos papéis:
+  - `coordenador` (Nível 4): Acesso irrestrito aos 73 espaços Jira, módulos do NOC, relatórios executivos e gestão total de usuários.
+  - `n2` (Nível 3): Acesso pleno às abas operacionais do NOC e gestão delegada de usuários com salvaguarda estrita anti-escalada de privilégios.
+  - `n1` (Nível 2): Acesso exclusivo e fixo às 3 telas operacionais do NOC (Certificados SSL, Triagem N1 & N2 e Esteira de Desenvolvimento).
+  - `monitor` (Nível 1): Perfil dedicado a Kiosk / Wallboard de telas públicas e TVs da sala de suporte.
+  - `viewer` / `manager` (Nível 1): Acesso restrito ao respectivo portal estadual (`/painel_sc`, etc.).
+- `feat(kiosk-wallboard): Token Perpétuo de 365 Dias e Conta 'monitor' para Displays Contínuos` — seed do usuário `monitor` no banco SQLite (`auth.db`) com concessão de token JWT válido por 365 dias (`timedelta(days=365)`) e isenção de troca compulsória de senha (`must_change_password=0`), eliminando desconexões involuntárias nas TVs do NOC.
+- `feat(anti-privilege-escalation): Salvaguardas em Profundidade para N2 na API de Usuários` — dependência de autorização `require_user_manager` no backend (`/api/v1/auth/users`). Analistas N2 podem criar e gerenciar operadores N1, Monitor e Gestores Estaduais, mas qualquer tentativa de criar, alterar, redefinir senha ou excluir contas `coordenador` ou `n2` é terminantemente bloqueada com **HTTP 403 Forbidden**.
+- `feat(smart-autorefresh): Auto-Refresh Não-Destrutivo (45s) com Salvaguarda de Drawer e Modais` — polling periódico automático nas 4 visões críticas da operação (*Observabilidade do Espaço Selecionado*, *NOC JIRA — Esteira de Desenvolvimento*, *NOC JIRA — Esteira de Triagem N1 & N2* e *Monitor de Certificados SSL da Infraestrutura*).
+  - Pausa imediata de refresh caso a gaveta lateral de diagnóstico (`#drawer.open`), qualquer modal de edição ou campos de formulário estejam com foco ativo, impedindo fechamento abrupto na leitura de tickets pelo operador.
+  - Tratamento resiliente e silencioso de requisições de background, eliminando logouts silenciosos por 401 transitório e retenção visual do último estado válido.
+
+### Fixed
+- `fix(analise-dev): Resiliência de Acesso e Restauração dos Cards da Esteira de Desenvolvimento` — correção no endpoint `/api/v1/modules/analise-dev/issues` para leitura aberta e resiliente, alinhado à esteira de Triagem N1&N2, sanando o desaparecimento transitório dos cards em tokens de wallboard e restabelecendo os 47 chamados em desenvolvimento ativo.
+
+## [0.5.7] — 2026-09-18 (PSEI-319)
+
+### Added
+- `feat(layout-db): Persistência Dupla e Automática de Layouts dos Cards (Browser + SQLite)` — criação da tabela `noc_layouts` no SQLite `/app/data/auth.db` e endpoints REST `/api/v1/modules/noc/layout/{tipo}` (GET e POST). Toda alteração de ordem ou coluna feita no painel da coordenação é persistida automaticamente no banco corporativo, garantindo recuperação contínua entre computadores, celulares e sessões.
+- `feat(mail-unification): Central Unificada de Disparos de E-mail` — unificação de gatilhos operacionais na aba `📧 Relatórios & Notificações` com 2 cards especializados: *Relatório Executivo — Esteira Dev* (`🚀 Disparar Esteira Dev`) e *Alertas de Certificados SSL da Infra* (`🚨 Disparar Alertas SSL Agora`).
+
+### Changed
+- `ui(cleanup): Remoção Definitiva da Aba Redundante '🌐 Central NOC — Panorama Multi-Estado'` — desativação do botão `btnTabModNoc`, exclusão do container `view-mod-noc` e limpeza dos controladores JavaScript, simplificando o menu da coordenação.
+- `ui(cert-dedup): Desduplicação de Botão de Disparo em Certificados SSL` — remoção do botão isolado na aba de Certificados, canalizando o controle para a Central de Relatórios onde ficam os destinatários e histórico de envios.
+
+## [0.5.6] — 2026-09-18 (PSEI-318)
+
+### Added
+- `feat(drag-and-drop): Disposição Livre dos Cards NOC via Drag-and-Drop Direto no Monitor` — suporte a arrasto nativo pelos cabeçalhos dos blocos de estado (`draggable="true"`, grip visual `⠿`, cursor `grab`) permitindo mover qualquer card entre colunas diretamente na tela principal com feedback visual `drag-hover` e recálculo instantâneo.
+- `feat(kanban-editor): Visão Kanban de Colunas no Modal '⚙️ Posição dos Cards'` — renderização das colunas lado a lado com controles de 1 clique (`◀` e `▶` para mover entre colunas, `▲` e `▼` para reordenar dentro da coluna) e suporte a seletor dinâmico de 2 a 5 colunas.
+
+## [0.5.5] — 2026-09-18 (PSEI-317)
+
+### Added
+- `feat(noc-pos): Editor Interativo de Posicionamento de Cards e Densidade de Colunas` — criação do modal `⚙️ Posição dos Cards` permitindo reordenação da sequência dos estados e ajuste de densidade (2 a 5 colunas ou auto adaptativo).
+- `ui(density): Otimização de Espaço Útil e Empacotamento Masonry Flexbox` — eliminação de vácuos visuais verticais e horizontais, garantindo ocupação de 100% da largura útil da tela do monitor.
+
+## [0.5.4] — 2026-09-18 (PSEI-316)
+
+### Added
+- `feat(cert-cards): Cards de Síntese Visual de Certificados SSL da Infraestrutura` — mostradores em grade: *Total Monitorados (92)*, *Em Dia (> 30d)*, *Alerta de Vencimento (&le; 30d)* e *Vencidos ou Críticos (&le; 15d)* com filtros reativos em 1 clique.
+- `feat(recipients-crud): Módulo de Gestão de Destinatários de Notificações` — tabela `email_recipients` com CRUD visual na aba de relatórios, permitindo selecionar individualmente quais destinatários recebem relatórios executivos do Jira e/ou alertas de certificados.
+
+## [0.5.3] — 2026-09-18 (PSEI-315)
+
+### Added
+- `feat(sheets-sync): Sincronização Bidirecional Google Sheets & Probe SSL em Tempo Real` — integração com a planilha mestre do Google Sheets (`1yO1L72qkR1-SXSBGrYtTe9xtm1QCSVcfKqRqzSjbtGU`) e probe TLS ativo para atualização automática de datas de emissão e expiração de certificados.
+
+## [0.5.2] — 2026-09-18 (PSEI-314)
+
+### Added
+- `feat(cert-monitor): Monitor e Alertas de Certificados SSL da Infraestrutura egSYS` — tabela `ssl_certificates` populada com 92 domínios da infraestrutura, cálculo de dias restantes, alertas visuais e exportação.
+
+## [0.5.1] — 2026-09-18 (PSEI-313)
+
+### Added
+- `feat(reports-smtp): Relatórios Executivos Semanais por E-mail via SMTP Corporativo` — compilação automática das tarefas em Análise de Desenvolvimento e envio HTML formatado via Gmail SMTP (`orion@egsys.com.br`) com trilha de auditoria na tabela `report_history`.
+
+## [0.5.0] — 2026-09-18 (PSEI-312)
+
+### Added
+- `feat(node-red-migration): Absorção e Modernização Modular do Node-RED Tab 1 & Tab 2` — migração soberana das esteiras legadas do Node-RED para endpoints FastAPI nativos e componentes reativos na coordenação (`Esteira Dev` e `Triagem N1 & N2`), viabilizando o desligamento do container legado `jira-dashboard`.
+
+---
+
 ## [0.4.3] — 2026-09-17 (PSEI-311)
 
 ### Fixed

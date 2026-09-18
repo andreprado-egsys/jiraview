@@ -26,85 +26,89 @@
   <style>
     :root {
       color-scheme: light;
-      --bg: #f4f5f7;
+      --bg: #edf1f7;
       --card: #ffffff;
-      --border: #dfe1e6;
-      --text: #172b4d;
-      --text-sub: #6b778c;
-      --header-bg: #0747a6;
+      --border: #94a3b8;
+      --text: #000000;
+      --text-sub: #1e293b;
+      --header-bg: #003399;
       --header-text: #ffffff;
-      --header-btn-bg: rgba(255, 255, 255, 0.18);
-      --header-btn-border: rgba(255, 255, 255, 0.35);
-      --th-bg: #fafbfc;
-      --tr-border: #ebecf0;
-      --tr-hover: #f0f4f9;
+      --header-btn-bg: rgba(255, 255, 255, 0.25);
+      --header-btn-border: rgba(255, 255, 255, 0.5);
+      --th-bg: #e2e8f0;
+      --tr-border: #cbd5e1;
+      --tr-hover: #e2e8f0;
       --input-bg: #ffffff;
-      --input-border: #dfe1e6;
-      --input-text: #172b4d;
-      --chip-bg: #e9f2ff;
-      --chip-text: #0c66e4;
-      --chip-border: #cce0ff;
-      --link-color: #0c66e4;
-      --accent: #0c66e4;
-      --green: #00875a;
-      --yellow: #ffab00;
-      --red: #de350b;
+      --input-border: #64748b;
+      --input-text: #000000;
+      --chip-bg: #dbeafe;
+      --chip-text: #0047b3;
+      --chip-border: #93c5fd;
+      --link-color: #0047b3;
+      --accent: #0047b3;
+      --green: #15803d;
+      --yellow: #b45309;
+      --red: #b91c1c;
       --drawer-bg: #ffffff;
-      --drawer-overlay: rgba(9, 30, 66, 0.54);
-      --posse-egsys-bg: #e9f2ff;
-      --posse-egsys-border: #b3d4ff;
-      --posse-egsys-text: #0052cc;
-      --posse-cliente-bg: #fff7e6;
-      --posse-cliente-border: #ffe380;
-      --posse-cliente-text: #974f00;
-      --step-done: #00875a;
-      --step-active: #0c66e4;
-      --step-pending: #a5b2c6;
+      --drawer-overlay: rgba(0, 0, 0, 0.7);
+      --posse-egsys-bg: #dbeafe;
+      --posse-egsys-border: #60a5fa;
+      --posse-egsys-text: #003399;
+      --posse-cliente-bg: #fef3c7;
+      --posse-cliente-border: #fcd34d;
+      --posse-cliente-text: #92400e;
+      --step-done: #15803d;
+      --step-active: #0047b3;
+      --step-pending: #475569;
     }
 
     [data-theme="dark"], html.dark, body.dark {
       color-scheme: dark !important;
-      --bg: #0d1117;
-      --card: #161b22;
-      --border: #30363d;
-      --text: #f0f6fc;
-      --text-sub: #8b949e;
-      --header-bg: #161b22;
-      --header-text: #f0f6fc;
-      --header-btn-bg: rgba(255, 255, 255, 0.1);
-      --header-btn-border: rgba(255, 255, 255, 0.2);
-      --th-bg: #1c2128;
-      --tr-border: #21262d;
-      --tr-hover: #1f242c;
-      --input-bg: #0d1117;
-      --input-border: #30363d;
-      --input-text: #f0f6fc;
-      --chip-bg: #1c2b42;
-      --chip-text: #58a6ff;
-      --chip-border: #388bfd40;
-      --link-color: #58a6ff;
-      --accent: #388bfd;
-      --green: #238636;
-      --yellow: #d29922;
-      --red: #f85149;
-      --drawer-bg: #161b22;
-      --drawer-overlay: rgba(0, 0, 0, 0.75);
-      --posse-egsys-bg: #1c2b42;
-      --posse-egsys-border: #388bfd66;
-      --posse-egsys-text: #79c0ff;
-      --posse-cliente-bg: #2d2208;
-      --posse-cliente-border: #d2992266;
-      --posse-cliente-text: #f0883e;
-      --step-done: #238636;
-      --step-active: #388bfd;
-      --step-pending: #484f58;
+      --bg: #030712;
+      --card: #0b0f19;
+      --border: #374151;
+      --text: #ffffff;
+      --text-sub: #e2e8f0;
+      --header-bg: #0b0f19;
+      --header-text: #ffffff;
+      --header-btn-bg: rgba(255, 255, 255, 0.18);
+      --header-btn-border: rgba(255, 255, 255, 0.35);
+      --th-bg: #111827;
+      --tr-border: #1f2937;
+      --tr-hover: #1f2937;
+      --input-bg: #030712;
+      --input-border: #4b5563;
+      --input-text: #ffffff;
+      --chip-bg: #172554;
+      --chip-text: #38bdf8;
+      --chip-border: #1d4ed8;
+      --link-color: #38bdf8;
+      --accent: #38bdf8;
+      --green: #16a34a;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --drawer-bg: #0b0f19;
+      --drawer-overlay: rgba(0, 0, 0, 0.85);
+      --posse-egsys-bg: #172554;
+      --posse-egsys-border: #2563eb;
+      --posse-egsys-text: #93c5fd;
+      --posse-cliente-bg: #451a03;
+      --posse-cliente-border: #b45309;
+      --posse-cliente-text: #fde047;
+      --step-done: #16a34a;
+      --step-active: #38bdf8;
+      --step-pending: #4b5563;
     }
 
     * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
       background-color: var(--bg);
       color: var(--text);
       transition: background-color 0.2s ease, color 0.2s ease;
@@ -193,9 +197,10 @@
     .btn-action:hover { filter: brightness(1.2); }
 
     .container {
-      padding: 24px;
-      max-width: 1540px;
+      padding: 20px 24px;
+      max-width: 100%;
       margin: 0 auto;
+      box-sizing: border-box;
     }
 
     .section-header {
@@ -899,6 +904,11 @@
       visibility: visible;
       display: flex;
     }
+    #modalOrdemCards.open {
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: flex !important;
+    }
     .modal-dialog {
       background: var(--drawer-bg);
       border: 1px solid var(--border);
@@ -947,6 +957,57 @@
       justify-content: space-between;
       align-items: center;
       background: var(--th-bg);
+    }
+
+    /* Estilos do Editor de Ordem dos Cards */
+    .order-state-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      gap: 10px;
+      transition: all 0.15s ease;
+    }
+    .order-state-item:hover {
+      border-color: var(--accent);
+      background: var(--chip-bg);
+    }
+    .order-state-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+    .order-pos-num {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-sub);
+      width: 22px;
+      text-align: center;
+    }
+    .order-btn-move {
+      background: var(--chip-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      transition: all 0.15s ease;
+    }
+    .order-btn-move:hover:not(:disabled) {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .order-btn-move:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
     }
     .multi-projects-grid {
       display: grid;
@@ -1030,6 +1091,359 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* ESTEIRA DE DESENVOLVIMENTO — LAYOUT MODULADO ORIGINAL */
+    .noc-esteira-header {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 3px solid #26a69a;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .noc-esteira-titles h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .noc-esteira-titles .noc-sub {
+      margin: 2px 0 0;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-sub);
+    }
+    .noc-counter-badge {
+      background: #21262d;
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: 8px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid #30363d;
+    }
+    .noc-counter-badge.alert-state {
+      background: #dc2626 !important;
+      border-color: #ef4444 !important;
+    }
+    .noc-count-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .noc-count-value {
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    /* CONTEÚDO MODULADO: CONTAINER MASONRY FULL-WIDTH (ZERO ESPAÇOS EM BRANCO) */
+    .noc-content-grid {
+      width: 100%;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .noc-masonry-container {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      width: 100%;
+      align-items: flex-start;
+      box-sizing: border-box;
+    }
+
+    .noc-masonry-col {
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+      box-sizing: border-box;
+      transition: background 0.15s ease, outline 0.15s ease;
+    }
+
+    .noc-masonry-col.drag-hover {
+      background: rgba(56, 139, 253, 0.08);
+      outline: 2px dashed var(--accent);
+      border-radius: 8px;
+    }
+
+    .modal-coluna-box.drag-hover {
+      background: rgba(56, 139, 253, 0.15) !important;
+      border-color: var(--accent) !important;
+    }
+
+    @media (max-width: 768px) {
+      .noc-masonry-container {
+        flex-direction: column;
+      }
+    }
+
+    /* MENSAGEM OU PLACEHOLDER DENTRO DO GRID/MASONRY */
+    .noc-grid-full {
+      width: 100%;
+      display: block;
+    }
+
+    /* BLOCO POR ESTADO */
+    .estado-bloco {
+      background: var(--card);
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      margin-bottom: 0;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .estado-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 10px;
+      background: var(--th-bg);
+      border-bottom: 1px solid var(--border);
+      border-left: 4px solid #26a69a;
+    }
+    .estado-info {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .estado-sigla {
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .estado-nome {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .alerta-icon {
+      font-size: 13px;
+    }
+    .estado-counter {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-sub);
+      background: var(--chip-bg);
+      padding: 2px 7px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .estado-counter-alert {
+      background: #dc2626 !important;
+      color: #ffffff !important;
+      border-color: #b91c1c !important;
+      font-weight: 900 !important;
+    }
+
+    /* TABELA DO ESTADO COMPACTA (ALTA DENSIDADE VISUAL & NITIDEZ TV) */
+    .clean-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .clean-table th {
+      background: var(--th-bg);
+      padding: 6px 9px;
+      text-align: left;
+      font-size: 11px;
+      color: var(--text);
+      font-weight: 800;
+      border-bottom: 2px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      line-height: 1.3;
+    }
+    .clean-table td {
+      padding: 6px 9px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--text);
+    }
+    .clean-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .clean-table tbody tr:hover td {
+      background-color: rgba(56, 139, 253, 0.08);
+    }
+
+    /* LARGURAS */
+    .clean-table .col-ticket { width: 22%; font-size: 12.5px; white-space: nowrap; font-weight: 800; }
+    .clean-table .col-summary { width: 52%; font-size: 12.5px; }
+    .clean-table .col-date { width: 16%; font-size: 11.5px; font-weight: 700; color: var(--text-sub); white-space: nowrap; }
+    .clean-table .col-age { width: 10%; text-align: center; white-space: nowrap; }
+
+    /* LINHA URGENTE: ZERO SOMBRA/FUNDO VERMELHO ATRÁS (MANTÉM FUNDO LIMPO E CONTRASTADO) */
+    .clean-table tr.row-urgent td {
+      background-color: transparent !important;
+      color: var(--text) !important;
+    }
+    .clean-table tr.row-urgent td a {
+      color: var(--link-color) !important;
+      font-weight: 800;
+    }
+    .clean-table tr.row-urgent td .text-title {
+      color: var(--text) !important;
+      font-weight: 700;
+    }
+
+    /* PILLS DE IDADE - CORES SÓLIDAS E ULTRA CONTRASTADAS (TEXTO BRANCO NÍTIDO) */
+    .status-pill {
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 900;
+      display: inline-block;
+      min-width: 36px;
+      text-align: center;
+      line-height: 1.25;
+      letter-spacing: 0.3px;
+    }
+    .badge-green { background: #16a34a; color: #ffffff; border: 1px solid #15803d; }
+    .badge-yellow { background: #d97706; color: #ffffff; border: 1px solid #b45309; }
+    .badge-red { background: #dc2626; color: #ffffff; border: 1px solid #b91c1c; }
+    .badge-grey { background: #475569; color: #ffffff; border: 1px solid #334155; }
+
+    .clean-table .col-ticket a {
+      color: var(--link-color);
+      font-weight: 800;
+      text-decoration: none;
+      font-size: 12.5px;
+    }
+    .clean-table .col-ticket a:hover {
+      text-decoration: underline;
+    }
+    .clean-table .text-title {
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0;
+      line-height: 1.35;
+      font-size: 12.5px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-word;
+    }
+
+    /* RODAPÉ DO MÓDULO ESTEIRA */
+    .noc-footer {
+      background: var(--card);
+      padding: 12px 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* BADGES DE CERTIFICADOS */
+    .badge-token-sim {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-token-nao {
+      background: rgba(35, 134, 54, 0.15);
+      color: #3fb950;
+      border: 1px solid rgba(35, 134, 54, 0.35);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Cards e Mostradores Premium - Padrão Painel do Cliente */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .card {
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-color: var(--accent);
+    }
+    .card.active-filter {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+    .card .label {
+      font-size: 12px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+    .card .value {
+      font-size: 28px;
+      font-weight: 700;
+      margin-top: 6px;
+      color: var(--text);
+    }
+    .card small {
+      color: var(--text-sub);
+      font-size: 11px;
+    }
+    .card-indicator {
+      height: 4px;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
   </style>
 </head>
 <body>
@@ -1038,8 +1452,12 @@
     <div class="header-left">
       <h1>👑 egSYS JiraView</h1>
       <span class="badge-role">Coordenação</span>
-      <nav class="nav-tabs">
+      <nav class="nav-tabs" id="mainNavTabs">
         <button id="btnTabObs" class="nav-tab active" onclick="trocarAba('observabilidade')">📊 Monitoramento & Espaços</button>
+        <button id="btnTabModDev" class="nav-tab" style="display:none;" onclick="trocarAba('mod-dev')">📐 Análise Dev</button>
+        <button id="btnTabModN1N2" class="nav-tab" style="display:none;" onclick="trocarAba('mod-n1n2')">📟 Triagem N1 & N2</button>
+        <button id="btnTabModMail" class="nav-tab" style="display:none;" onclick="trocarAba('mod-mail')">📧 Relatórios</button>
+        <button id="btnTabModCert" class="nav-tab" style="display:none;" onclick="trocarAba('mod-cert')">🛡️ Certificados SSL</button>
         <button id="btnTabUsers" class="nav-tab" onclick="trocarAba('usuarios')">👥 Gestão de Usuários</button>
       </nav>
     </div>
@@ -1145,7 +1563,10 @@
       </div>
 
       <button id="theme-btn" class="btn-action" onclick="toggleTheme()">🌓 Tema</button>
-      <div id="userDisplay" style="font-size:12px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);padding:6px 12px;border-radius:6px;font-weight:600;">👤 <span id="userDisplayName">Coordenação</span></div>
+      <div id="userDisplay" style="font-size:12px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);padding:6px 12px;border-radius:6px;font-weight:600;">
+        👤 <span id="userDisplayName">Coordenação</span>
+        <span id="userRoleBadge" class="badge" style="font-size:10px;margin-left:4px;padding:2px 8px;border-radius:4px;background:rgba(234,179,8,0.2);color:#facc15;font-weight:700;">👑 Coordenação</span>
+      </div>
       <button class="btn-action" onclick="logout()" style="background:rgba(248,81,73,0.2);border-color:rgba(248,81,73,0.4);color:#ff7b72;" title="Sair da sessão">🚪 Sair</button>
     </div>
   </header>
@@ -1404,7 +1825,10 @@
               <label for="u_role">Perfil de Acesso</label>
               <select id="u_role" class="user-form-select">
                 <option value="manager" selected>Gestor Estadual (manager)</option>
-                <option value="viewer">Visualizador (viewer)</option>
+                <option value="viewer">Visualizador Geral (viewer)</option>
+                <option value="monitor">Monitor NOC / TV Sala de Suporte (monitor)</option>
+                <option value="n1">Analista N1 Suporte (n1)</option>
+                <option value="n2">Analista N2 Suporte (n2)</option>
                 <option value="admin">Coordenação / Admin (admin)</option>
               </select>
             </div>
@@ -1483,6 +1907,323 @@
       </div>
 
     </div> <!-- FIM view-usuarios -->
+
+
+
+    <!-- ============================================== -->
+    <!-- MÓDULO 2: ESTEIRA DE ANÁLISE DE DESENVOLVIMENTO-->
+    <!-- ============================================== -->
+    <div id="view-mod-dev" style="display:none;">
+      
+      <!-- CABEÇALHO EXECUTIVO NOC ESTEIRA -->
+      <div class="noc-esteira-header">
+        <div class="noc-esteira-titles">
+          <h2>📐 NOC JIRA &mdash; ESTEIRA DE DESENVOLVIMENTO</h2>
+          <div class="noc-sub">Triagem técnica, análise de engenharia e refinamento pré-sprint</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <input type="text" id="devBuscaInput" class="search-input" placeholder="🔍 Filtrar ticket, resumo ou estado..." oninput="filtrarBlocosDev(this.value)" style="width: 280px; height: 38px;" />
+          <div class="noc-counter-badge" id="devCounterBadge">
+            <span class="noc-count-label">TOTAL DE TASKS</span>
+            <span class="noc-count-value" id="devTotalCount">0</span>
+          </div>
+          <button class="btn-action" id="btnOrdemCardsDev" onclick="abrirModalOrdemCards('dev')" title="Organizar ordem e colunas dos cards de estado" style="height: 38px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; background: rgba(56, 139, 253, 0.15); border-color: var(--accent); color: var(--accent);">⚙️ Posição dos Cards</button>
+          <button class="btn-action" onclick="carregarAnaliseDevIssues()" style="height: 38px;">🔄 Atualizar Esteira</button>
+        </div>
+      </div>
+
+      <!-- GRID MODULADA POR ESTADO (MASONRY SEM VAZIOS VERTICAIS) -->
+      <div id="devGridEstados" class="noc-content-grid">
+        <div class="noc-grid-full" style="text-align:center; padding: 40px; color: var(--text-sub);">
+          ⏳ Carregando tarefas em Análise de Desenvolvimento...
+        </div>
+      </div>
+
+      <!-- RODAPÉ DO MÓDULO ESTEIRA -->
+      <div class="noc-footer" id="devFooter">
+        <span id="devFooterStatus" style="color: #059669; font-weight: 700;">● Tudo dentro do prazo</span>
+        <span id="devFooterUpdated" style="color: var(--text-sub);">Atualizado: --:--:--</span>
+      </div>
+
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MÓDULO 5: ESTEIRA DE TRIAGEM N1 & N2          -->
+    <!-- ============================================== -->
+    <div id="view-mod-n1n2" style="display:none;">
+      
+      <!-- CABEÇALHO EXECUTIVO NOC ESTEIRA N1/N2 -->
+      <div class="noc-esteira-header">
+        <div class="noc-esteira-titles">
+          <h2>📟 NOC JIRA &mdash; ESTEIRA DE TRIAGEM N1 & N2</h2>
+          <div class="noc-sub">Triagem técnica, análise de suporte N1/N2 e validação preliminar por estado</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <input type="text" id="n1n2BuscaInput" class="search-input" placeholder="🔍 Filtrar ticket, resumo, status ou estado..." oninput="filtrarBlocosN1N2(this.value)" style="width: 290px; height: 38px;" />
+          <div class="noc-counter-badge" id="n1n2CounterBadge">
+            <span class="noc-count-label">TOTAL DE TASKS N1/N2</span>
+            <span class="noc-count-value" id="n1n2TotalCount">0</span>
+          </div>
+          <button class="btn-action" id="btnOrdemCardsN1N2" onclick="abrirModalOrdemCards('n1n2')" title="Organizar ordem e colunas dos cards de estado" style="height: 38px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; background: rgba(56, 139, 253, 0.15); border-color: var(--accent); color: var(--accent);">⚙️ Posição dos Cards</button>
+          <button class="btn-action" onclick="carregarTriagemN1N2Issues()" style="height: 38px;">🔄 Atualizar Esteira</button>
+        </div>
+      </div>
+
+      <!-- GRID MODULADA POR ESTADO (MASONRY SEM VAZIOS VERTICAIS) -->
+      <div id="n1n2GridEstados" class="noc-content-grid">
+        <div class="noc-grid-full" style="text-align:center; padding: 40px; color: var(--text-sub);">
+          ⏳ Carregando tarefas em Triagem N1 & N2...
+        </div>
+      </div>
+
+      <!-- RODAPÉ DO MÓDULO ESTEIRA N1/N2 -->
+      <div class="noc-footer" id="n1n2Footer">
+        <span id="n1n2FooterStatus" style="color: #059669; font-weight: 700;">● Tudo dentro do prazo</span>
+        <span id="n1n2FooterUpdated" style="color: var(--text-sub);">Atualizado: --:--:--</span>
+      </div>
+
+    </div>
+    <div id="view-mod-mail" style="display:none;">
+      <div class="section-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <div>
+          <span class="section-title">📧 Central de Relatórios Executivos & E-mails</span>
+          <div style="font-size:12px; color:var(--text-sub); margin-top:2px;">
+            Envio automatizado (07h50) e sob demanda via SMTP Institucional seguro da egSYS
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding: 22px 24px; margin-bottom: 24px;">
+        <h3 style="font-size: 15px; margin-top: 0; margin-bottom: 6px; color: var(--text);">🚀 Central Unificada de Disparo Imediato</h3>
+        <p style="font-size: 12.5px; color: var(--text-sub); margin-bottom: 16px;">
+          Dispare sob demanda as notificações corporativas via SMTP Seguro egSYS. Os e-mails são enviados aos destinatários marcados na tabela abaixo.
+        </p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+          <!-- CARD A: RELATÓRIO ESTEIRA DEV -->
+          <div style="background: var(--th-bg); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
+            <div>
+              <div style="font-size: 13px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px;">
+                <span>📊 Relatório Executivo &mdash; Esteira Dev</span>
+              </div>
+              <div style="font-size: 11.5px; color: var(--text-sub); margin-top: 4px; line-height: 1.35;">
+                Compila todas as tarefas em <strong>Análise de Desenvolvimento</strong> por estado e envia aos cadastrados com a opção <em>Relatório Executivo</em>.
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <input type="text" id="mailDestinatariosInput" class="user-form-input" style="flex: 1; min-width: 160px; height: 34px; font-size: 12px;" placeholder="Destinatários extras (opcional)" />
+              <button class="btn-action" onclick="dispararRelatorioAnaliseDev()" id="btnDispararRelatorio" style="background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 700; height: 34px; font-size: 12px; padding: 0 14px; white-space: nowrap;">
+                🚀 Disparar Esteira Dev
+              </button>
+            </div>
+          </div>
+
+          <!-- CARD B: ALERTAS CERTIFICADOS SSL -->
+          <div style="background: var(--th-bg); border: 1px solid var(--border); border-left: 4px solid var(--red); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
+            <div>
+              <div style="font-size: 13px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px;">
+                <span>🚨 Alertas de Certificados SSL da Infra</span>
+              </div>
+              <div style="font-size: 11.5px; color: var(--text-sub); margin-top: 4px; line-height: 1.35;">
+                Audita e envia a lista de certificados <strong>críticos ou vencidos (&le; 15 dias)</strong> aos cadastrados com a opção <em>Alertas Certificados</em>.
+              </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end;">
+              <button class="btn-action" onclick="dispararAlertaCertificadosEmail()" id="btnSendCertAlertEmail" style="background: rgba(239, 68, 68, 0.15); color: var(--red); border-color: var(--red); font-weight: 700; height: 34px; font-size: 12px; padding: 0 16px; white-space: nowrap;">
+                🚨 Disparar Alertas SSL Agora
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GESTÃO DE DESTINATÁRIOS DE E-MAILS (RELATÓRIO EXECUTIVO & ALERTAS DE CERTIFICADOS) -->
+      <div class="card" style="padding: 20px; margin-bottom: 24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+          <div>
+            <h3 style="font-size: 15px; margin: 0; color: var(--text);">👥 Cadastro de Destinatários de Notificações</h3>
+            <div style="font-size: 12px; color: var(--text-sub); margin-top: 2px;">
+              Configure quem recebe o <strong>Relatório Executivo</strong> e/ou os <strong>Alertas de Certificados SSL</strong>
+            </div>
+          </div>
+          <button class="btn-action" onclick="carregarDestinatarios()" style="font-size: 12px; padding: 4px 10px;">
+            🔄 Atualizar Destinatários
+          </button>
+        </div>
+
+        <!-- Formulário rápido de novo destinatário -->
+        <div style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; background: var(--th-bg); padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px;">
+          <div style="flex: 1; min-width: 180px;">
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-sub); display: block; margin-bottom: 4px;">NOME COMPLETO</label>
+            <input type="text" id="novoRecipNome" class="user-form-input" placeholder="Ex: Alexandre Publio" style="height: 36px;" />
+          </div>
+          <div style="flex: 1.2; min-width: 220px;">
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-sub); display: block; margin-bottom: 4px;">E-MAIL CORPORATIVO</label>
+            <input type="email" id="novoRecipEmail" class="user-form-input" placeholder="Ex: alexandre.publio@egsys.com.br" style="height: 36px;" />
+          </div>
+          <div style="display: flex; gap: 14px; align-items: center; height: 36px;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">
+              <input type="checkbox" id="novoRecipRelatorio" checked /> Relatório Executivo
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">
+              <input type="checkbox" id="novoRecipCertificados" checked /> Alertas Certificados
+            </label>
+          </div>
+          <button class="btn-action" onclick="cadastrarDestinatario()" style="background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 700; height: 36px; padding: 0 16px;">
+            ➕ Cadastrar
+          </button>
+        </div>
+
+        <!-- Tabela de Destinatários Cadastrados -->
+        <div class="table-container" style="border: 1px solid var(--border); border-radius: 6px;">
+          <table>
+            <thead>
+              <tr style="background: var(--th-bg);">
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th style="text-align: center; width: 170px;">📊 Relatório Executivo</th>
+                <th style="text-align: center; width: 170px;">🛡️ Alertas Certificados</th>
+                <th style="text-align: center; width: 90px;">Status</th>
+                <th style="text-align: right; width: 150px;">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaDestinatariosCorpo">
+              <tr><td colspan="6" style="text-align:center; padding: 20px; color: var(--text-sub);">Carregando destinatários...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="padding: 0; overflow: hidden;">
+        <div style="padding: 16px 20px; background: var(--th-bg); border-bottom: 1px solid var(--border);">
+          <span style="font-weight: 700; font-size: 13px; color: var(--text);">Histórico Recente de Disparos</span>
+        </div>
+        <div class="table-container" style="border:none;">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 160px;">Data / Hora</th>
+                <th style="width: 140px;">Tipo</th>
+                <th>Destinatários</th>
+                <th style="width: 90px; text-align: center;">Tarefas</th>
+                <th style="width: 110px;">Status</th>
+                <th>Detalhes</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaHistoricoRelatoriosCorpo">
+              <tr><td colspan="6" style="text-align:center; padding: 25px; color: var(--text-sub);">Carregando histórico...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MÓDULO 4: MONITOR & WEBHOOK DE CERTIFICADOS SSL -->
+    <!-- ============================================== -->
+    <div id="view-mod-cert" style="display:none;">
+      <div class="section-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <div>
+          <span class="section-title">🛡️ Monitor de Certificados SSL da Infraestrutura</span>
+          <div style="font-size:12px; color:var(--text-sub); margin-top:2px;">
+            Auditoria preventiva de certificados SSL, expiração, renovações automáticas e exigência de tokens DNS/Registro.br
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <button class="btn-action" onclick="sincronizarGoogleSheetsCertificados()" id="btnSyncSheets" style="background: rgba(16, 185, 129, 0.15); color: var(--green); border-color: var(--green); font-weight: 600;">
+            📊 Sincronizar Planilha Google &amp; Probe SSL
+          </button>
+          <button class="btn-action" onclick="sincronizarTraefikCertificados()" id="btnSyncTraefik" style="background: rgba(56, 139, 253, 0.15); color: var(--accent); border-color: var(--accent); font-weight: 600;">
+            ⚡ Sincronizar Traefik (acme.json)
+          </button>
+          <button class="btn-action" onclick="carregarCertificados()">🔄 Atualizar Status</button>
+        </div>
+      </div>
+
+      <!-- CARDS DE RESUMO ANALÍTICO — PADRÃO PAINEL DO CLIENTE -->
+      <div class="cards" id="certCardsGrid" style="margin-bottom: 20px;">
+        <div class="card cert-card-filter active-filter" id="card-cert-todos" onclick="filtrarCertificadosPorCard('todos')" title="Clique para ver todos os domínios monitorados">
+          <div class="label">🌐 TOTAL MONITORADOS</div>
+          <div class="value" id="certTotal">92</div>
+          <small>Domínios e hosts cadastrados</small>
+          <div class="card-indicator" style="background:var(--accent);"></div>
+        </div>
+        <div class="card cert-card-filter" id="card-cert-validos" onclick="filtrarCertificadosPorCard('validos')" title="Clique para filtrar certificados em dia (> 30 dias)">
+          <div class="label" style="color:var(--green);">✅ EM DIA (&gt; 30 DIAS)</div>
+          <div class="value" id="certOk" style="color:var(--green);">62</div>
+          <small>Operação regular e segura</small>
+          <div class="card-indicator" style="background:var(--green);"></div>
+        </div>
+        <div class="card cert-card-filter" id="card-cert-alerta" onclick="filtrarCertificadosPorCard('alerta')" title="Clique para filtrar certificados em alerta (16 a 30 dias)">
+          <div class="label" style="color:var(--yellow);">⚠️ ALERTA DE VENCIMENTO (&le; 30D)</div>
+          <div class="value" id="certAlerta" style="color:var(--yellow);">9</div>
+          <small>Janela preventiva de renovação</small>
+          <div class="card-indicator" style="background:var(--yellow);"></div>
+        </div>
+        <div class="card cert-card-filter" id="card-cert-criticos" onclick="filtrarCertificadosPorCard('criticos')" title="Clique para filtrar vencidos ou críticos (≤ 15 dias)">
+          <div class="label" style="color:var(--red);">🚨 VENCIDOS OU CRÍTICOS (&le; 15D)</div>
+          <div class="value" id="certVencidos" style="color:var(--red);">21</div>
+          <small>Exigem ação imediata</small>
+          <div class="card-indicator" style="background:var(--red);"></div>
+        </div>
+      </div>
+
+      <!-- CARD DE ALERTA CRÍTICO (CONDICIONAL - ZERO FUNDO VERMELHO ATRÁS) -->
+      <div id="certAlertBanner" style="display:none; background: var(--card); border: 2px solid var(--border); border-left: 6px solid #dc2626; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px;">
+        <div style="display:flex; align-items:center; gap:8px; color:#dc2626; font-weight:900; font-size:14px; margin-bottom:8px;">
+          <span>🚨 ATENÇÃO: CERTIFICADOS EXPIRADOS OU COM VENCIMENTO EM MENOS DE 15 DIAS</span>
+        </div>
+        <div id="certAlertItems" style="font-size:12px; color:var(--text); line-height:1.6;"></div>
+      </div>
+
+      <!-- LISTAGEM COMPLETA E DETALHADA DOS CERTIFICADOS -->
+      <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 24px;">
+        <div style="padding: 16px 20px; background: var(--th-bg); border-bottom: 1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-weight: 700; font-size: 13px; color: var(--text);">Auditoria de Domínios & Certificados SSL</span>
+            <span id="certCountBadge" class="badge-role" style="background:var(--accent);">0</span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <select id="certFilterStatus" class="select-control" style="height:32px; font-size:12px;" onchange="filtrarTabelaCertificados()">
+              <option value="todos">Todos os Status</option>
+              <option value="criticos">Críticos / Vencidos (&le; 15d)</option>
+              <option value="alerta">Em Alerta (&le; 30d)</option>
+              <option value="validos">Válidos (&gt; 30d)</option>
+            </select>
+            <input type="text" id="certBuscaInput" class="search-input" placeholder="🔍 Filtrar domínio, host, token..." oninput="filtrarTabelaCertificados()" style="max-width: 240px; height: 32px;" />
+          </div>
+        </div>
+        <div class="table-container" style="border:none;">
+          <table>
+            <thead>
+              <tr>
+                <th>Domínio / URL</th>
+                <th style="width: 150px;">Ambiente / Host</th>
+                <th style="width: 110px; text-align: center;">Renovado Em</th>
+                <th style="width: 110px; text-align: center;">Vence Em</th>
+                <th style="width: 130px; text-align: center;">Dias & Status</th>
+                <th style="width: 180px;">Padrão do Certificado</th>
+                <th style="width: 160px; text-align: center;">Precisa de Token?</th>
+                <th style="width: 170px;">Método de Renovação</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaCertificadosCorpo">
+              <tr><td colspan="8" style="text-align:center; padding: 25px; color: var(--text-sub);">Carregando status dos certificados...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="padding: 20px; background: rgba(56, 139, 253, 0.05); border: 1px dashed var(--accent);">
+        <h4 style="margin: 0 0 8px 0; color: var(--accent); font-size: 14px;">📡 Sondas e Ingestão Automática de Certificados</h4>
+        <p style="font-size: 12px; color: var(--text-sub); margin: 0 0 10px 0;">
+          Os certificados gerenciados pelo Traefik local são lidos automaticamente do <code>acme.json</code>. Para servidores estaduais remotos (SC, TO, AM, RO, GM), envie o webhook de telemetria SSL:
+        </p>
+        <code style="display: block; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; font-size: 12px; color: var(--text); user-select: all;">
+          curl -X POST https://suporte-monitor.egsys.siseg.tech/api/v1/modules/certificates/webhook-legacy -H "Content-Type: application/json" -d '{"states": {"SC": {"hosts": [{"domain": "sysait.pm.sc.gov.br", "daysLeft": 42, "validUntil": "30/10/2026", "validFrom": "15/07/2026", "issuer": "Let'\''s Encrypt"}]}}}'
+        </code>
+      </div>
+    </div>
 
   </div> <!-- FIM container -->
 
@@ -1568,7 +2309,10 @@
               <label for="edit_u_role">Perfil de Acesso</label>
               <select id="edit_u_role" class="user-form-select">
                 <option value="manager">Gestor Estadual (manager)</option>
-                <option value="viewer">Visualizador (viewer)</option>
+                <option value="viewer">Visualizador Geral (viewer)</option>
+                <option value="monitor">Monitor NOC / TV Sala de Suporte (monitor)</option>
+                <option value="n1">Analista N1 Suporte (n1)</option>
+                <option value="n2">Analista N2 Suporte (n2)</option>
                 <option value="admin">Coordenação / Admin (admin)</option>
               </select>
             </div>
@@ -1601,6 +2345,31 @@
             </div>
           </div>
 
+          <div class="user-form-group" style="background: rgba(56, 139, 253, 0.08); border: 1px solid rgba(56, 139, 253, 0.25); border-radius: 8px; padding: 12px;">
+            <label style="color: var(--accent); font-weight: 700; margin-bottom: 6px; display: block;">🧩 Módulos Internos Habilitados (Apenas Usuários Internos)</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;">
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                <input type="checkbox" id="mod_check_edit_visao_gerencial" value="visao_gerencial" />
+                <span>📊 Visão Gerencial / NOC</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                <input type="checkbox" id="mod_check_edit_analise_dev" value="analise_dev" />
+                <span>📐 Análise de Desenvolvimento</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                <input type="checkbox" id="mod_check_edit_relatorio_email" value="relatorio_email" />
+                <span>📧 Relatórios por E-mail</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                <input type="checkbox" id="mod_check_edit_certificados_alert" value="certificados_alert" />
+                <span>🛡️ Certificados SSL</span>
+              </label>
+            </div>
+            <div style="font-size: 11px; color: var(--text-sub); margin-top: 6px;">
+              ⚠️ Clientes externos (PMSC, PMTO, etc.) não devem possuir módulos internos habilitados.
+            </div>
+          </div>
+
           <div class="user-form-group" style="display: flex; align-items: center; gap: 10px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 8px; padding: 10px 12px;">
             <input type="checkbox" id="edit_u_must_change_password" style="width: 17px; height: 17px; accent-color: #f59e0b; cursor: pointer;" />
             <label for="edit_u_must_change_password" style="cursor: pointer; text-transform: none; font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 0;">
@@ -1613,6 +2382,55 @@
           <button type="submit" class="btn-user-submit" id="btnSalvarEdicaoUsuario">💾 Salvar Alterações</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- MODAL: EDITOR DE DISPOSIÇÃO E COLUNAS DOS CARDS -->
+  <div class="modal-backdrop" id="modalOrdemCards" style="display:none;" onclick="fecharModalOrdemCards(event)">
+    <div class="modal-dialog" style="max-width: 980px; width: 95vw;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span id="modalOrdemTitulo">⚙️ Organizar Disposição dos Cards nas Colunas</span>
+        </div>
+        <button class="btn-close" onclick="fecharModalOrdemCards()">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 16px 20px; display:flex; flex-direction:column; gap:14px; overflow-y: auto; max-height: 80vh;">
+        <div style="font-size: 12.5px; color: var(--text-sub); line-height: 1.4;">
+          Escolha a quantidade de colunas e distribua facilmente qual card vai em cada coluna. Você pode usar os botões <b>◀ ▶</b> para transferir cards entre colunas ou <b>arrastar e soltar (drag & drop)</b> diretamente!
+        </div>
+
+        <!-- SELETOR DE COLUNAS -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--th-bg); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border); flex-wrap: wrap; gap: 10px;">
+          <div>
+            <label style="font-size: 12.5px; font-weight: 700; color: var(--text); margin-bottom: 2px; display:block;">Quantidade de Colunas no Monitor:</label>
+            <span style="font-size: 11px; color: var(--text-sub);">Alterne a quantidade para ver e distribuir os cards nas colunas abaixo</span>
+          </div>
+          <select id="modalOrdemColunasSelect" class="select-control" onchange="aoMudarQtdColunasModal(this.value)" style="width: 190px; height: 34px; font-size: 12.5px; font-weight: 600;">
+            <option value="2">2 Colunas Fixas</option>
+            <option value="3">3 Colunas Fixas</option>
+            <option value="4">4 Colunas Fixas</option>
+            <option value="5">5 Colunas Fixas</option>
+            <option value="auto">⚡ Auto (3 Colunas Adaptativas)</option>
+          </select>
+        </div>
+
+        <!-- PRÉVIA DAS COLUNAS VISUAIS -->
+        <div>
+          <div style="font-size: 11px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; margin-bottom: 8px;">
+            Distribuição Visual das Colunas:
+          </div>
+          <div id="modalColunasVisualContainer" style="display: flex; gap: 10px; min-height: 240px; width: 100%; overflow-x: auto; padding-bottom: 6px;">
+            <!-- Renderizado dinamicamente -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
+        <button class="btn-action" onclick="restaurarOrdemPadraoCards()">↺ Restaurar Padrão</button>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-action" onclick="fecharModalOrdemCards()">Cancelar</button>
+          <button class="btn-action" onclick="salvarOrdemPersonalizadaCards()" style="background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 700;">💾 Salvar & Aplicar</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1663,6 +2481,16 @@
   </div>
 
   <script>
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
     let JIRA_DB = {};
     let chart1Inst = null;
     let chart2Inst = null;
@@ -2596,8 +3424,98 @@
         if (nameEl && usuarioLogado.nome) {
           nameEl.textContent = usuarioLogado.nome;
         }
-      } catch(e) {}
+        aplicarPermissoesPorRole((usuarioLogado && usuarioLogado.role) ? usuarioLogado.role.toLowerCase() : "coordenador");
+      } catch(e) {
+        console.warn("Erro ao validar dados da sessão:", e);
+      }
       return true;
+    }
+
+    function aplicarPermissoesPorRole(role) {
+      const btnObs = document.getElementById("btnTabObs");
+      const btnDev = document.getElementById("btnTabModDev");
+      const btnN1N2 = document.getElementById("btnTabModN1N2");
+      const btnMail = document.getElementById("btnTabModMail");
+      const btnCert = document.getElementById("btnTabModCert");
+      const btnUsers = document.getElementById("btnTabUsers");
+      const roleBadge = document.getElementById("userRoleBadge");
+
+      if (role === "monitor" || role === "n1") {
+        // N1 e Monitor Kiosk TV têm acesso exclusivo às 3 abas operacionais
+        if (btnObs) btnObs.style.display = "none";
+        if (btnMail) btnMail.style.display = "none";
+        if (btnUsers) btnUsers.style.display = "none";
+
+        if (btnDev) btnDev.style.display = "inline-block";
+        if (btnN1N2) btnN1N2.style.display = "inline-block";
+        if (btnCert) btnCert.style.display = "inline-block";
+
+        if (roleBadge) {
+          roleBadge.textContent = (role === "monitor") ? "📺 NOC Monitor TV" : "📟 Analista N1";
+          roleBadge.style.background = (role === "monitor") ? "rgba(168,85,247,0.2)" : "rgba(59,130,246,0.2)";
+          roleBadge.style.color = (role === "monitor") ? "#c084fc" : "#60a5fa";
+        }
+
+        // Se estiver na tela inicial de observabilidade ou aba restrita, direciona para a esteira dev
+        if (!window.abaAtiva || window.abaAtiva === "observabilidade" || window.abaAtiva === "usuarios" || window.abaAtiva === "mod-mail") {
+          trocarAba("mod-dev");
+        }
+      } else if (role === "n2") {
+        // Analista N2 tem acesso operacional a todas as abas
+        if (btnObs) btnObs.style.display = "inline-block";
+        if (btnDev) btnDev.style.display = "inline-block";
+        if (btnN1N2) btnN1N2.style.display = "inline-block";
+        if (btnMail) btnMail.style.display = "inline-block";
+        if (btnCert) btnCert.style.display = "inline-block";
+        if (btnUsers) btnUsers.style.display = "inline-block";
+
+        if (roleBadge) {
+          roleBadge.textContent = "🛠️ Analista N2";
+          roleBadge.style.background = "rgba(16,185,129,0.2)";
+          roleBadge.style.color = "#34d399";
+        }
+
+        ajustarSelectsUsuariosParaN2();
+      } else {
+        // Coordenação / Admin
+        if (btnObs) btnObs.style.display = "inline-block";
+        if (btnDev) btnDev.style.display = "inline-block";
+        if (btnN1N2) btnN1N2.style.display = "inline-block";
+        if (btnMail) btnMail.style.display = "inline-block";
+        if (btnCert) btnCert.style.display = "inline-block";
+        if (btnUsers) btnUsers.style.display = "inline-block";
+
+        if (roleBadge) {
+          roleBadge.textContent = "👑 Coordenação";
+          roleBadge.style.background = "rgba(234,179,8,0.2)";
+          roleBadge.style.color = "#facc15";
+        }
+      }
+    }
+
+    function ajustarSelectsUsuariosParaN2() {
+      const isN2 = usuarioLogado && (usuarioLogado.role === "n2");
+      ["u_role", "edit_u_role"].forEach(id => {
+        const select = document.getElementById(id);
+        if (!select) return;
+        Array.from(select.options).forEach(opt => {
+          if (["admin", "coordenador", "n2"].includes(opt.value)) {
+            opt.disabled = isN2;
+            opt.style.display = isN2 ? "none" : "";
+          }
+        });
+      });
+
+      ["u_estado", "edit_u_estado"].forEach(id => {
+        const select = document.getElementById(id);
+        if (!select) return;
+        Array.from(select.options).forEach(opt => {
+          if (opt.value === "todos") {
+            opt.disabled = isN2;
+            opt.style.display = isN2 ? "none" : "";
+          }
+        });
+      });
     }
 
     function logout() {
@@ -2615,29 +3533,1433 @@
     }
 
     // ==========================================
-    // NAVEGAÇÃO ENTRE ABAS
+    // NAVEGAÇÃO ENTRE ABAS E EXTENSÕES MODULARES
     // ==========================================
     function trocarAba(aba) {
+      // Trava estrita de navegação para perfis restritos N1 e Monitor
+      if (usuarioLogado && (usuarioLogado.role === "monitor" || usuarioLogado.role === "n1")) {
+        if (aba !== "mod-dev" && aba !== "mod-n1n2" && aba !== "mod-cert") {
+          aba = "mod-dev";
+        }
+      }
+
+      window.abaAtiva = aba;
+
       const btnObs = document.getElementById("btnTabObs");
+      const btnDev = document.getElementById("btnTabModDev");
+      const btnN1N2 = document.getElementById("btnTabModN1N2");
+      const btnMail = document.getElementById("btnTabModMail");
+      const btnCert = document.getElementById("btnTabModCert");
       const btnUsers = document.getElementById("btnTabUsers");
+
       const viewObs = document.getElementById("view-observabilidade");
+      const viewDev = document.getElementById("view-mod-dev");
+      const viewN1N2 = document.getElementById("view-mod-n1n2");
+      const viewMail = document.getElementById("view-mod-mail");
+      const viewCert = document.getElementById("view-mod-cert");
       const viewUsers = document.getElementById("view-usuarios");
       const controlsObs = document.getElementById("controls-observabilidade");
 
+      [btnObs, btnDev, btnN1N2, btnMail, btnCert, btnUsers].forEach(b => b && b.classList.remove("active"));
+      [viewObs, viewDev, viewN1N2, viewMail, viewCert, viewUsers].forEach(v => v && (v.style.display = "none"));
+
+      if (controlsObs) controlsObs.style.display = (aba === "observabilidade") ? "flex" : "none";
+
       if (aba === "usuarios") {
-        btnObs.classList.remove("active");
-        btnUsers.classList.add("active");
-        viewObs.style.display = "none";
-        viewUsers.style.display = "block";
-        controlsObs.style.display = "none";
+        if (btnUsers) btnUsers.classList.add("active");
+        if (viewUsers) viewUsers.style.display = "block";
         carregarUsuarios();
+      } else if (aba === "mod-dev") {
+        if (btnDev) btnDev.classList.add("active");
+        if (viewDev) viewDev.style.display = "block";
+        carregarAnaliseDevIssues();
+      } else if (aba === "mod-n1n2") {
+        if (btnN1N2) btnN1N2.classList.add("active");
+        if (viewN1N2) viewN1N2.style.display = "block";
+        carregarTriagemN1N2Issues();
+      } else if (aba === "mod-mail") {
+        if (btnMail) btnMail.classList.add("active");
+        if (viewMail) viewMail.style.display = "block";
+        carregarDestinatarios();
+        carregarHistoricoRelatorios();
+      } else if (aba === "mod-cert") {
+        if (btnCert) btnCert.classList.add("active");
+        if (viewCert) viewCert.style.display = "block";
+        carregarCertificados();
       } else {
-        btnUsers.classList.remove("active");
-        btnObs.classList.add("active");
-        viewUsers.style.display = "none";
-        viewObs.style.display = "block";
-        controlsObs.style.display = "flex";
+        if (btnObs) btnObs.classList.add("active");
+        if (viewObs) viewObs.style.display = "block";
       }
+    }
+
+    // ==========================================
+    // CONTROLADORES DE EXTENSÕES MODULARES
+    // ==========================================
+    async function carregarCatalogoModulos() {
+      try {
+        const res = await fetch("/api/v1/modules/catalog", { headers: authHeaders() });
+        if (!res.ok) return;
+        const data = await res.json();
+        const mods = data.modules || [];
+        mods.forEach(m => {
+          if (!m.habilitado) return;
+          if (m.id === "analise_dev") {
+            const b = document.getElementById("btnTabModDev");
+            if (b) b.style.display = "inline-block";
+          }
+          if (m.id === "triagem_n1n2") {
+            const b = document.getElementById("btnTabModN1N2");
+            if (b) b.style.display = "inline-block";
+          }
+          if (m.id === "relatorio_email") {
+            const b = document.getElementById("btnTabModMail");
+            if (b) b.style.display = "inline-block";
+          }
+          if (m.id === "certificados_alert") {
+            const b = document.getElementById("btnTabModCert");
+            if (b) b.style.display = "inline-block";
+          }
+        });
+
+        // Coordenadores, Administradores e N2 têm acesso a todas as abas operacionais
+        if (data.is_admin || (usuarioLogado && ["coordenador", "admin", "n2"].includes(usuarioLogado.role))) {
+          ["btnTabModDev", "btnTabModN1N2", "btnTabModMail", "btnTabModCert"].forEach(id => {
+            const b = document.getElementById(id);
+            if (b) b.style.display = "inline-block";
+          });
+        }
+      } catch (err) {
+        console.warn("Erro ao consultar catálogo de módulos:", err);
+      }
+    }
+
+
+    // ============================================================================
+    // MÓDULO 2: ESTEIRA DE ANÁLISE DE DESENVOLVIMENTO (LAYOUT ORIGINAL MODULADO)
+    // ============================================================================
+    let devGruposCache = [];
+    let devIssuesCache = [];
+
+    async function carregarAnaliseDevIssues(silencioso = false) {
+      const grid = document.getElementById("devGridEstados");
+      if (!silencioso && grid) {
+        grid.innerHTML = `<div class="noc-grid-full" style="text-align:center; padding: 40px; color: var(--text-sub);">⏳ Carregando tarefas em Análise de Desenvolvimento...</div>`;
+      }
+
+      try {
+        const res = await fetch("/api/v1/modules/analise-dev/issues", { headers: authHeaders() });
+        if (!res.ok) throw new Error("Erro ao consultar tarefas em Análise Dev (HTTP " + res.status + ")");
+        const data = await res.json();
+
+        devGruposCache = data.grupos || [];
+        devIssuesCache = data.issues || [];
+
+        // Atualiza contador de cabeçalho e estado de alerta
+        const total = data.total || 0;
+        const totalEl = document.getElementById("devTotalCount");
+        if (totalEl) totalEl.textContent = total;
+        const badge = document.getElementById("devCounterBadge");
+        if (badge) {
+          if (data.hasAlert) {
+            badge.classList.add("alert-state");
+          } else {
+            badge.classList.remove("alert-state");
+          }
+        }
+
+        // Rodapé
+        const footerStatus = document.getElementById("devFooterStatus");
+        if (footerStatus) {
+          if (data.hasCritico10d) {
+            footerStatus.innerHTML = `<span style="color:#DC2626;font-weight:bold;">⚠️ EXISTEM TASKS COM MAIS DE 10 DIAS SEM ANÁLISE</span>`;
+          } else {
+            footerStatus.innerHTML = `<span style="color:#059669;">● Tudo dentro do prazo</span>`;
+          }
+        }
+        const footerUpdated = document.getElementById("devFooterUpdated");
+        if (footerUpdated) {
+          footerUpdated.textContent = `Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`;
+        }
+
+        // Sincroniza layout persistido no servidor antes de renderizar
+        await sincronizarLayoutDoServidor("dev");
+        renderizarBlocosDev(devGruposCache);
+      } catch (err) {
+        console.warn("Falha ao carregar tarefas em Análise Dev:", err);
+        if (!silencioso && grid) {
+          grid.innerHTML = `<div class="noc-grid-full" style="text-align:center; padding: 30px; color: var(--red);">${err.message}</div>`;
+        }
+      }
+    }
+
+    // ============================================================================
+    // EDITOR VISUAL DE DISPOSIÇÃO DE COLUNAS E DRAG-AND-DROP DOS CARDS NOC
+    // ============================================================================
+    let modalOrdemTipoAtual = "dev";
+    let modalLayoutTemp = null;
+    let modalCardDrag = null;
+    let dashboardDraggingItem = null;
+    const layoutServidorCarregado = { dev: false, n1n2: false };
+
+    async function sincronizarLayoutDoServidor(tipo) {
+      if (layoutServidorCarregado[tipo]) return;
+      try {
+        const res = await fetch(`/api/v1/modules/noc/layout/${encodeURIComponent(tipo)}`, { headers: authHeaders() });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.layout && Array.isArray(data.layout.columns) && data.layout.columns.length > 0) {
+            localStorage.setItem("jiraview_col_layout_" + tipo, JSON.stringify(data.layout));
+            localStorage.setItem("jiraview_cols_" + tipo, String(data.layout.numCols || "3"));
+          }
+        }
+      } catch (e) {
+        console.warn(`Aviso: layout do servidor para ${tipo} indisponível, usando cache local.`, e);
+      } finally {
+        layoutServidorCarregado[tipo] = true;
+      }
+    }
+
+    function obterLayoutColunas(tipo, listaGrupos) {
+      const siglasDisponiveis = (listaGrupos && listaGrupos.length > 0)
+        ? listaGrupos.map(g => g.sigla)
+        : ["SC", "PR", "AM", "TO", "RO", "GM"];
+
+      let layout = null;
+      try {
+        const raw = localStorage.getItem("jiraview_col_layout_" + tipo);
+        if (raw) layout = JSON.parse(raw);
+      } catch (e) {
+        console.warn("Erro ao ler jiraview_col_layout:", e);
+      }
+
+      if (!layout || !Array.isArray(layout.columns) || layout.columns.length === 0) {
+        let numCols = 3;
+        const rawCols = localStorage.getItem("jiraview_cols_" + tipo);
+        if (rawCols && rawCols !== "auto" && !isNaN(parseInt(rawCols))) {
+          numCols = parseInt(rawCols);
+        }
+        const cols = Array.from({ length: numCols }, () => []);
+        siglasDisponiveis.forEach((sigla, i) => {
+          cols[i % numCols].push(sigla);
+        });
+        layout = { numCols: String(numCols), columns: cols };
+      } else {
+        let targetCols = (layout.numCols === "auto") ? 3 : (parseInt(layout.numCols) || 3);
+        while (layout.columns.length < targetCols) layout.columns.push([]);
+        if (layout.columns.length > targetCols) {
+          const extras = layout.columns.splice(targetCols);
+          extras.forEach(extra => extra.forEach(s => layout.columns[targetCols - 1].push(s)));
+        }
+
+        const presentes = new Set();
+        layout.columns.forEach(col => col.forEach(s => presentes.add(s)));
+        siglasDisponiveis.forEach(sigla => {
+          if (!presentes.has(sigla)) {
+            let menorIdx = 0;
+            for (let i = 1; i < layout.columns.length; i++) {
+              if (layout.columns[i].length < layout.columns[menorIdx].length) menorIdx = i;
+            }
+            layout.columns[menorIdx].push(sigla);
+          }
+        });
+      }
+
+      return layout;
+    }
+
+    function salvarLayoutColunas(tipo, layout) {
+      try {
+        localStorage.setItem("jiraview_col_layout_" + tipo, JSON.stringify(layout));
+        localStorage.setItem("jiraview_cols_" + tipo, String(layout.numCols));
+      } catch (e) {
+        console.warn("Erro ao gravar jiraview_col_layout local:", e);
+      }
+
+      // Sincroniza persistência com o banco SQLite no servidor (tabela noc_layouts)
+      fetch(`/api/v1/modules/noc/layout/${encodeURIComponent(tipo)}`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({
+          tipo: tipo,
+          num_cols: String(layout.numCols || "3"),
+          columns: layout.columns || []
+        })
+      }).catch(err => console.warn("Erro ao sincronizar layout com backend:", err));
+    }
+
+    function abrirModalOrdemCards(tipo) {
+      modalOrdemTipoAtual = tipo;
+      const modal = document.getElementById("modalOrdemCards");
+      if (!modal) return;
+
+      const titulo = document.getElementById("modalOrdemTitulo");
+      if (titulo) {
+        titulo.textContent = (tipo === "dev")
+          ? "⚙️ Disposição dos Cards — Esteira de Desenvolvimento"
+          : "⚙️ Disposição dos Cards — Triagem N1 & N2";
+      }
+
+      const grupos = (tipo === "dev" ? devGruposCache : n1n2GruposCache) || [];
+      modalLayoutTemp = JSON.parse(JSON.stringify(obterLayoutColunas(tipo, grupos)));
+
+      const selCol = document.getElementById("modalOrdemColunasSelect");
+      if (selCol) {
+        selCol.value = modalLayoutTemp.numCols || "3";
+      }
+
+      renderizarModalColunasVisual();
+
+      modal.style.display = "flex";
+      requestAnimationFrame(() => {
+        modal.classList.add("open");
+      });
+    }
+
+    function fecharModalOrdemCards(e) {
+      if (e && e.target && e.target !== document.getElementById("modalOrdemCards") && !e.target.classList.contains("btn-close") && e.target.tagName !== "BUTTON") {
+        return;
+      }
+      const modal = document.getElementById("modalOrdemCards");
+      if (modal) {
+        modal.classList.remove("open");
+        setTimeout(() => {
+          modal.style.display = "none";
+        }, 200);
+      }
+    }
+
+    function aoMudarQtdColunasModal(novaQtd) {
+      if (!modalLayoutTemp) return;
+      modalLayoutTemp.numCols = novaQtd;
+      let targetCols = (novaQtd === "auto") ? 3 : (parseInt(novaQtd) || 3);
+
+      while (modalLayoutTemp.columns.length < targetCols) {
+        modalLayoutTemp.columns.push([]);
+      }
+      if (modalLayoutTemp.columns.length > targetCols) {
+        const extras = modalLayoutTemp.columns.splice(targetCols);
+        extras.forEach(extra => {
+          extra.forEach(sigla => {
+            modalLayoutTemp.columns[modalLayoutTemp.columns.length - 1].push(sigla);
+          });
+        });
+      }
+      renderizarModalColunasVisual();
+    }
+
+    function renderizarModalColunasVisual() {
+      const container = document.getElementById("modalColunasVisualContainer");
+      if (!container || !modalLayoutTemp) return;
+
+      const grupos = (modalOrdemTipoAtual === "dev" ? devGruposCache : n1n2GruposCache) || [];
+      const infoMap = new Map();
+      grupos.forEach(g => infoMap.set(g.sigla, g));
+
+      const defaultInfo = {
+        SC: { sigla: "SC", nome: "Santa Catarina", cor: "#10b981" },
+        PR: { sigla: "PR", nome: "Paraná", cor: "#3b82f6" },
+        AM: { sigla: "AM", nome: "Amazonas", cor: "#f59e0b" },
+        TO: { sigla: "TO", nome: "Tocantins", cor: "#8b5cf6" },
+        RO: { sigla: "RO", nome: "Rondônia", cor: "#ec4899" },
+        GM: { sigla: "GM", nome: "Guarda Municipal", cor: "#06b6d4" }
+      };
+
+      const totalCols = modalLayoutTemp.columns.length;
+
+      container.innerHTML = modalLayoutTemp.columns.map((colSiglas, colIdx) => {
+        const cardsHtml = colSiglas.map((sigla, cardIdx) => {
+          const g = infoMap.get(sigla) || defaultInfo[sigla] || { sigla, nome: sigla, cor: "#26A69A" };
+          const isFirstCol = (colIdx === 0);
+          const isLastCol = (colIdx === totalCols - 1);
+          const isFirstRow = (cardIdx === 0);
+          const isLastRow = (cardIdx === colSiglas.length - 1);
+
+          return `
+            <div class="modal-card-item" draggable="true" 
+                 ondragstart="onModalCardDragStart(event, ${colIdx}, ${cardIdx})"
+                 style="background: var(--card); border: 1px solid var(--border); border-left: 4px solid ${g.cor || '#26A69A'}; border-radius: 6px; padding: 7px 9px; cursor: grab; user-select: none; display: flex; flex-direction: column; gap: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.15);">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 6px; overflow: hidden;">
+                  <span style="display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 800; color: #fff; background: ${g.cor || '#26A69A'};">${escapeHtml(g.sigla)}</span>
+                  <span style="font-size: 11.5px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(g.nome)}</span>
+                </div>
+                <span style="font-size: 11px; color: var(--text-sub);" title="Arraste para mover de coluna">⠿</span>
+              </div>
+
+              <!-- CONTROLES: MOVER ENTRE COLUNAS OU REORDENAR -->
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 4px; margin-top: 2px;">
+                <div style="display: flex; gap: 3px;" title="Mover entre colunas">
+                  <button class="btn-action" style="padding: 2px 6px; font-size: 10px; min-width: 22px; height: 22px; ${isFirstCol ? 'opacity:0.3; pointer-events:none;' : ''}" onclick="moverCardColuna(${colIdx}, ${cardIdx}, -1)" title="Mover para coluna à esquerda">◀</button>
+                  <button class="btn-action" style="padding: 2px 6px; font-size: 10px; min-width: 22px; height: 22px; ${isLastCol ? 'opacity:0.3; pointer-events:none;' : ''}" onclick="moverCardColuna(${colIdx}, ${cardIdx}, 1)" title="Mover para coluna à direita">▶</button>
+                </div>
+                <div style="display: flex; gap: 3px;" title="Reordenar nesta coluna">
+                  <button class="btn-action" style="padding: 2px 6px; font-size: 10px; min-width: 22px; height: 22px; ${isFirstRow ? 'opacity:0.3; pointer-events:none;' : ''}" onclick="reordenarCardNaColuna(${colIdx}, ${cardIdx}, -1)" title="Subir">▲</button>
+                  <button class="btn-action" style="padding: 2px 6px; font-size: 10px; min-width: 22px; height: 22px; ${isLastRow ? 'opacity:0.3; pointer-events:none;' : ''}" onclick="reordenarCardNaColuna(${colIdx}, ${cardIdx}, 1)" title="Descer">▼</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="modal-coluna-box" 
+               ondragover="onModalColDragOver(event)" 
+               ondragleave="onModalColDragLeave(event)" 
+               ondrop="onModalColDrop(event, ${colIdx})"
+               style="flex: 1 1 0; min-width: 170px; background: var(--th-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; overflow: hidden;">
+            <div style="padding: 8px 10px; background: var(--card); border-bottom: 1px solid var(--border); font-size: 11.5px; font-weight: 700; color: var(--text); display: flex; justify-content: space-between; align-items: center;">
+              <span>Coluna ${colIdx + 1}</span>
+              <span style="font-size: 10.5px; color: var(--text-sub); background: var(--th-bg); padding: 1px 6px; border-radius: 10px;">${colSiglas.length}</span>
+            </div>
+            <div style="padding: 8px; display: flex; flex-direction: column; gap: 6px; flex: 1; min-height: 160px;">
+              ${cardsHtml || '<div style="font-size: 11px; color: var(--text-sub); text-align: center; padding: 25px 0; border: 1px dashed var(--border); border-radius: 6px;">Solte um card aqui</div>'}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function moverCardColuna(colIdx, cardIdx, direcao) {
+      const targetColIdx = colIdx + direcao;
+      if (targetColIdx < 0 || targetColIdx >= modalLayoutTemp.columns.length) return;
+      const sigla = modalLayoutTemp.columns[colIdx].splice(cardIdx, 1)[0];
+      modalLayoutTemp.columns[targetColIdx].push(sigla);
+      renderizarModalColunasVisual();
+    }
+
+    function reordenarCardNaColuna(colIdx, cardIdx, direcao) {
+      const targetCardIdx = cardIdx + direcao;
+      const col = modalLayoutTemp.columns[colIdx];
+      if (targetCardIdx < 0 || targetCardIdx >= col.length) return;
+      const sigla = col.splice(cardIdx, 1)[0];
+      col.splice(targetCardIdx, 0, sigla);
+      renderizarModalColunasVisual();
+    }
+
+    function onModalCardDragStart(e, colIdx, cardIdx) {
+      modalCardDrag = { colIdx, cardIdx };
+      e.dataTransfer.setData("text/plain", JSON.stringify({ colIdx, cardIdx }));
+      e.dataTransfer.effectAllowed = "move";
+    }
+
+    function onModalColDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      const box = e.currentTarget;
+      if (box && !box.classList.contains("drag-hover")) {
+        box.classList.add("drag-hover");
+      }
+    }
+
+    function onModalColDragLeave(e) {
+      const box = e.currentTarget;
+      if (box) box.classList.remove("drag-hover");
+    }
+
+    function onModalColDrop(e, targetColIdx) {
+      e.preventDefault();
+      const box = e.currentTarget;
+      if (box) box.classList.remove("drag-hover");
+
+      let info = modalCardDrag;
+      if (!info) {
+        try {
+          info = JSON.parse(e.dataTransfer.getData("text/plain"));
+        } catch (err) {}
+      }
+      if (!info || info.colIdx === undefined || info.cardIdx === undefined) return;
+
+      const sigla = modalLayoutTemp.columns[info.colIdx].splice(info.cardIdx, 1)[0];
+      if (sigla) {
+        modalLayoutTemp.columns[targetColIdx].push(sigla);
+        renderizarModalColunasVisual();
+      }
+    }
+
+    function salvarOrdemPersonalizadaCards() {
+      if (!modalLayoutTemp) return;
+      const selCol = document.getElementById("modalOrdemColunasSelect");
+      if (selCol) modalLayoutTemp.numCols = selCol.value;
+
+      salvarLayoutColunas(modalOrdemTipoAtual, modalLayoutTemp);
+      fecharModalOrdemCards();
+      mostrarToast("Disposição dos cards salva com sucesso!");
+
+      if (modalOrdemTipoAtual === "dev") {
+        renderizarBlocosDev(devGruposCache);
+      } else {
+        renderizarBlocosN1N2(n1n2GruposCache);
+      }
+    }
+
+    function restaurarOrdemPadraoCards() {
+      localStorage.removeItem("jiraview_col_layout_" + modalOrdemTipoAtual);
+      localStorage.removeItem("jiraview_cols_" + modalOrdemTipoAtual);
+
+      const grupos = (modalOrdemTipoAtual === "dev" ? devGruposCache : n1n2GruposCache) || [];
+      modalLayoutTemp = obterLayoutColunas(modalOrdemTipoAtual, grupos);
+
+      const selCol = document.getElementById("modalOrdemColunasSelect");
+      if (selCol) selCol.value = modalLayoutTemp.numCols || "3";
+
+      renderizarModalColunasVisual();
+
+      if (modalOrdemTipoAtual === "dev") {
+        renderizarBlocosDev(devGruposCache);
+      } else {
+        renderizarBlocosN1N2(n1n2GruposCache);
+      }
+
+      fecharModalOrdemCards();
+      mostrarToast("Disposição padrão restaurada!");
+    }
+
+    // ============================================================================
+    // DRAG-AND-DROP LIVRE DIRETO NO DASHBOARD
+    // ============================================================================
+    function onDashboardCardDragStart(e, tipo, sigla) {
+      dashboardDraggingItem = { tipo, sigla };
+      e.dataTransfer.setData("text/plain", JSON.stringify({ tipo, sigla }));
+      e.dataTransfer.effectAllowed = "move";
+    }
+
+    function onDashboardColDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      const col = e.currentTarget;
+      if (col && !col.classList.contains("drag-hover")) {
+        col.classList.add("drag-hover");
+      }
+    }
+
+    function onDashboardColDragLeave(e) {
+      const col = e.currentTarget;
+      if (col) col.classList.remove("drag-hover");
+    }
+
+    function onDashboardColDrop(e, tipo, targetColIdx) {
+      e.preventDefault();
+      const col = e.currentTarget;
+      if (col) col.classList.remove("drag-hover");
+
+      let info = dashboardDraggingItem;
+      if (!info) {
+        try {
+          info = JSON.parse(e.dataTransfer.getData("text/plain"));
+        } catch (err) {}
+      }
+      if (!info || info.tipo !== tipo) return;
+
+      const grupos = (tipo === "dev" ? devGruposCache : n1n2GruposCache) || [];
+      const layout = obterLayoutColunas(tipo, grupos);
+
+      let numCols = (layout.numCols === "auto") ? 3 : (parseInt(layout.numCols) || 3);
+      while (layout.columns.length < numCols) layout.columns.push([]);
+
+      // Remove de qualquer coluna anterior
+      layout.columns.forEach(colArr => {
+        const idx = colArr.indexOf(info.sigla);
+        if (idx !== -1) colArr.splice(idx, 1);
+      });
+
+      // Insere na coluna de destino
+      if (targetColIdx >= layout.columns.length) targetColIdx = layout.columns.length - 1;
+      layout.columns[targetColIdx].push(info.sigla);
+
+      salvarLayoutColunas(tipo, layout);
+      mostrarToast(`Card ${info.sigla} posicionado na Coluna ${targetColIdx + 1}!`);
+
+      if (tipo === "dev") {
+        renderizarBlocosDev(devGruposCache);
+      } else {
+        renderizarBlocosN1N2(n1n2GruposCache);
+      }
+    }
+
+    function distribuirEmColunasVisual(containerId, blocosMap, tipoAba) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      if (!blocosMap || blocosMap.size === 0) return;
+
+      const gruposFonte = Array.from(blocosMap.keys()).map(sigla => ({ sigla }));
+      const layout = obterLayoutColunas(tipoAba, gruposFonte);
+
+      let numCols = 3;
+      if (layout.numCols === "auto") {
+        const containerWidth = container.clientWidth || window.innerWidth;
+        if (containerWidth >= 1700) numCols = 4;
+        else if (containerWidth >= 1150) numCols = 3;
+        else if (containerWidth >= 720) numCols = 2;
+        else numCols = 1;
+      } else {
+        numCols = parseInt(layout.numCols);
+        if (isNaN(numCols) || numCols < 1) numCols = 3;
+      }
+
+      const colunasSiglas = Array.from({ length: numCols }, (_, i) => {
+        return (layout.columns && layout.columns[i]) ? [...layout.columns[i]] : [];
+      });
+
+      if (layout.columns && layout.columns.length > numCols) {
+        for (let i = numCols; i < layout.columns.length; i++) {
+          (layout.columns[i] || []).forEach(s => colunasSiglas[numCols - 1].push(s));
+        }
+      }
+
+      const alocadas = new Set();
+      colunasSiglas.forEach(col => col.forEach(s => alocadas.add(s)));
+      blocosMap.forEach((_, sigla) => {
+        if (!alocadas.has(sigla)) {
+          let menorIdx = 0;
+          for (let i = 1; i < numCols; i++) {
+            if (colunasSiglas[i].length < colunasSiglas[menorIdx].length) menorIdx = i;
+          }
+          colunasSiglas[menorIdx].push(sigla);
+        }
+      });
+
+      const colunasHtml = colunasSiglas.map((siglas, colIdx) => {
+        const cardsHtml = siglas.map(sigla => {
+          const bloco = blocosMap.get(sigla);
+          return bloco ? bloco.html : '';
+        }).filter(Boolean).join('');
+
+        return `
+          <div class="noc-masonry-col" data-col-idx="${colIdx}"
+               ondragover="onDashboardColDragOver(event)"
+               ondragleave="onDashboardColDragLeave(event)"
+               ondrop="onDashboardColDrop(event, '${tipoAba}', ${colIdx})">
+            ${cardsHtml}
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        <div class="noc-masonry-container">
+          ${colunasHtml}
+        </div>
+      `;
+    }
+
+    function renderizarBlocosDev(grupos) {
+      const grid = document.getElementById("devGridEstados");
+      if (!grupos || grupos.length === 0) {
+        grid.innerHTML = `
+          <div class="noc-grid-full" style="text-align:center; padding: 50px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 8px;">
+            <div style="font-size: 36px; margin-bottom: 10px;">🎉</div>
+            <h3 style="margin: 0 0 6px 0; color: var(--text);">Nenhuma tarefa em Análise de Desenvolvimento</h3>
+            <p style="margin: 0; font-size: 13px; color: var(--text-sub);">Todas as demandas estão refinadas ou em andamento na esteira de engenharia.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const blocosMap = new Map();
+      grupos.forEach(grupo => {
+        const tasks = grupo.tasks || [];
+        const alertClass = grupo.hasAlert ? "estado-counter-alert" : "";
+        const alertIcon = grupo.hasAlert ? `<span class="alerta-icon">⚠️</span>` : "";
+
+        const linhas = tasks.map(item => {
+          const isUrgent = (item.diasAberta >= 7);
+          return `
+            <tr class="${isUrgent ? 'row-urgent' : ''}">
+              <td class="col-ticket">
+                <a href="${item.link}" target="_blank">${item.key}</a>
+              </td>
+              <td class="col-summary">
+                <div class="text-title">${escapeHtml(item.summary || 'Sem Título')}</div>
+              </td>
+              <td class="col-date">${item.created || '---'}</td>
+              <td class="col-age">
+                <span class="status-pill ${item.urgClass || 'badge-grey'}">${item.urgLabel || '---'}</span>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        const html = `
+          <div class="estado-bloco" id="card-dev-${grupo.sigla}" data-sigla="${grupo.sigla}">
+            <div class="estado-header" draggable="true" 
+                 ondragstart="onDashboardCardDragStart(event, 'dev', '${grupo.sigla}')"
+                 style="border-left-color: ${grupo.cor || '#26A69A'}; cursor: grab;" 
+                 title="Arraste pelo cabeçalho para mover este card para outra coluna">
+              <div class="estado-info">
+                <span style="font-size: 12px; color: var(--text-sub); margin-right: 4px; cursor: grab; user-select:none;" title="Arrastar para outra coluna">⠿</span>
+                <span class="estado-sigla" style="background: ${grupo.cor || '#26A69A'};">${grupo.sigla}</span>
+                <span class="estado-nome">${grupo.nome}</span>
+                ${alertIcon}
+              </div>
+              <div class="estado-counter ${alertClass}">
+                ${grupo.total} task${grupo.total !== 1 ? 's' : ''}
+              </div>
+            </div>
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th class="col-ticket">TICKET</th>
+                  <th class="col-summary">DESCRIÇÃO</th>
+                  <th class="col-date">ABERTO EM</th>
+                  <th class="col-age">DIAS</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${linhas}
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        blocosMap.set(grupo.sigla, { html, peso: tasks.length || 1, sigla: grupo.sigla });
+      });
+
+      distribuirEmColunasVisual("devGridEstados", blocosMap, "dev");
+    }
+
+    function filtrarBlocosDev(termo) {
+      const t = (termo || "").toLowerCase().trim();
+      if (!t) {
+        renderizarBlocosDev(devGruposCache);
+        return;
+      }
+
+      const filtrados = [];
+      devGruposCache.forEach(g => {
+        const matchingTasks = (g.tasks || []).filter(item =>
+          (item.key && item.key.toLowerCase().includes(t)) ||
+          (item.summary && item.summary.toLowerCase().includes(t)) ||
+          (g.nome && g.nome.toLowerCase().includes(t)) ||
+          (g.sigla && g.sigla.toLowerCase().includes(t))
+        );
+
+        if (matchingTasks.length > 0) {
+          filtrados.push({
+            ...g,
+            total: matchingTasks.length,
+            hasAlert: matchingTasks.some(t => t.diasAberta >= 7),
+            tasks: matchingTasks
+          });
+        }
+      });
+
+      renderizarBlocosDev(filtrados);
+    }
+
+    // ============================================================================
+    // MÓDULO 5: ESTEIRA DE TRIAGEM N1 & N2 (SUPORTE MULTI-ESTADO)
+    // ============================================================================
+    let n1n2GruposCache = [];
+    let n1n2IssuesCache = [];
+
+    async function carregarTriagemN1N2Issues(silencioso = false) {
+      const grid = document.getElementById("n1n2GridEstados");
+      if (!silencioso && grid) {
+        grid.innerHTML = `<div class="noc-grid-full" style="text-align:center; padding: 40px; color: var(--text-sub);">⏳ Carregando tarefas em Triagem N1 & N2...</div>`;
+      }
+
+      try {
+        const res = await fetch("/api/v1/modules/triagem-n1n2/issues", { headers: authHeaders() });
+        if (!res.ok) throw new Error("Erro ao consultar tarefas em Triagem N1 & N2 (HTTP " + res.status + ")");
+        const data = await res.json();
+
+        n1n2GruposCache = data.grupos || [];
+        n1n2IssuesCache = data.issues || [];
+
+        // Atualiza contador de cabeçalho e estado de alerta
+        const total = data.total || 0;
+        const totalEl = document.getElementById("n1n2TotalCount");
+        if (totalEl) totalEl.textContent = total;
+        const badge = document.getElementById("n1n2CounterBadge");
+        if (badge) {
+          if (data.hasAlert) {
+            badge.classList.add("alert-state");
+          } else {
+            badge.classList.remove("alert-state");
+          }
+        }
+
+        // Rodapé
+        const footerStatus = document.getElementById("n1n2FooterStatus");
+        if (footerStatus) {
+          if (data.hasCritico10d) {
+            footerStatus.innerHTML = `<span style="color:#DC2626;font-weight:bold;">⚠️ EXISTEM TICKETS DE SUPORTE COM MAIS DE 10 DIAS EM TRIAGEM</span>`;
+          } else if (data.hasAlert) {
+            footerStatus.innerHTML = `<span style="color:#F59E0B;font-weight:bold;">⚠️ TICKETS COM MAIS DE 7 DIAS EXIGEM ATENÇÃO</span>`;
+          } else {
+            footerStatus.innerHTML = `<span style="color:#059669;">● SLA de Triagem dentro da conformidade</span>`;
+          }
+        }
+        const footerUpdated = document.getElementById("n1n2FooterUpdated");
+        if (footerUpdated) {
+          footerUpdated.textContent = `Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`;
+        }
+
+        // Sincroniza layout persistido no servidor antes de renderizar
+        await sincronizarLayoutDoServidor("n1n2");
+        renderizarBlocosN1N2(n1n2GruposCache);
+      } catch (err) {
+        console.warn("Falha ao carregar tarefas em Triagem N1 & N2:", err);
+        if (!silencioso && grid) {
+          grid.innerHTML = `<div class="noc-grid-full" style="text-align:center; padding: 30px; color: var(--red);">${err.message}</div>`;
+        }
+      }
+    }
+
+    function renderizarBlocosN1N2(grupos) {
+      const grid = document.getElementById("n1n2GridEstados");
+      if (!grupos || grupos.length === 0) {
+        grid.innerHTML = `
+          <div class="noc-grid-full" style="text-align:center; padding: 50px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 8px;">
+            <div style="font-size: 36px; margin-bottom: 10px;">🎉</div>
+            <h3 style="margin: 0 0 6px 0; color: var(--text);">Nenhum chamado em Triagem N1 ou N2</h3>
+            <p style="margin: 0; font-size: 13px; color: var(--text-sub);">Fila de atendimento de primeiro e segundo nível zerada.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const blocosMap = new Map();
+      grupos.forEach(grupo => {
+        const tasks = grupo.tasks || [];
+        const alertClass = grupo.hasAlert ? "estado-counter-alert" : "";
+        const alertIcon = grupo.hasAlert ? `<span class="alerta-icon">⚠️</span>` : "";
+
+        const linhas = tasks.map(item => {
+          const isUrgent = (item.diasAberta >= 7);
+          return `
+            <tr class="${isUrgent ? 'row-urgent' : ''}">
+              <td class="col-ticket">
+                <a href="${item.link}" target="_blank">${item.key}</a>
+                <div style="font-size: 10px; color: var(--text-sub); margin-top: 2px;">${escapeHtml(item.status || '')}</div>
+              </td>
+              <td class="col-summary">
+                <div class="text-title">${escapeHtml(item.summary || 'Sem Título')}</div>
+              </td>
+              <td class="col-date">${item.created || '---'}</td>
+              <td class="col-age">
+                <span class="status-pill ${item.urgClass || 'badge-grey'}">${item.urgLabel || '---'}</span>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        const html = `
+          <div class="estado-bloco" id="card-n1n2-${grupo.sigla}" data-sigla="${grupo.sigla}">
+            <div class="estado-header" draggable="true" 
+                 ondragstart="onDashboardCardDragStart(event, 'n1n2', '${grupo.sigla}')"
+                 style="border-left-color: ${grupo.cor || '#26A69A'}; cursor: grab;" 
+                 title="Arraste pelo cabeçalho para mover este card para outra coluna">
+              <div class="estado-info">
+                <span style="font-size: 12px; color: var(--text-sub); margin-right: 4px; cursor: grab; user-select:none;" title="Arrastar para outra coluna">⠿</span>
+                <span class="estado-sigla" style="background: ${grupo.cor || '#26A69A'};">${grupo.sigla}</span>
+                <span class="estado-nome">${grupo.nome}</span>
+                ${alertIcon}
+              </div>
+              <div class="estado-counter ${alertClass}">
+                ${grupo.total} ticket${grupo.total !== 1 ? 's' : ''}
+              </div>
+            </div>
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th class="col-ticket">TICKET / STATUS</th>
+                  <th class="col-summary">DESCRIÇÃO</th>
+                  <th class="col-date">ABERTO EM</th>
+                  <th class="col-age">DIAS</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${linhas}
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        blocosMap.set(grupo.sigla, { html, peso: tasks.length || 1, sigla: grupo.sigla });
+      });
+
+      distribuirEmColunasVisual("n1n2GridEstados", blocosMap, "n1n2");
+    }
+
+    function filtrarBlocosN1N2(termo) {
+      const t = (termo || "").toLowerCase().trim();
+      if (!t) {
+        renderizarBlocosN1N2(n1n2GruposCache);
+        return;
+      }
+
+      const filtrados = [];
+      n1n2GruposCache.forEach(g => {
+        const matchingTasks = (g.tasks || []).filter(item =>
+          (item.key && item.key.toLowerCase().includes(t)) ||
+          (item.summary && item.summary.toLowerCase().includes(t)) ||
+          (item.status && item.status.toLowerCase().includes(t)) ||
+          (g.nome && g.nome.toLowerCase().includes(t)) ||
+          (g.sigla && g.sigla.toLowerCase().includes(t))
+        );
+
+        if (matchingTasks.length > 0) {
+          filtrados.push({
+            ...g,
+            total: matchingTasks.length,
+            hasAlert: matchingTasks.some(t => t.diasAberta >= 7),
+            tasks: matchingTasks
+          });
+        }
+      });
+
+      renderizarBlocosN1N2(filtrados);
+    }
+
+    // ============================================================================
+    // MÓDULO 3: RELATÓRIOS E-MAIL
+    // ============================================================================
+    async function dispararRelatorioAnaliseDev() {
+      const btn = document.getElementById("btnDispararRelatorio");
+      const input = document.getElementById("mailDestinatariosInput");
+      const destinatarios = input ? input.value.trim() : "";
+
+      btn.disabled = true;
+      btn.textContent = "⏳ Disparando...";
+
+      try {
+        const res = await fetch("/api/v1/modules/reports/trigger-analise-dev", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({ destinatarios: destinatarios || null })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Erro ao disparar relatório");
+
+        mostrarToast(data.detalhe || "Relatório disparado com sucesso!");
+        carregarHistoricoRelatorios();
+      } catch (err) {
+        mostrarToast(err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "🚀 Disparar Relatório Agora";
+      }
+    }
+
+    async function carregarHistoricoRelatorios() {
+      const tbody = document.getElementById("tabelaHistoricoRelatoriosCorpo");
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 25px; color: var(--text-sub);">⏳ Carregando histórico de envios...</td></tr>`;
+
+      try {
+        const res = await fetch("/api/v1/modules/reports/history", { headers: authHeaders() });
+        if (!res.ok) throw new Error("Erro ao consultar histórico");
+        const data = await res.json();
+        const hist = data.history || [];
+
+        if (hist.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 25px; color: var(--text-sub);">Nenhum relatório disparado recentemente.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = hist.map(h => {
+          const isOk = h.status_envio === "enviado" || h.status_envio === "simulado";
+          const stBadge = isOk 
+            ? `<span class="badge" style="background:rgba(35,134,54,0.15); color:var(--green);">✅ ${h.status_envio}</span>`
+            : `<span class="badge" style="background:rgba(248,81,73,0.15); color:var(--red);">❌ ${h.status_envio}</span>`;
+          return `
+            <tr>
+              <td style="font-size:12px; color:var(--text-sub);">${h.created_at || ''}</td>
+              <td><strong>${h.tipo || ''}</strong></td>
+              <td style="font-size:12px; color:var(--text);">${h.destinatarios || ''}</td>
+              <td style="text-align:center; font-weight:700;">${h.total_tarefas || 0}</td>
+              <td>${stBadge}</td>
+              <td style="font-size:11px; color:var(--text-sub);">${h.mensagem || ''}</td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 25px; color: var(--red);">${err.message}</td></tr>`;
+      }
+    }
+
+    // ============================================================================
+    // MÓDULO 3.1: GESTÃO DE DESTINATÁRIOS DE E-MAIL (RELATÓRIO & ALERTAS SSL)
+    // ============================================================================
+    async function carregarDestinatarios() {
+      const tbody = document.getElementById("tabelaDestinatariosCorpo");
+      if (!tbody) return;
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 20px; color: var(--text-sub);">⏳ Carregando destinatários...</td></tr>`;
+
+      try {
+        const res = await fetch("/api/v1/modules/recipients", { headers: authHeaders() });
+        if (!res.ok) throw new Error("Erro ao carregar lista de destinatários");
+        const data = await res.json();
+        const lista = data.recipients || [];
+
+        if (lista.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 20px; color: var(--text-sub);">Nenhum destinatário cadastrado. Cadastre o primeiro acima.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = lista.map(r => `
+          <tr>
+            <td style="font-weight: 700; color: var(--text);">${escapeHtml(r.nome)}</td>
+            <td style="color: var(--accent); font-weight: 600;">${escapeHtml(r.email)}</td>
+            <td style="text-align: center;">
+              <input type="checkbox" ${r.relatorio_executivo ? 'checked' : ''} onchange="atualizarOpcaoDestinatario(${r.id}, 'relatorio_executivo', this.checked)" title="Ativar/desativar Relatório Executivo" style="cursor:pointer;" />
+            </td>
+            <td style="text-align: center;">
+              <input type="checkbox" ${r.alertas_certificados ? 'checked' : ''} onchange="atualizarOpcaoDestinatario(${r.id}, 'alertas_certificados', this.checked)" title="Ativar/desativar Alertas de Certificados" style="cursor:pointer;" />
+            </td>
+            <td style="text-align: center;">
+              <span class="badge" style="background: ${r.ativo ? 'rgba(35,134,54,0.15)' : 'rgba(248,81,73,0.15)'}; color: ${r.ativo ? 'var(--green)' : 'var(--red)'};">
+                ${r.ativo ? 'Ativo' : 'Inativo'}
+              </span>
+            </td>
+            <td style="text-align: right;">
+              <button class="btn-sm-action" onclick="testarEnvioDestinatario('${escapeHtml(r.email)}')" title="Enviar e-mail de teste imediato">📧 Testar</button>
+              <button class="btn-sm-action" onclick="removerDestinatario(${r.id}, '${escapeHtml(r.nome)}')" style="color: var(--red); border-color: rgba(248,81,73,0.4);" title="Remover contato">🗑️</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 20px; color: var(--red);">${err.message}</td></tr>`;
+      }
+    }
+
+    async function cadastrarDestinatario() {
+      const nomeInput = document.getElementById("novoRecipNome");
+      const emailInput = document.getElementById("novoRecipEmail");
+      const relInput = document.getElementById("novoRecipRelatorio");
+      const certInput = document.getElementById("novoRecipCertificados");
+
+      const nome = nomeInput?.value?.trim();
+      const email = emailInput?.value?.trim();
+
+      if (!nome || !email) {
+        mostrarToast("Preencha o nome e o e-mail corporativo.", true);
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/v1/modules/recipients", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({
+            nome: nome,
+            email: email,
+            relatorio_executivo: relInput?.checked ?? true,
+            alertas_certificados: certInput?.checked ?? true,
+            ativo: true
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Erro ao cadastrar destinatário");
+
+        mostrarToast("✅ Destinatário cadastrado com sucesso!");
+        nomeInput.value = "";
+        emailInput.value = "";
+        await carregarDestinatarios();
+      } catch (err) {
+        mostrarToast(err.message, true);
+      }
+    }
+
+    async function atualizarOpcaoDestinatario(id, campo, valor) {
+      try {
+        const payload = {};
+        payload[campo] = valor;
+        const res = await fetch(`/api/v1/modules/recipients/${id}`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error("Erro ao atualizar opção");
+        mostrarToast("Opção atualizada.");
+      } catch (err) {
+        mostrarToast(err.message, true);
+        await carregarDestinatarios();
+      }
+    }
+
+    async function removerDestinatario(id, nome) {
+      if (!confirm(`Deseja remover ${nome} da lista de notificações?`)) return;
+      try {
+        const res = await fetch(`/api/v1/modules/recipients/${id}`, {
+          method: "DELETE",
+          headers: authHeaders()
+        });
+        if (!res.ok) throw new Error("Erro ao remover destinatário");
+        mostrarToast("Destinatário removido.");
+        await carregarDestinatarios();
+      } catch (err) {
+        mostrarToast(err.message, true);
+      }
+    }
+
+    async function testarEnvioDestinatario(email) {
+      mostrarToast(`Disparando e-mail de teste para ${email}...`);
+      try {
+        const res = await fetch("/api/v1/modules/recipients/test-email", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({ email: email })
+        });
+        const data = await res.json();
+        if (data.status === "ok") {
+          mostrarToast(`✅ E-mail de teste entregue com sucesso para ${email}!`);
+        } else {
+          mostrarToast(`Erro no envio: ${data.mensagem}`, true);
+        }
+      } catch (err) {
+        mostrarToast("Erro ao testar envio: " + err.message, true);
+      }
+    }
+
+    // ============================================================================
+    // MÓDULO 4: CERTIFICADOS SSL (DETALHADO COM DATAS, PADRÃO E EXIGÊNCIA DE TOKEN)
+    // ============================================================================
+    let certsCache = [];
+
+    async function sincronizarGoogleSheetsCertificados() {
+      const btn = document.getElementById("btnSyncSheets");
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "⏳ Varrendo SSL & Atualizando Planilha...";
+      }
+
+      try {
+        const res = await fetch("/api/v1/modules/certificates/sync-sheets", {
+          method: "POST",
+          headers: authHeaders()
+        });
+        const data = await res.json();
+        if (data.status === "ok") {
+          const lAtualizadas = data.sheet_sync?.linhas_atualizadas || 0;
+          const msgSheet = data.sheet_sync?.atualizado
+            ? `Planilha Google atualizada com sucesso (${lAtualizadas} linhas renovadas)!`
+            : "Varredura concluída (sem alterações pendentes na planilha).";
+          mostrarToast(`✅ ${msgSheet} ${data.probes_sucesso} certificados validados ao vivo.`);
+        } else {
+          mostrarToast("Aviso na sincronização: " + (data.message || "Verifique os logs."), true);
+        }
+        await carregarCertificados();
+      } catch (err) {
+        mostrarToast("Erro ao sincronizar com Google Sheets: " + err.message, true);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "📊 Sincronizar Planilha Google & Probe SSL";
+        }
+      }
+    }
+
+    async function sincronizarTraefikCertificados() {
+      const btn = document.getElementById("btnSyncTraefik");
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "⏳ Sincronizando...";
+      }
+
+      try {
+        const res = await fetch("/api/v1/modules/certificates/sync-traefik", {
+          method: "POST",
+          headers: authHeaders()
+        });
+        const data = await res.json();
+        mostrarToast(`Sincronização concluída: ${data.total_sincronizados || 0} certificados atualizados.`);
+        await carregarCertificados();
+      } catch (err) {
+        mostrarToast("Erro ao sincronizar Traefik: " + err.message, true);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "⚡ Sincronizar Traefik (acme.json)";
+        }
+      }
+    }
+
+    const NOMES_ESTADOS_MAP = {
+      "SC": "Santa Catarina",
+      "PR": "Paraná",
+      "RO": "Rondônia",
+      "TO": "Tocantins",
+      "AM": "Amazonas",
+      "PI": "Piauí",
+      "MT": "Mato Grosso",
+      "SYSGM": "Guarda Municipal (GMSJ)",
+      "GM": "Guarda Municipal (GMSJ)",
+      "EGSYS": "Infraestrutura Corporativa egSYS",
+      "INFRA": "Infraestrutura Corporativa egSYS"
+    };
+
+    function formatarNomeEstado(sigla) {
+      const s = (sigla || "INFRA").toUpperCase();
+      return NOMES_ESTADOS_MAP[s] ? `${NOMES_ESTADOS_MAP[s]} (${s})` : s;
+    }
+
+    async function carregarCertificados(silencioso = false) {
+      const tbody = document.getElementById("tabelaCertificadosCorpo");
+      if (!silencioso && tbody) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 25px; color: var(--text-sub); font-weight:600;">⏳ Consultando certificados SSL e validade de domínios...</td></tr>`;
+      }
+
+      try {
+        const res = await fetch("/api/v1/modules/certificates", { headers: authHeaders() });
+        if (!res.ok) throw new Error("Erro ao consultar certificados (HTTP " + res.status + ")");
+        const data = await res.json();
+
+        const resumo = data.resumo || {};
+        const elTotal = document.getElementById("certTotal");
+        if (elTotal) elTotal.textContent = resumo.total || 0;
+        const elOk = document.getElementById("certOk");
+        if (elOk) elOk.textContent = resumo.ok || 0;
+        const elAlerta = document.getElementById("certAlerta");
+        if (elAlerta) elAlerta.textContent = resumo.alerta || 0;
+        const elVenc = document.getElementById("certVencidos");
+        if (elVenc) elVenc.textContent = (resumo.vencidos || 0) + (resumo.criticos || 0);
+
+        const badgeCount = document.getElementById("certCountBadge");
+        if (badgeCount) badgeCount.textContent = resumo.total || 0;
+
+        // Card / Banner de Alerta Crítico (Agrupado e Aninhado por Estado, Ordenado por Vencimento)
+        const banner = document.getElementById("certAlertBanner");
+        const itemsBox = document.getElementById("certAlertItems");
+        if (resumo.has_alert && resumo.itens_alerta && resumo.itens_alerta.length > 0) {
+          if (banner) banner.style.display = "block";
+          if (itemsBox) {
+            const gruposAlerta = {};
+            resumo.itens_alerta.forEach(it => {
+              const uf = (it.state || 'INFRA').toUpperCase();
+              if (!gruposAlerta[uf]) gruposAlerta[uf] = [];
+              gruposAlerta[uf].push(it);
+            });
+
+            // Ordena dentro do estado por data de vencimento (mais urgentes primeiro)
+            Object.keys(gruposAlerta).forEach(uf => {
+              gruposAlerta[uf].sort((a, b) => (parseInt(a.dias, 10) || 0) - (parseInt(b.dias, 10) || 0));
+            });
+
+            // Ordena estados pelos que têm vencimentos mais graves
+            const ufsAlerta = Object.keys(gruposAlerta).sort((a, b) => {
+              const minA = Math.min(...gruposAlerta[a].map(x => parseInt(x.dias, 10) || 0));
+              const minB = Math.min(...gruposAlerta[b].map(x => parseInt(x.dias, 10) || 0));
+              return minA - minB;
+            });
+
+            itemsBox.innerHTML = ufsAlerta.map(uf => `
+              <div class="cert-alert-state-group" style="margin-top: 10px; background: var(--card); border: 1px solid var(--border); border-left: 5px solid #dc2626; border-radius: 6px; padding: 12px 16px;">
+                <div style="font-weight: 900; font-size: 13.5px; color: var(--text); display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px;">
+                  <span>🏛️ Estado: <strong style="color:var(--accent);">${formatarNomeEstado(uf)}</strong></span>
+                  <span class="badge" style="background: #dc2626; color: #ffffff; font-size: 11px; font-weight: 900; border: 1px solid #b91c1c;">
+                    ${gruposAlerta[uf].length} certificado(s) crítico(s) ou vencido(s)
+                  </span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  ${gruposAlerta[uf].map(it => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; background: var(--th-bg); padding:8px 14px; border-radius:4px; border: 1px solid var(--border); flex-wrap:wrap;">
+                      <div>
+                        <a href="https://${it.domain}" target="_blank" style="color:var(--link-color); font-weight:800; text-decoration:none; font-size:13px;">🔒 ${it.domain}</a>
+                        <span style="color:var(--text-sub); font-size:12px; margin-left:6px; font-weight:700;">(${it.host || 'Traefik Host'})</span> &mdash;
+                        <span style="color:#dc2626; font-weight:900; font-size:13px;">${it.dias <= 0 ? '⛔ JÁ VENCIDO (' + it.vence_em + ')' : '⚠️ Vence em ' + it.dias + ' dia(s) (' + it.vence_em + ')'}</span>
+                      </div>
+                      <div>
+                        <span style="font-size:12px; font-weight:700; color:var(--text-sub);">Renovação: <strong style="color:var(--text);">${it.precisa_token}</strong></span>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `).join('');
+          }
+        } else {
+          if (banner) banner.style.display = "none";
+        }
+
+        certsCache = data.certificados || [];
+        filtrarTabelaCertificados();
+
+      } catch (err) {
+        console.warn("Falha ao carregar certificados SSL:", err);
+        if (!silencioso && tbody) {
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 25px; color: var(--red); font-weight:700;">${err.message} <br/><button class="btn-action" onclick="carregarCertificados()" style="margin-top:10px;">🔄 Tentar Novamente</button></td></tr>`;
+        }
+      }
+    }
+
+    function filtrarCertificadosPorCard(tipo) {
+      document.querySelectorAll(".cert-card-filter").forEach(el => el.classList.remove("active-filter"));
+      const cardEl = document.getElementById("card-cert-" + tipo);
+      if (cardEl) cardEl.classList.add("active-filter");
+
+      const sel = document.getElementById("certFilterStatus");
+      if (sel) {
+        sel.value = tipo;
+      }
+      filtrarTabelaCertificados();
+    }
+
+    async function dispararAlertaCertificadosEmail() {
+      const btn = document.getElementById("btnSendCertAlertEmail");
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "⏳ Disparando Alertas...";
+      }
+
+      try {
+        const res = await fetch("/api/v1/modules/certificates/send-alert", {
+          method: "POST",
+          headers: authHeaders()
+        });
+        const data = await res.json();
+        if (data.status === "ok") {
+          mostrarToast(`✅ ${data.mensagem || 'Alerta enviado!'} (${data.destinatarios?.length || 0} notificados)`);
+          carregarHistoricoRelatorios();
+        } else {
+          mostrarToast(`Aviso: ${data.mensagem || "Falha no envio"}`, true);
+        }
+      } catch (err) {
+        mostrarToast("Erro ao disparar alerta: " + err.message, true);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "🚨 Disparar Alertas SSL Agora";
+        }
+      }
+    }
+
+    function filtrarTabelaCertificados() {
+      const termo = (document.getElementById("certBuscaInput")?.value || "").toLowerCase().trim();
+      const statusFiltro = document.getElementById("certFilterStatus")?.value || "todos";
+
+      let filtrados = certsCache.slice();
+
+      if (statusFiltro === "criticos") {
+        filtrados = filtrados.filter(c => (c.dias_restantes || 0) <= 15 || c.status === "VENCIDO");
+      } else if (statusFiltro === "alerta") {
+        filtrados = filtrados.filter(c => (c.dias_restantes || 0) > 0 && (c.dias_restantes || 0) <= 30);
+      } else if (statusFiltro === "validos") {
+        filtrados = filtrados.filter(c => (c.dias_restantes || 0) > 30);
+      }
+
+      if (termo) {
+        filtrados = filtrados.filter(c =>
+          (c.domain && c.domain.toLowerCase().includes(termo)) ||
+          (c.host && c.host.toLowerCase().includes(termo)) ||
+          (c.state && c.state.toLowerCase().includes(termo)) ||
+          (c.issuer && c.issuer.toLowerCase().includes(termo)) ||
+          (c.padrao && c.padrao.toLowerCase().includes(termo)) ||
+          (c.precisa_token && c.precisa_token.toLowerCase().includes(termo)) ||
+          (c.tipo_renovacao && c.tipo_renovacao.toLowerCase().includes(termo))
+        );
+      }
+
+      const badgeCount = document.getElementById("certCountBadge");
+      if (badgeCount) badgeCount.textContent = filtrados.length;
+
+      renderizarTabelaCertificados(filtrados);
+    }
+
+    function renderizarTabelaCertificados(lista) {
+      const tbody = document.getElementById("tabelaCertificadosCorpo");
+      if (!lista || lista.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 30px; color: var(--text-sub); font-weight:600;">Nenhum certificado localizado para o filtro selecionado.</td></tr>`;
+        return;
+      }
+
+      // Agrupa certificados por estado
+      const grupos = {};
+      lista.forEach(c => {
+        const uf = (c.state || 'INFRA').toUpperCase();
+        if (!grupos[uf]) grupos[uf] = [];
+        grupos[uf].push(c);
+      });
+
+      // Ordena os certificados de cada estado por data de vencimento / dias restantes (ASC: mais urgentes primeiro)
+      Object.keys(grupos).forEach(uf => {
+        grupos[uf].sort((a, b) => {
+          const diasA = parseInt(a.dias_restantes, 10) ?? 999;
+          const diasB = parseInt(b.dias_restantes, 10) ?? 999;
+          return diasA - diasB;
+        });
+      });
+
+      // Ordena os estados: aqueles com certificados mais críticos/vencidos vêm primeiro
+      const ufs = Object.keys(grupos).sort((a, b) => {
+        const minA = Math.min(...grupos[a].map(x => parseInt(x.dias_restantes, 10) ?? 999));
+        const minB = Math.min(...grupos[b].map(x => parseInt(x.dias_restantes, 10) ?? 999));
+        if (minA !== minB) return minA - minB;
+        return a.localeCompare(b);
+      });
+
+      let html = "";
+      ufs.forEach(uf => {
+        const itens = grupos[uf];
+        const vencidosNoEstado = itens.filter(c => (parseInt(c.dias_restantes, 10) || 0) <= 0 || c.status === "VENCIDO").length;
+        const criticosNoEstado = itens.filter(c => (parseInt(c.dias_restantes, 10) || 0) > 0 && (parseInt(c.dias_restantes, 10) || 0) <= 15).length;
+        
+        let resumoBadges = "";
+        if (vencidosNoEstado > 0) {
+          resumoBadges += `<span class="badge" style="background:rgba(239,68,68,0.2); color:var(--red); font-weight:800; font-size:11px; margin-left:6px; border:1px solid rgba(239,68,68,0.4);">⛔ ${vencidosNoEstado} Vencido(s)</span>`;
+        }
+        if (criticosNoEstado > 0) {
+          resumoBadges += `<span class="badge" style="background:rgba(239,68,68,0.15); color:var(--red); font-weight:800; font-size:11px; margin-left:6px; border:1px solid rgba(239,68,68,0.3);">🚨 ${criticosNoEstado} Crítico(s)</span>`;
+        }
+
+        // Linha descritiva do estado (Aninhamento por Estado)
+        html += `
+          <tr class="tr-group-state" style="background: var(--th-bg); border-top: 2px solid var(--accent); border-bottom: 2px solid var(--border);">
+            <td colspan="8" style="padding: 10px 14px; font-weight: 800; font-size: 13px; color: var(--text);">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:16px;">🏛️</span>
+                  <span>Estado: <strong style="color:var(--accent); font-size:13.5px;">${formatarNomeEstado(uf)}</strong></span>
+                  ${resumoBadges}
+                </div>
+                <div style="font-size:12px; font-weight:700; color:var(--text-sub);">
+                  Total: <strong>${itens.length}</strong> certificado(s)
+                </div>
+              </div>
+            </td>
+          </tr>
+        `;
+
+        // Linhas de certificados do estado (ordenadas por vencimento)
+        itens.forEach(c => {
+          const dias = parseInt(c.dias_restantes, 10) || 0;
+          let badgeStatus = `<span class="badge" style="background:#16a34a; color:#ffffff; font-weight:900; border:1px solid #15803d;">● Válido (${dias}d)</span>`;
+          if (c.status === "VENCIDO" || dias <= 0) {
+            badgeStatus = `<span class="badge" style="background:#dc2626; color:#ffffff; font-weight:900; border:1px solid #b91c1c;">⛔ VENCIDO (${dias}d)</span>`;
+          } else if (dias <= 15) {
+            badgeStatus = `<span class="badge" style="background:#dc2626; color:#ffffff; font-weight:900; border:1px solid #b91c1c;">🚨 Crítico (${dias}d)</span>`;
+          } else if (dias <= 30) {
+            badgeStatus = `<span class="badge" style="background:#d97706; color:#ffffff; font-weight:900; border:1px solid #b45309;">⚠️ Alerta (${dias}d)</span>`;
+          }
+
+          const tokenText = c.precisa_token || "Não (Automático)";
+          const isSim = tokenText.toLowerCase().includes("sim");
+          const tokenBadge = isSim
+            ? `<span class="badge-token-sim" style="background:#f59e0b; color:#ffffff; font-weight:800; border:1px solid #d97706;">🔑 ${tokenText}</span>`
+            : `<span class="badge-token-nao" style="background:#3b82f6; color:#ffffff; font-weight:800; border:1px solid #2563eb;">⚡ ${tokenText}</span>`;
+
+          html += `
+            <tr>
+              <td style="padding-left: 24px;">
+                <a href="https://${c.domain}" target="_blank" style="color:var(--link-color); font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-size:13px;">
+                  🔒 ${c.domain}
+                </a>
+              </td>
+              <td style="color:var(--text); font-size:12.5px; font-weight:700;">
+                ${c.host || 'Traefik Host'}
+                <span class="badge badge-state" style="margin-left:4px; font-weight:900;">${c.state || 'INFRA'}</span>
+              </td>
+              <td style="text-align:center; font-size:12px; color:var(--text-sub); font-weight:700;">${c.valid_from || '–'}</td>
+              <td style="text-align:center; font-size:12.5px; color:var(--text); font-weight:900;">${c.valid_until || '–'}</td>
+              <td style="text-align:center;">${badgeStatus}</td>
+              <td style="font-size:12px; font-weight:700; color:var(--text);">${c.padrao || "Let's Encrypt (DV X.509 RSA/ECC)"}</td>
+              <td style="text-align:center;">${tokenBadge}</td>
+              <td style="font-size:12px; color:var(--text-sub); font-weight:700;">${c.tipo_renovacao || 'ACME TLS-ALPN-01 (Traefik)'}</td>
+            </tr>
+          `;
+        });
+      });
+
+      tbody.innerHTML = html;
     }
 
     // ==========================================
@@ -2751,9 +5073,20 @@
           ? `<div style="margin-top:4px;"><span class="badge" style="background:rgba(245,158,11,0.15);color:#d97706;border:1px solid rgba(245,158,11,0.3);font-size:10px;" title="Usuário deve obrigatoriamente trocar a senha no 1º acesso">⚠️ 1º Acesso Pendente</span></div>`
           : `<div style="margin-top:4px;"><span class="badge" style="background:rgba(35,134,54,0.12);color:#2ea043;border:1px solid rgba(35,134,54,0.25);font-size:10px;" title="Senha definitiva configurada">✅ Senha Definida</span></div>`;
 
-        const roleBadge = u.role === "admin"
-          ? `<span class="badge" style="background:rgba(234,179,8,0.15);color:#eab308;border:1px solid rgba(234,179,8,0.3);">👑 Coordenação/Admin</span>`
-          : `<span class="badge badge-state">Gestor</span>`;
+        let roleBadge = `<span class="badge badge-state">Gestor</span>`;
+        const uRole = (u.role || "").toLowerCase();
+        const uUsername = (u.username || "").toLowerCase();
+        if (uRole === "admin" || uRole === "coordenador" || uUsername === "coordenador" || uUsername === "admin") {
+          roleBadge = `<span class="badge" style="background:rgba(234,179,8,0.15);color:#eab308;border:1px solid rgba(234,179,8,0.3);">👑 Coordenação</span>`;
+        } else if (uRole === "n2") {
+          roleBadge = `<span class="badge" style="background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.3);">🛠️ Analista N2</span>`;
+        } else if (uRole === "n1") {
+          roleBadge = `<span class="badge" style="background:rgba(59,130,246,0.15);color:#3b82f6;border:1px solid rgba(59,130,246,0.3);">📟 Analista N1</span>`;
+        } else if (uRole === "monitor") {
+          roleBadge = `<span class="badge" style="background:rgba(168,85,247,0.15);color:#a855f7;border:1px solid rgba(168,85,247,0.3);">📺 NOC Monitor TV</span>`;
+        } else if (uRole === "viewer") {
+          roleBadge = `<span class="badge badge-grey">Visualizador</span>`;
+        }
 
         const estadoBadge = `<span class="badge" style="background:var(--chip-bg);color:var(--chip-text);text-transform:uppercase;">${u.estado}</span>`;
 
@@ -2761,7 +5094,10 @@
           ? u.espacos.split(",").map(p => `<span class="badge" style="background:rgba(56,139,253,0.15);color:var(--accent);font-weight:700;font-size:10px;margin:2px 3px;display:inline-block;">${p.trim()}</span>`).join("")
           : `<span style="font-size:11px;color:var(--text-sub);">Padrão (${u.estado.toUpperCase()})</span>`;
 
-        const isSelf = usuarioLogado && usuarioLogado.username && usuarioLogado.username.toLowerCase() === u.username.toLowerCase();
+        const isSelf = usuarioLogado && usuarioLogado.username && usuarioLogado.username.toLowerCase() === uUsername;
+        const isN2 = usuarioLogado && (usuarioLogado.role === "n2");
+        const isProtectedTarget = ["admin", "coordenador", "n2"].includes(uRole) || ["admin", "coordenador"].includes(uUsername);
+        const canManage = !(isN2 && isProtectedTarget);
 
         return `
           <tr>
@@ -2774,12 +5110,16 @@
             <td><code style="font-size:11px;background:var(--th-bg);padding:2px 6px;border-radius:4px;">${u.painel_url}</code></td>
             <td>${statusBadge}${pswBadge}</td>
             <td>
+              ${canManage ? `
               <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
                 <button class="btn-sm-action" onclick="abrirModalEditarUsuario(${JSON.stringify(u).replace(/"/g, '&quot;')})" title="Editar cadastro e projetos">✏️ Editar</button>
                 <button class="btn-sm-action" onclick="redefinirSenhaUsuario(${u.id}, '${u.username}')" title="Redefinir senha e configurar 1º acesso">🔑 Senha</button>
                 <button class="btn-sm-action" onclick="alternarStatusUsuario(${u.id}, ${u.is_active})" title="${u.is_active ? 'Desativar' : 'Ativar'}">${u.is_active ? '⏸️' : '▶️'}</button>
                 ${!isSelf ? `<button class="btn-sm-action btn-sm-danger" onclick="excluirUsuario(${u.id}, '${u.username}')" title="Excluir">🗑️</button>` : ''}
               </div>
+              ` : `
+              <span style="font-size:11px;color:var(--text-sub);padding:3px 8px;background:var(--th-bg);border-radius:4px;border:1px solid var(--border);display:inline-block;" title="Apenas Coordenadores podem gerenciar este perfil">🔒 Restrito à Coordenação</span>
+              `}
             </td>
           </tr>
         `;
@@ -2851,6 +5191,12 @@
       document.getElementById("edit_u_espacos").value = u.espacos || "";
       document.getElementById("edit_u_must_change_password").checked = !!u.must_change_password;
 
+      const ativos = (u.modulos_ativos || "").split(",").map(s => s.trim().toLowerCase());
+      document.getElementById("mod_check_edit_visao_gerencial").checked = ativos.includes("visao_gerencial");
+      document.getElementById("mod_check_edit_analise_dev").checked = ativos.includes("analise_dev");
+      document.getElementById("mod_check_edit_relatorio_email").checked = ativos.includes("relatorio_email");
+      document.getElementById("mod_check_edit_certificados_alert").checked = ativos.includes("certificados_alert");
+
       const m = document.getElementById("modalEditarUsuario");
       if (m) {
         m.style.display = "flex";
@@ -2894,6 +5240,13 @@
       const espacos = document.getElementById("edit_u_espacos").value.trim();
       const must_change = document.getElementById("edit_u_must_change_password").checked ? 1 : 0;
 
+      const selMods = [];
+      if (document.getElementById("mod_check_edit_visao_gerencial").checked) selMods.push("visao_gerencial");
+      if (document.getElementById("mod_check_edit_analise_dev").checked) selMods.push("analise_dev");
+      if (document.getElementById("mod_check_edit_relatorio_email").checked) selMods.push("relatorio_email");
+      if (document.getElementById("mod_check_edit_certificados_alert").checked) selMods.push("certificados_alert");
+      const modulos_ativos = selMods.join(",");
+
       const btn = document.getElementById("btnSalvarEdicaoUsuario");
       btn.disabled = true;
       btn.textContent = "Salvando...";
@@ -2902,12 +5255,12 @@
         const res = await fetch(`/api/v1/auth/users/${id}`, {
           method: "PUT",
           headers: authHeaders(),
-          body: JSON.stringify({ nome, role, estado, painel_url, espacos, must_change_password: must_change })
+          body: JSON.stringify({ nome, role, estado, painel_url, espacos, modulos_ativos, must_change_password: must_change })
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || "Erro ao atualizar usuário");
 
-        mostrarToast("Usuário atualizado com sucesso!");
+        mostrarToast("Usuário e permissões de módulos atualizados com sucesso!");
         const m = document.getElementById("modalEditarUsuario");
         if (m) m.classList.remove("open");
         carregarUsuarios();
@@ -3130,9 +5483,107 @@
       mostrarToast(`Multi-filtro aplicado: ${chaves.join(", ")}`);
     }
 
+    // Recalcula colunas Masonry ao redimensionar a tela
+    let resizeTimerMasonry = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimerMasonry);
+      resizeTimerMasonry = setTimeout(() => {
+        const viewDev = document.getElementById("view-mod-dev");
+        if (viewDev && viewDev.style.display !== "none" && devGruposCache && devGruposCache.length > 0) {
+          renderizarBlocosDev(devGruposCache);
+        }
+        const viewN1N2 = document.getElementById("view-mod-n1n2");
+        if (viewN1N2 && viewN1N2.style.display !== "none" && n1n2GruposCache && n1n2GruposCache.length > 0) {
+          renderizarBlocosN1N2(n1n2GruposCache);
+        }
+      }, 200);
+    });
+
+    // ============================================================================
+    // ⏱️ AUTO-REFRESH INTELIGENTE (45s) — ZERO INTERRUPÇÃO DO USUÁRIO
+    // Preserva o Drawer Lateral, Modais Abertos e Campos em Edição
+    // ============================================================================
+    async function recarregarObservabilidadeSilencioso() {
+      try {
+        let basePath = window.location.pathname;
+        if (basePath.endsWith("/") || basePath.endsWith(".html") || basePath.endsWith("coordenador")) {
+          basePath = basePath.substring(0, basePath.lastIndexOf("/"));
+        }
+        const cacheBuster = "?v=" + Date.now();
+        const url = (basePath ? basePath + "/" : "") + "assets/jira_real_cache.json" + cacheBuster;
+        
+        let res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) res = await fetch("assets/jira_real_cache.json" + cacheBuster, { cache: "no-store" });
+        if (!res.ok) res = await fetch("/assets/jira_real_cache.json" + cacheBuster, { cache: "no-store" });
+        if (!res.ok) return;
+        const freshDb = await res.json();
+        if (freshDb && typeof freshDb === "object") {
+          JIRA_DB = freshDb;
+          selecionarEspaco();
+        }
+      } catch (err) {
+        console.warn("Auto-refresh observabilidade silencioso:", err);
+      }
+    }
+
+    let autoRefreshTimerCoordenador = null;
+
+    function podeExecutarAutoRefreshCoordenador() {
+      if (document.visibilityState !== "visible") return false;
+
+      // 1. Protege estritamente o Drawer lateral de jornada do chamado
+      const drawer = document.getElementById("drawer");
+      const overlay = document.getElementById("drawerOverlay");
+      if ((drawer && drawer.classList.contains("open")) || (overlay && overlay.classList.contains("open"))) {
+        return false;
+      }
+
+      // 2. Protege contra qualquer modal em exibição
+      const modais = ["modalMultiEspacos", "modalEditarUsuario", "modalOrdemCards"];
+      for (const id of modais) {
+        const el = document.getElementById(id);
+        if (el && el.style.display !== "none" && (el.classList.contains("open") || el.style.display === "flex" || el.style.display === "block")) {
+          return false;
+        }
+      }
+
+      // 3. Protege formulários / campos de texto que o usuário esteja digitando
+      const active = document.activeElement;
+      if (active && ["INPUT", "SELECT", "TEXTAREA"].includes(active.tagName)) {
+        return false;
+      }
+
+      return true;
+    }
+
+    async function executarCicloAutoRefresh() {
+      if (!podeExecutarAutoRefreshCoordenador()) return;
+      const aba = window.abaAtiva || "observabilidade";
+      try {
+        if (aba === "mod-dev") {
+          await carregarAnaliseDevIssues(true);
+        } else if (aba === "mod-n1n2") {
+          await carregarTriagemN1N2Issues(true);
+        } else if (aba === "mod-cert") {
+          await carregarCertificados(true);
+        } else if (aba === "observabilidade") {
+          await recarregarObservabilidadeSilencioso();
+        }
+      } catch (e) {
+        console.warn("Ciclo auto-refresh coordenador silencioso:", e);
+      }
+    }
+
+    function iniciarAutoRefreshCoordenador() {
+      if (autoRefreshTimerCoordenador) clearInterval(autoRefreshTimerCoordenador);
+      autoRefreshTimerCoordenador = setInterval(executarCicloAutoRefresh, 45000);
+    }
+
     window.addEventListener("DOMContentLoaded", () => {
       if (!validarAutenticacao()) return;
       carregarDadosIniciais();
+      carregarCatalogoModulos();
+      iniciarAutoRefreshCoordenador();
     });
   </script>
 </body>

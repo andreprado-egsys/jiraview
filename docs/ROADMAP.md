@@ -87,10 +87,39 @@
 - [x] **Fim do Truncamento de 50 Itens**:
   - Ampliação do cap padrão para 250 itens com leitor por cursor, exibindo 100% da carteira sem cortes.
 
-## v0.5 — Automação e Governança Multi-Estado
+## v0.5 (concluída) — Absorção Modular Node-RED, Relatórios Executivos, Monitor SSL & Layouts Persistentes (PSEI-312 a PSEI-319)
+- [x] **Absorção e Modernização das Esteiras do Node-RED**:
+  - Migração soberana das esteiras de Análise Dev e Triagem N1/N2 do container legado `jira-dashboard` para o container único `egsys-jiraview`.
+  - Descomissionamento completo da aba redundante Central NOC, eliminando tráfego ocioso.
+- [x] **Editor Visual de Disposição e Drag-and-Drop Livre**:
+  - Arrasto de cards diretamente na tela principal do monitor (`draggable="true"`, layout reativo em colunas).
+  - Modal interativo Kanban com seleção de 2 a 5 colunas e ajustes de 1 clique.
+  - Persistência em banco SQLite (`noc_layouts`) sincronizada bidirecionalmente com `localStorage`.
+- [x] **Monitor de Certificados SSL da Infraestrutura egSYS**:
+  - Tabela com 92 domínios, cards de status executivo, cálculo de dias para expiração e probe TLS ativo.
+  - Sincronização bidirecional com Google Sheets (`1yO1L72qkR1-SXSBGrYtTe9xtm1QCSVcfKqRqzSjbtGU`) e Traefik (`acme.json`).
+- [x] **Central Unificada de Relatórios Executivos & E-mails**:
+  - Disparos manuais e automáticos via SMTP Google corporativo (`orion@egsys.com.br`).
+  - Gestão granular de destinatários (`email_recipients`) com separação entre Relatórios Jira e Alertas SSL.
+  - Histórico de envios auditável com timestamps, contagem de tarefas e respostas do servidor.
+- [x] **Matriz Canônica de RBAC em 5 Níveis & Kiosk Wallboard (v0.5.8)**:
+  - Perfis formalizados: `coordenador` (global irrestrito), `n2` (operacional e gestão delegada), `n1` (restrito a 3 abas operacionais), `monitor` (kiosk TV wallboard) e `viewer`/`manager` (específico por estado).
+  - Conta de sistema `monitor` com token perpétuo de 365 dias e isenção de troca compulsória de senha para TVs de suporte ininterruptas.
+  - Salvaguardas anti-escalada de privilégio (`require_user_manager`) impedindo N2 de alterar contas de coordenação ou outros N2.
+- [x] **Auto-Refresh Inteligente e Não-Destrutivo (45s)**:
+  - Polling a cada 45s nas 4 abas críticas (Observabilidade, Esteira Dev, Triagem N1&N2, Certificados SSL).
+  - Bloqueio estrito de refresh ao detectar gaveta de diagnóstico aberta (`#drawer.open`), modais ou inputs ativos.
+  - Resiliência operacional sem logouts involuntários e retenção do último estado válido.
+- [x] **Certificados SSL por Estado & Ergonomia Visual para TVs (v0.5.9 — PSEI-321)**:
+  - Aninhamento hierárquico no banner de alertas com blocos dedicados por estado, contagem de volumetria e ordenação cronológica estrita por vencimento.
+  - Eliminação da "sombra vermelha" e fundo avermelhado translúcido de `.row-urgent td` que borrava as fontes em TVs.
+  - Calibração de contraste máximo WCAG AAA: Modo Claro com preto absoluto (`#000000`) e Modo Escuro com branco puro (`#ffffff`).
+  - Badges sólidos de alto contraste (`#dc2626`, `#d97706`, `#16a34a`) com tipografia branca em negrito.
+
+## v0.6 — Governança e Automações Corporativas
 - [ ] Regra de automação JSM (workflow/conclusão) substituindo script-timer quando permitido
-- [ ] Métricas de SLA por área/estado com histórico de conformidade
-- [ ] Descomissionamento do painel Node-RED `noc-jira` legado
+- [ ] Métricas avançadas de SLA por área/estado com histórico de conformidade
+- [ ] Desligamento físico e remoção do volume `/var/egsys-docker/container/jira-dashboard` no host de produção
 
 ## Backlog técnico
 - [ ] Testes pytest (RBAC, chamadas Jira mockadas, cálculo do funil) + gate `ruff`

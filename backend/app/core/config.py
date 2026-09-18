@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     app_env: str = "dev"
     app_port: int = 8090
     secret_key: str = "change-me"
-    access_token_expire_minutes: int = 60
+    access_token_expire_minutes: int = 10080  # 7 dias (evita 401 durante operação do NOC)
     refresh_token_expire_days: int = 7
     cors_origins: str = "http://localhost:5173,http://localhost:3000"
 
@@ -28,6 +28,13 @@ class Settings(BaseSettings):
     max_mem: str = "512m"
     max_cpu: str = "1.0"
     max_pids: int = 150
+
+    # SMTP Corporativo (padronizado com o projeto Orion)
+    smtp_host: str = "smtp.gmail.com"
+    smtp_port: int = 587
+    smtp_user: str = "orion@egsys.com.br"
+    smtp_password: str = "xrnrxpuvmdncxwgk"
+    smtp_from_email: str = "orion@egsys.com.br"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

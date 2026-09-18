@@ -8,9 +8,17 @@ from pydantic import BaseModel
 
 from .config import get_settings
 
-Role = Literal["viewer", "manager", "admin", "coordenador"]
+Role = Literal["viewer", "manager", "monitor", "n1", "n2", "admin", "coordenador"]
 
-ROLE_LEVEL = {"viewer": 1, "manager": 2, "admin": 3, "coordenador": 3}
+ROLE_LEVEL = {
+    "viewer": 1,
+    "manager": 1,
+    "monitor": 1,
+    "n1": 2,
+    "n2": 3,
+    "admin": 4,
+    "coordenador": 4,
+}
 
 
 class TokenPayload(BaseModel):
@@ -18,6 +26,7 @@ class TokenPayload(BaseModel):
     role: str = "viewer"
     state: str = "sc"
     espacos: Optional[str] = ""
+    modulos_ativos: Optional[str] = ""
     nome: Optional[str] = None
     painel_url: Optional[str] = None
     must_change_password: bool = False
@@ -109,6 +118,7 @@ def create_access_token(
     role: str = "viewer",
     state: str = "sc",
     espacos: Optional[str] = "",
+    modulos_ativos: Optional[str] = "",
     nome: Optional[str] = None,
     painel_url: Optional[str] = None,
     must_change_password: bool = False,
@@ -116,12 +126,18 @@ def create_access_token(
     from datetime import datetime, timedelta, timezone
 
     s = get_settings()
-    exp = datetime.now(timezone.utc) + timedelta(minutes=s.access_token_expire_minutes)
+    # Usuário monitor (Kiosk / Wallboard de suporte) recebe token perpétuo de 365 dias
+    if role == "monitor" or sub.lower() == "monitor":
+        exp = datetime.now(timezone.utc) + timedelta(days=365)
+    else:
+        exp = datetime.now(timezone.utc) + timedelta(minutes=s.access_token_expire_minutes)
+
     payload = {
         "sub": sub,
         "role": role,
         "state": state,
         "espacos": espacos or "",
+        "modulos_ativos": modulos_ativos or "",
         "nome": nome or sub,
         "painel_url": painel_url or "/painel_sc",
         "must_change_password": bool(must_change_password),
@@ -149,8 +165,28 @@ def get_current_user(
 
 def require_role(min_role: Role):
     def check(user: Annotated[TokenPayload, Depends(get_current_user)]):
-        if ROLE_LEVEL[user.role] < ROLE_LEVEL[min_role]:
+        if ROLE_LEVEL.get(user.role, 0) < ROLE_LEVEL.get(min_role, 99):
             raise HTTPException(status.HTTP_403_FORBIDDEN, "Permissão insuficiente")
+        return user
+
+    return check
+
+
+def require_module(module_id: str):
+    """Garante que o usuário tenha o módulo habilitado no perfil ou seja administrador geral."""
+    def check(user: Annotated[TokenPayload, Depends(get_current_user)]):
+        if user.role in ("admin", "coordenador") or user.sub in ("admin", "coordenador"):
+            return user
+        if user.role == "n2":
+            return user
+        if user.role in ("n1", "monitor") and module_id in ("analise_dev", "triagem_n1n2", "certificados_alert"):
+            return user
+        ativos = [m.strip().lower() for m in (user.modulos_ativos or "").split(",") if m.strip()]
+        if module_id.strip().lower() not in ativos:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Módulo '{module_id}' não habilitado para o usuário '{user.sub}'."
+            )
         return user
 
     return check

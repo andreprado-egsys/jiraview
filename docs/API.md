@@ -1,12 +1,15 @@
 # API — egSYS JiraView
 
 Base: `https://suporte-monitor.egsys.siseg.tech` (prod) · local `:8090`
-Auth: `Authorization: Bearer <JWT>` (RBAC: `viewer` < `manager` < `admin`/`coordenador`).
+Auth: `Authorization: Bearer <JWT>` (Matriz Canônica de RBAC em 5 Níveis: `monitor` = Nível 1 | `viewer`/`manager` = Nível 1 | `n1` = Nível 2 | `n2` = Nível 3 | `coordenador` = Nível 4).
 
 ## Endpoints de Autenticação & Gestão de Acessos
 
 ### POST `/api/v1/auth/login`
 Autentica usuário cadastrado no banco SQLite e retorna JWT com URL de direcionamento específico e flag de primeiro acesso. **Público**.
+- **Perfil Geral**: Token JWT padrão com validade de 24 horas.
+- **Perfil Kiosk Wallboard (`monitor`)**: Gera automaticamente **token de longa duração válido por 365 dias**, viabilizando execução ininterrupta em televisores e monitores de sala de suporte sem expiração de sessão e sem exigência de troca de senha (`must_change_password=0`).
+
 Payload:
 ```json
 {"username": "gestor.sc", "password": "egsys@sc2026"}
@@ -42,10 +45,11 @@ Payload:
 Retorna dados cadastrais do operador autenticado via token Bearer. **Auth obrigatório**.
 
 ### GET `/api/v1/auth/users`
-Lista todos os usuários cadastrados no banco SQLite. **Acesso restrito à Coordenação / Admin** (`role in ('admin', 'coordenador')`).
+Lista todos os usuários cadastrados no banco SQLite. **Acesso autorizado via `require_user_manager` (`coordenador` e `n2`)**.
 
 ### POST `/api/v1/auth/users`
-Cadastra novo operador no sistema com direcionamento estadual. **Acesso restrito à Coordenação / Admin**.
+Cadastra novo operador no sistema com direcionamento estadual. **Acesso autorizado via `require_user_manager` (`coordenador` e `n2`)**.
+- **Salvaguarda N2**: Analistas N2 só podem cadastrar contas com papéis `n1`, `monitor`, `viewer` ou `manager`. Tentativas de criar `coordenador` ou `n2` retornam **HTTP 403 Forbidden**.
 Payload:
 ```json
 {
@@ -62,10 +66,13 @@ Payload:
 ```
 
 ### PUT `/api/v1/auth/users/{user_id}`
-Atualiza dados cadastrais, espaços autorizados (`espacos`), redefine senha ou ativa/desativa usuário. **Acesso restrito à Coordenação / Admin**.
+Atualiza dados cadastrais, espaços autorizados (`espacos`), redefine senha ou ativa/desativa usuário. **Acesso autorizado via `require_user_manager` (`coordenador` e `n2`)**.
+- **Salvaguarda N2**: Analistas N2 são estritamente impedidos de alterar ou resetar senhas de usuários com nível hierárquico maior ou igual ao seu (`coordenador` ou `n2`), retornando **HTTP 403 Forbidden**.
 
 ### DELETE `/api/v1/auth/users/{user_id}`
-Remove usuário da base SQLite (impede que o usuário logado exclua a si mesmo). **Acesso restrito à Coordenação / Admin**.
+Remove usuário da base SQLite. **Acesso autorizado via `require_user_manager` (`coordenador` e `n2`)**.
+- Impede que o operador conectado exclua a própria conta.
+- **Salvaguarda N2**: Bloqueia exclusão de contas com papel `coordenador` ou `n2` (retorna **HTTP 403 Forbidden**).
 
 ## Endpoints de Monitoramento & Métricas JSM
 
@@ -241,7 +248,109 @@ Exemplo de Resposta:
 
 ---
 
+## Endpoints das Extensões Modulares (NOC, Esteiras, Relatórios & Certificados SSL)
+
+A partir da versão v0.5.0 (PSEI-312 a PSEI-319), o JiraView absorveu e modernizou as esteiras de governança técnica e alertas corporativos. Todos os endpoints abaixo exigem cabeçalho `Authorization: Bearer <JWT>` e permissão modular correspondente.
+
+### GET `/api/v1/modules/catalog`
+Retorna o catálogo de módulos operacionais disponíveis no sistema e se estão habilitados para o operador conectado.
+```json
+{
+  "is_admin": true,
+  "modules": [
+    {"id": "analise_dev", "nome": "Esteira de Análise de Dev", "habilitado": true},
+    {"id": "triagem_n1n2", "nome": "Esteira de Triagem N1/N2", "habilitado": true},
+    {"id": "relatorio_email", "nome": "Relatórios Executivos & Destinatários", "habilitado": true},
+    {"id": "certificados_alert", "nome": "Monitor de Certificados SSL", "habilitado": true}
+  ]
+}
+```
+
+### GET `/api/v1/modules/analise-dev/issues`
+Retorna todas as tarefas da esteira de Análise de Desenvolvimento em tempo real no Jira Cloud, agrupadas por estado/projeto (SC, PR, AM, TO, RO, GM) com alertas de SLA (&ge; 7d e &ge; 10d).
+Retorna: `total`, `hasAlert`, `hasCritico10d`, `grupos[]`, `issues[]`.
+
+### GET `/api/v1/modules/triagem-n1n2/issues`
+Retorna todos os tickets em triagem inicial de suporte (N1 e N2) em tempo real, particionados por estado com cálculo de tempo em aberto e severidade.
+Retorna: `total`, `hasAlert`, `hasCritico10d`, `grupos[]`, `issues[]`.
+
+### POST `/api/v1/modules/reports/trigger-analise-dev`
+Dispara o envio manual do Relatório Executivo semanal da Esteira de Análise de Desenvolvimento por e-mail via SMTP corporativo (`smtp.gmail.com:587`, remetente `orion@egsys.com.br`) para os destinatários cadastrados com `relatorio_executivo = 1`.
+Payload opcional:
+```json
+{"destinatarios": "diretoria@egsys.com.br, gerente@egsys.com.br"}
+```
+
+### GET `/api/v1/modules/reports/history`
+Retorna os últimos 20 envios de relatórios e alertas efetuados pelo sistema com status, data/hora, quantidade de tarefas e mensagem de resposta do servidor SMTP.
+
+### GET `/api/v1/modules/recipients`
+Lista todos os destinatários corporativos de e-mails cadastrados no banco SQLite (`email_recipients`).
+Retorna: `recipients: [{"id": 1, "nome": "...", "email": "...", "relatorio_executivo": 1, "alertas_certificados": 1, "ativo": 1}]`.
+
+### POST `/api/v1/modules/recipients`
+Cadastra novo destinatário de relatórios e/ou alertas.
+Payload:
+```json
+{
+  "nome": "Equipe de Infraestrutura",
+  "email": "infra@egsys.com.br",
+  "relatorio_executivo": 0,
+  "alertas_certificados": 1
+}
+```
+
+### PUT `/api/v1/modules/recipients/{id}`
+Atualiza flags de notificação, nome, e-mail ou ativação (`ativo: 0/1`) de um destinatário existente.
+
+### DELETE `/api/v1/modules/recipients/{id}`
+Remove um destinatário do cadastro corporativo.
+
+### GET `/api/v1/modules/certificates`
+Retorna a lista completa de domínios e certificados SSL monitorados da infraestrutura egSYS, com cruzamento de dados do Google Sheets e Traefik, validade, dias restantes e cálculo de KPIs:
+- `total`: Total de domínios cadastrados (ex.: 92)
+- `ok`: Em dia (> 30 dias)
+- `alerta`: Janela preventiva (&le; 30 dias)
+- `criticos`: Críticos (&le; 15 dias)
+- `vencidos`: Já expirados
+- `itens_alerta`: Lista de domínios críticos e vencidos contendo `domain`, `host`, `state` (normalizado para agrupamento hierárquico por estado), `vence_em`, `dias` e `precisa_token`.
+
+### POST `/api/v1/modules/certificates/sync`
+Sincroniza os domínios com a planilha mestre do Google Sheets (`1yO1L72qkR1-SXSBGrYtTe9xtm1QCSVcfKqRqzSjbtGU`) e executa probe SSL TLS direto via socket para atualizar `valid_from` e `valid_until`.
+
+### POST `/api/v1/modules/certificates/sync-traefik`
+Lê os certificados gerenciados automaticamente pelo Traefik (`acme.json`) no host de monitoramento e sincroniza os prazos e emissores Let's Encrypt.
+
+### POST `/api/v1/modules/certificates/send-alert`
+Audita todos os certificados em estado crítico ou vencido (&le; 15 dias) e em janela de alerta (&le; 30 dias) e dispara e-mail formatado aos destinatários cadastrados com `alertas_certificados = 1`.
+
+### GET `/api/v1/modules/noc/layout/{tipo}`
+Retorna a disposição customizada de colunas e cards salva para a esteira especificada (`tipo: 'dev'` ou `'n1n2'`).
+```json
+{
+  "status": "ok",
+  "layout": {
+    "numCols": "3",
+    "columns": [["SC", "PR"], ["AM", "TO"], ["RO", "GM"]]
+  }
+}
+```
+
+### POST `/api/v1/modules/noc/layout/{tipo}`
+Persiste a disposição customizada de colunas e cards no banco SQLite (`auth.db`), tabela `noc_layouts`.
+Payload:
+```json
+{
+  "tipo": "dev",
+  "num_cols": "3",
+  "columns": [["SC", "PR"], ["AM", "TO"], ["RO", "GM"]]
+}
+```
+
+---
+
 ## Segurança
 - RBAC por estado; token nunca exposto; credencial Jira backend-only.
 - Headers defensivos: HSTS (prod), X-Frame-Options DENY, nosniff, CSP, Referrer-Policy.
 - Limite de escrita: nenhum na API pública — API somente leitura do Jira (transições executadas apenas por script com `--apply` autorizado + snapshot).
+

@@ -31,8 +31,8 @@ from datetime import datetime
 # Configuração (NAO commitar credenciais: usar %ATLASSIAN_EMAIL% e %ATLASSIAN_TOKEN%)
 # ---------------------------------------------------------------------------
 SERVER = "https://egsys.atlassian.net"
-EMAIL = os.environ.get("ATLASSIAN_EMAIL", "")
-TOKEN = os.environ.get("ATLASSIAN_TOKEN", "")
+EMAIL = os.environ.get("ATLASSIAN_EMAIL") or os.environ.get("JIRA_USER", "")
+TOKEN = os.environ.get("ATLASSIAN_TOKEN") or os.environ.get("JIRA_TOKEN", "")
 SNAP_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "snapshots")
 
 if not EMAIL or not TOKEN:

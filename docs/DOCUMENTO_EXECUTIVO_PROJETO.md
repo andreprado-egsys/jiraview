@@ -2,9 +2,9 @@
 ## Painel Unificado de Solicitações JSM, Visibilidade Executiva e Inteligência de Atendimento
 
 - **Produto**: egSYS JiraView (`egsys-jiraview`)
-- **Versão Homologada**: `v0.4.1` (Build `1d27040`)
+- **Versão Homologada**: `v0.5.9` (Build `2026-09-18`)
 - **Classificação**: Documento Técnico-Executivo e Arquitetural (SSOT Camada 1)
-- **Data de Emissão**: 17 de Setembro de 2026
+- **Data de Emissão**: 18 de Setembro de 2026
 - **Responsáveis Técnicos**: Tech Lead N2, Engenharia de Software, SRE e Coordenação de Suporte egSYS
 - **Público-Alvo**: Diretoria Executiva da egSYS, Gestores de TI e Segurança dos Clientes Estaduais (PMSC, PMTO, PMAM, PMRO, PMPR, GMSJ), Arquitetos de Solução, Engenheiros de Software e SRE
 - **Status do Projeto**: Em Produção e Homologado no Host de Monitoramento Corporativo
@@ -21,6 +21,8 @@
    - 2.4. Arquitetura do Frontend (SPA Dark Glass, Zero-Build e Resiliência Intranet)
    - 2.5. A Esteira Canônica de 8 Etapas da Engenharia egSYS
    - 2.6. Rastreabilidade de Engenharia (`issuelinks`) e Links 1-Click
+   - 2.7. Módulos Operacionais Absorvidos do Node-RED & Jira-Dashboard
+   - 2.8. Layout Customizável de Colunas e Cards Persistente no SQLite
 3. [Pilar 2: Observabilidade & Psicologia da Informação](#3-pilar-2-observabilidade--psicologia-da-informação)
    - 3.1. Os 3 Níveis Cognitivos de Observabilidade
    - 3.2. Síntese Matemática do Backlog (Eliminação da Ambiguidade)
@@ -28,6 +30,7 @@
    - 3.4. Gráficos Táticos e Métricas Visuais de Decisão
    - 3.5. Auditoria e Exportação Multi-Formato (.MD, .XLSX, .CSV)
    - 3.6. Cobertura Abrangente de 73 Espaços Jira para Coordenação
+   - 3.7. Auto-Refresh Inteligente (45s) com Preservação Estrita do Drawer e Sessão
 4. [Pilar 3: Site Reliability Engineering (SRE) & Infraestrutura](#4-pilar-3-site-reliability-engineering-sre--infraestrutura)
    - 4.1. Topologia de Produção e Roteamento Traefik Soberano
    - 4.2. Contenção Rígida de Recursos Docker Cgroups
@@ -36,7 +39,7 @@
    - 4.5. Scripts Idempotentes de Correção e Salvaguarda (`corrige_divergentes.py`)
    - 4.6. Matriz de SLA, SLO, SLI, RTO e RPO
 5. [Pilar 4: Gestão, Governança & Segurança (DevSecOps)](#5-pilar-4-gestão-governança--segurança-devsecops)
-   - 5.1. Governança de Identidade e Acesso Granular (RBAC)
+   - 5.1. Governança de Identidade e Matriz Canônica RBAC em 5 Níveis
    - 5.2. Criptografia NIST e Política de Primeiro Acesso
    - 5.3. Governança Docs-as-Code em 3 Camadas
    - 5.4. Gestão de Janelas Temporais e Proteção de Carga
@@ -179,6 +182,18 @@ O JiraView unifica a gestão de atendimento e a engenharia de produto:
 - **Derivações Técnicas (`issuelinks`)**: Quando um chamado de cliente (`HDPMSC-388`) gera uma tarefa de desenvolvimento no projeto de engenharia (`PSC-1420`), essa vinculação é extraída e renderizada na gaveta de diagnóstico com status e analista responsável.
 - **Navegação 1-Click Direta ao Jira Cloud**: Todos os badges de chamados e tarefas derivadas contêm atalhos diretos (`https://egsys.atlassian.net/browse/{chave}`), permitindo aos gestores e analistas abrir o ticket oficial em nova aba instantaneamente.
 
+### 2.7. Módulos Operacionais Absorvidos do Node-RED & Jira-Dashboard
+Com a obsolescência do stack legado em Node-RED, o egSYS JiraView absorveu e modernizou completamente os módulos operacionais em FastAPI nativo:
+- **Esteira de Triagem N1 & N2 (`/api/v1/modules/triagem-n1n2/issues`)**: Consolidação dos chamados em triagem inicial, sem responsável atribuído ou com necessidade de direcionamento imediato.
+- **Esteira de Desenvolvimento (`/api/v1/modules/analise-dev/issues`)**: Acompanhamento tático das demandas em desenvolvimento ativo e testes internos com métricas de tempo e desenvolvedor responsável.
+- **Monitor de Certificados SSL da Infraestrutura (`/api/v1/modules/certificados/status`)**: Verificação automatizada dos certificados HTTPS e túneis perimétricos de todos os nós estaduais egSYS com cálculo dinâmico de dias para expiração.
+- **Auditoria de Relatórios Executivos & Disparo Integrado (`/api/v1/modules/relatorios/disparar`)**: Centralização unificada do envio de relatórios e auditoria documental sem redundâncias ou botões obsoletos.
+
+### 2.8. Layout Customizável de Colunas e Cards Persistente no SQLite
+Para acomodar monitores ultrawide, televisores de sala de operação e notebooks de suporte:
+- **Disposição em Colunas Configurável**: O operador pode alternar dinamicamente entre 1, 2, 3 ou 4 colunas de exibição via modal interativo de posicionamento.
+- **Persistência Centralizada em SQLite (`noc_layouts`)**: Cada alteração de ordem de cards ou número de colunas é persistida no banco `auth.db` via API REST (`/api/v1/modules/noc/layout/{tipo}`), assegurando restauração automática em qualquer navegador sem perdas de customização.
+
 ---
 
 ## 3. Pilar 2: Observabilidade & Psicologia da Informação
@@ -231,6 +246,12 @@ Para o Coordenador Geral de Suporte, o painel disponibiliza a rota `/coordenador
 - **Portais JSM Estaduais**: `HDPMSC` (SC), `HDTO` (TO), `HDSUPAM` (AM), `HDRO` (RO), `HDPMPR` (PR), `HDMT` (MT), `HDGM` (GM), `SUPOFI` (Oficinas).
 - **Projetos de Engenharia e Sustentação**: `PSC`, `PTO`, `PAM`, `PRO`, `PPR`, `PMT`, `PGM`.
 - **Governança Corporativa e Gestão Estratégica**: `PSEI`, `ANN`, `DS`, `PLANTAO`, `PPS`.
+
+### 3.7. Auto-Refresh Inteligente (45s) com Preservação Estrita do Drawer e Sessão
+Em ambientes de monitoramento contínuo (wallboards e telas de suporte N1/N2), a atualização autônoma dos dados é imperativa, contudo não pode degradar a usabilidade humana:
+- **Intervalo Não-Destrutivo (45 Segundos)**: Polling periódico em background implementado nativamente nas abas críticas: *Observabilidade do Espaço Selecionado*, *NOC JIRA — Esteira de Desenvolvimento*, *NOC JIRA — Esteira de Triagem N1 & N2* e *Monitor de Certificados SSL da Infraestrutura*.
+- **Salvaguarda de Interação (Anti-Disruption Lock)**: O ciclo de atualização verifica ativamente o estado do DOM. Se a gaveta lateral de diagnóstico (`#drawer.open`), qualquer modal de edição ou formulário estiver com foco ativo, o refresh é imediatamente pausado para impedir o fechamento abrupto ou perda de digitação.
+- **Tratamento Silencioso de Conectividade**: Falhas transitórias de rede ou expiração de token em background não ejetam o operador nem esvaziam cards com mensagens de erro destrutivas; o sistema mantém o último estado válido visível e tenta nova sincronização no ciclo subsequente.
 
 ---
 
@@ -305,15 +326,22 @@ Para solucionar anomalias históricas do Jira (como chamadas com status *Done* p
 
 ## 5. Pilar 4: Gestão, Governança & Segurança (DevSecOps)
 
-### 5.1. Governança de Identidade e Acesso Granular (RBAC)
-O JiraView utiliza tokens de acesso assinados (JWT) combinados com o banco ultraleve SQLite (`auth.db`). A matriz de controle de acesso define quatro perfis de privilégio:
+### 5.1. Governança de Identidade e Matriz Canônica RBAC em 5 Níveis
+O JiraView utiliza tokens de acesso assinados (JWT) combinados com o banco ultraleve SQLite (`auth.db`). A matriz de controle de acesso define cinco perfis estritos de privilégio:
 
-| Papel (Role) | Escopo de Visibilidade | Permissões Operacionais |
-|---|---|---|
-| **`viewer`** | Específico do Estado | Visualização de chamados e métricas do seu órgão. |
-| **`manager`** | Específico do Estado | Visualização, filtragem personalizada e salvamento de filtros JQL. |
-| **`admin`** | Específico do Estado | Gestão de filtros e parametrizações operacionais do estado. |
-| **`coordenador`** | Global (Todos os Estados) | Acesso irrestrito aos 73 espaços Jira, auditoria de usuários e exportação global. |
+| Papel (Role) | Nível Hierárquico | Escopo de Visibilidade | Permissões Operacionais & Governança |
+|---|:---:|---|---|
+| **`coordenador`** | **Nível 4** (Máximo) | Global (Todos os 73 Espaços Jira) | Acesso irrestrito a todas as abas, relatórios executivos, gestão total de usuários e parâmetros da plataforma. |
+| **`n2`** | **Nível 3** | Global Operacional & Módulos | Acesso a abas operacionais e gestão delegada de usuários (N1, Monitor e Clientes Estaduais). **Bloqueio rígido de escalada de privilégio**: não pode criar, alterar ou resetar senhas de Coordenadores nem de outros N2. |
+| **`n1`** | **Nível 2** | Operacional Restrito (3 Telas NOC) | Acesso fixo e exclusivo às abas de *Certificados SSL*, *Esteira de Triagem N1 & N2* e *Esteira de Desenvolvimento*. Sem acesso a configurações ou dados de gestão. |
+| **`monitor`** | **Nível 1** | Kiosk / Wallboard TV (3 Telas NOC) | Destinado a displays públicos e TVs da sala de suporte. Acesso idêntico ao N1 com **token perpétuo de 365 dias**, sem expiração diária e isenção de troca compulsória de senha (`must_change_password=0`). |
+| **`viewer` / `manager`** | **Nível 1** | Específico do Estado (Cliente) | Acesso exclusivo ao portal do respectivo estado (`/painel_sc`, etc.) para visualização de chamados e acompanhamento da esteira. |
+
+#### Salvaguardas Anti-Escalada de Privilégios no Backend (`require_user_manager`)
+O endpoint de administração de usuários (`/api/v1/auth/users`) implementa validação em profundidade:
+1. Analistas **N2** podem gerenciar contas operacionais (`n1`, `monitor`) e gestores estaduais (`viewer`, `manager`).
+2. Qualquer tentativa de um usuário N2 de criar contas com papel `coordenador` ou `n2`, ou de alterar senhas/excluir contas de níveis $\ge 3$ resulta em bloqueio com **HTTP 403 Forbidden**.
+3. O Coordenador Geral preserva a soberania intransponível sobre as contas estratégicas da empresa.
 
 ### 5.2. Criptografia NIST e Política de Primeiro Acesso
 - **Hashing Criptográfico Robusto**: Senhas de usuários são protegidas via algoritmo **PBKDF2-HMAC-SHA256**, aplicando 100.000 iterações com salt criptográfico único por conta (`backend/app/core/db.py`).
@@ -363,17 +391,25 @@ O plano de evolução tecnológica do egSYS JiraView está estruturado nos segui
 
 ```mermaid
 flowchart TD
-    M1["📍 v0.4.1 (Atual)<br/>- Síntese Matemática do Backlog (25 Ativas / 25 Concluídas)<br/>- Filtros Temporais Granulares (30d a 1 ano)<br/>- Esteira Canônica de 8 Etapas<br/>- Pareamento de Banco scripts/sync_db.py<br/>- Exportação Multi-Formato (.md, .xlsx, .csv)"]
-    M2["🚀 v0.5.0 (Q4 2026)<br/>- Integração dos Novos Estados (TO, AM, RO)<br/>- Notificações Proativas de SLA via Webhooks<br/>- Módulo de Auditoria Forense de Acessos"]
-    M3["🌟 v1.0.0 (Q1 2027)<br/>- Assistente Cognitivo de Suporte via IA egSYS<br/>- Conciliação Autônoma de Metadados JSM<br/>- Painel Mobile Nativo PWA"]
+    M1["📍 v0.4.1<br/>- Síntese Matemática do Backlog<br/>- Filtros Temporais Granulares<br/>- Esteira Canônica de 8 Etapas"]
+    M2["✅ v0.5.9 (Entregue & Homologado)<br/>- Absorção do Node-RED & Jira-Dashboard<br/>- Matriz Canônica RBAC em 5 Níveis (Coordenador, N2, N1, Monitor, Clientes)<br/>- Kiosk Wallboard com Token 365d<br/>- Auto-Refresh Inteligente 45s com Proteção de Drawer<br/>- Certificados SSL por Estado & Contraste Máximo para TVs"]
+    M3["🚀 v0.6.0 (Q4 2026)<br/>- Webhooks de Alerta em Tempo Real<br/>- Histórico de Auditoria Forense com Log de Acessos"]
+    M4["🌟 v1.0.0 (Q1 2027)<br/>- Assistente Cognitivo de Suporte via IA egSYS<br/>- Conciliação Autônoma de Metadados JSM<br/>- Painel Mobile Nativo PWA"]
 
-    M1 --> M2 --> M3
+    M1 --> M2 --> M3 --> M4
 ```
 
-- **Versão v0.5.0**:
-  - Habilitação completa dos novos estados (PMTO, PMAM, PMRO) via configuração declarativa.
+- **Versão v0.5.9 (Atual — Produção)**:
+  - Absorção total dos módulos legados do Node-RED (Triagem N1/N2, Desenvolvimento, Certificados SSL, Relatórios).
+  - Implementação da Matriz Canônica de RBAC em 5 níveis com perfil dedicado `monitor` para TVs/Wallboards da operação.
+  - Salvaguardas anti-escalada de privilégio para analistas N2.
+  - Auto-refresh silencioso a cada 45 segundos com bloqueio inteligente quando a gaveta (`drawer`) ou modais estiverem abertos.
+  - Layout customizável de colunas e cards persistente no banco de dados SQLite (`noc_layouts`).
+  - Aninhamento hierárquico por estado de certificados SSL vencidos/críticos e ordenação cronológica de vencimento.
+  - Calibração de contraste máximo (WCAG AAA) para monitores e televisores da sala de suporte (preto puro `#000000`, branco puro `#ffffff`, badges sólidos e remoção total do halo avermelhado de tarefas urgentes).
+- **Versão v0.6.0**:
   - Webhooks de alerta em tempo real para chamados próximos da expiração do SLA contratual.
-  - Histórico de auditoria de sessões e acessos com registro de IP e ações dos gestores.
+  - Histórico de auditoria forense de acessos e operações sensíveis com retenção auditável.
 - **Versão v1.0.0**:
   - Integração com agentes de inteligência artificial da egSYS para geração automática de resumos executivos de chamados complexos.
   - Conciliação autônoma de dados entre Jira Cloud, banco SAS e Orion.

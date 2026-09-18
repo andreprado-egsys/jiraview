@@ -20,6 +20,7 @@ class UserInfo(BaseModel):
     role: str
     estado: str
     espacos: Optional[str] = ""
+    modulos_ativos: Optional[str] = ""
     painel_url: str
     must_change_password: bool = False
 
@@ -44,12 +45,14 @@ async def login(req: LoginRequest):
 
     must_change = bool(user.get("must_change_password", 0))
     user_espacos = user.get("espacos") or ""
+    user_modulos = user.get("modulos_ativos") or ""
 
     token = create_access_token(
         sub=user["username"],
         role=user["role"],
         state=user["estado"],
         espacos=user_espacos,
+        modulos_ativos=user_modulos,
         nome=user["nome"],
         painel_url=user["painel_url"],
         must_change_password=must_change,
@@ -65,6 +68,7 @@ async def login(req: LoginRequest):
             role=user["role"],
             estado=user["estado"],
             espacos=user_espacos,
+            modulos_ativos=user_modulos,
             painel_url=user["painel_url"],
             must_change_password=must_change,
         )
@@ -128,6 +132,7 @@ async def me(user: TokenPayload = Depends(get_current_user)):
             "role": db_user["role"],
             "estado": db_user["estado"],
             "espacos": db_user.get("espacos") or "",
+            "modulos_ativos": db_user.get("modulos_ativos") or "",
             "painel_url": db_user["painel_url"],
             "must_change_password": bool(db_user.get("must_change_password", 0)),
         }
@@ -137,6 +142,7 @@ async def me(user: TokenPayload = Depends(get_current_user)):
         "role": user.role,
         "estado": user.state,
         "espacos": getattr(user, "espacos", "") or "",
+        "modulos_ativos": getattr(user, "modulos_ativos", "") or "",
         "painel_url": user.painel_url or "/painel_sc",
         "must_change_password": user.must_change_password,
     }
@@ -150,13 +156,13 @@ from ..core.db import (
 )
 
 
-def require_admin_or_coordinator(user: TokenPayload = Depends(get_current_user)) -> TokenPayload:
-    """Verifica se o usuário tem privilégio de gestão de acessos."""
-    if user.role in ("admin", "coordenador") or user.sub in ("coordenador", "admin") or user.state == "todos":
+def require_user_manager(user: TokenPayload = Depends(get_current_user)) -> TokenPayload:
+    """Verifica se o usuário tem privilégio de gestão de acessos (Coordenador, Admin ou N2)."""
+    if user.role in ("admin", "coordenador", "n2") or user.sub in ("coordenador", "admin") or user.state == "todos":
         return user
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
-        detail=f"Acesso restrito à Coordenação de Suporte ou Administrador Geral. Usuário conectado: '{user.sub}' (perfil: '{user.role}', estado: '{user.state}'). Faça login com 'coordenador'.",
+        detail=f"Acesso restrito à Coordenação de Suporte ou Analistas N2. Usuário conectado: '{user.sub}' (perfil: '{user.role}', estado: '{user.state}').",
     )
 
 
@@ -167,6 +173,7 @@ class CreateUserRequest(BaseModel):
     role: str = "manager"
     estado: str = "sc"
     espacos: Optional[str] = ""
+    modulos_ativos: Optional[str] = ""
     painel_url: str = "/painel_sc"
     is_active: int = 1
     must_change_password: Optional[int] = 1
@@ -177,14 +184,19 @@ class UpdateUserRequest(BaseModel):
     role: Optional[str] = None
     estado: Optional[str] = None
     espacos: Optional[str] = None
+    modulos_ativos: Optional[str] = None
     painel_url: Optional[str] = None
     is_active: Optional[int] = None
     must_change_password: Optional[int] = None
     password: Optional[str] = None
 
 
+class UpdateModulesRequest(BaseModel):
+    modulos_ativos: str
+
+
 @router.get("/users")
-async def list_users_endpoint(_: TokenPayload = Depends(require_admin_or_coordinator)):
+async def list_users_endpoint(_: TokenPayload = Depends(require_user_manager)):
     """Lista todos os usuários cadastrados no banco SQLite."""
     return {"users": db_list_users()}
 
@@ -192,9 +204,22 @@ async def list_users_endpoint(_: TokenPayload = Depends(require_admin_or_coordin
 @router.post("/users", status_code=status.HTTP_201_CREATED)
 async def create_user_endpoint(
     req: CreateUserRequest,
-    _: TokenPayload = Depends(require_admin_or_coordinator),
+    current_user: TokenPayload = Depends(require_user_manager),
 ):
-    """Cadastra um novo usuário no sistema."""
+    """Cadastra um novo usuário no sistema com controle estrito de privilégios."""
+    if current_user.role == "n2":
+        # N2 não pode criar usuários de nível Coordenação, Admin ou N2
+        if req.role in ("admin", "coordenador", "n2"):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Analistas N2 não possuem permissão para criar usuários de nível Coordenação, Admin ou N2.",
+            )
+        if req.estado == "todos":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Analistas N2 não podem atribuir o escopo global 'todos' a novos usuários.",
+            )
+
     try:
         new_user = db_create_user(
             username=req.username,
@@ -203,6 +228,7 @@ async def create_user_endpoint(
             role=req.role,
             estado=req.estado,
             espacos=req.espacos or "",
+            modulos_ativos=req.modulos_ativos or "",
             painel_url=req.painel_url,
             is_active=req.is_active,
             must_change_password=1 if req.must_change_password is None or req.must_change_password else 0,
@@ -218,12 +244,28 @@ async def create_user_endpoint(
 async def update_user_endpoint(
     user_id: int,
     req: UpdateUserRequest,
-    _: TokenPayload = Depends(require_admin_or_coordinator),
+    current_user: TokenPayload = Depends(require_user_manager),
 ):
     """Atualiza dados cadastrais ou redefine senha de um usuário."""
     existing = db_get_user_by_id(user_id)
     if not existing:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuário não encontrado")
+
+    if current_user.role == "n2":
+        target_role = existing.get("role", "viewer")
+        target_username = existing.get("username", "").lower()
+        # N2 não pode modificar coordenador, admin ou outro n2
+        if target_role in ("admin", "coordenador", "n2") or target_username in ("coordenador", "admin"):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Analistas N2 não possuem permissão para alterar cadastro ou redefinir senhas de usuários de nível Coordenação, Admin ou N2.",
+            )
+        # N2 não pode promover usuário a admin, coordenador ou n2
+        if req.role and req.role in ("admin", "coordenador", "n2"):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Analistas N2 não podem conceder privilégios de Coordenação, Admin ou N2.",
+            )
 
     updated = db_update_user(
         user_id=user_id,
@@ -231,6 +273,7 @@ async def update_user_endpoint(
         role=req.role,
         estado=req.estado,
         espacos=req.espacos,
+        modulos_ativos=req.modulos_ativos,
         painel_url=req.painel_url,
         is_active=req.is_active,
         must_change_password=req.must_change_password,
@@ -239,10 +282,36 @@ async def update_user_endpoint(
     return {"status": "ok", "user": updated}
 
 
+@router.put("/users/{user_id}/modules")
+async def update_user_modules_endpoint(
+    user_id: int,
+    req: UpdateModulesRequest,
+    current_user: TokenPayload = Depends(require_user_manager),
+):
+    """Atualiza seletivamente os módulos internos ativos para o usuário."""
+    existing = db_get_user_by_id(user_id)
+    if not existing:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuário não encontrado")
+
+    if current_user.role == "n2":
+        target_role = existing.get("role", "viewer")
+        if target_role in ("admin", "coordenador", "n2"):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Analistas N2 não possuem permissão para alterar módulos de Coordenação ou N2.",
+            )
+
+    updated = db_update_user(
+        user_id=user_id,
+        modulos_ativos=req.modulos_ativos,
+    )
+    return {"status": "ok", "user": updated}
+
+
 @router.delete("/users/{user_id}")
 async def delete_user_endpoint(
     user_id: int,
-    current_user: TokenPayload = Depends(require_admin_or_coordinator),
+    current_user: TokenPayload = Depends(require_user_manager),
 ):
     """Exclui usuário do banco."""
     target = db_get_user_by_id(user_id)
@@ -252,6 +321,15 @@ async def delete_user_endpoint(
     # Impede que o usuário logado exclua a si mesmo
     if target["username"].lower() == current_user.sub.lower():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Você não pode excluir sua própria conta")
+
+    if current_user.role == "n2":
+        target_role = target.get("role", "viewer")
+        target_username = target.get("username", "").lower()
+        if target_role in ("admin", "coordenador", "n2") or target_username in ("coordenador", "admin"):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Analistas N2 não possuem permissão para excluir usuários de nível Coordenação, Admin ou N2.",
+            )
 
     success = db_delete_user(user_id)
     return {"status": "ok", "deleted": success}

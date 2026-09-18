@@ -28,8 +28,8 @@ import urllib.error
 from datetime import datetime
 
 SERVER = "https://egsys.atlassian.net"
-EMAIL = os.environ.get("ATLASSIAN_EMAIL", "")
-TOKEN = os.environ.get("ATLASSIAN_TOKEN", "")
+EMAIL = os.environ.get("ATLASSIAN_EMAIL") or os.environ.get("JIRA_USER", "")
+TOKEN = os.environ.get("ATLASSIAN_TOKEN") or os.environ.get("JIRA_TOKEN", "")
 BASE = os.path.dirname(os.path.abspath(__file__))
 SNAP_DIR = os.path.join(BASE, "snapshots")
 

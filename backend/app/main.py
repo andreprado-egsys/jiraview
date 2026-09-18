@@ -11,17 +11,24 @@ from .core.security import TokenPayload, get_current_user, jsm
 from .core.estados import estado_por_sigla
 from .api.v1 import router as v1_router
 from .api.auth import router as auth_router
+from .api.modules import router as modules_router
 
 settings = get_settings()
 is_prod = settings.app_env == "prod"
 
 app = FastAPI(
     title="egSYS JiraView",
-    version="0.2.0",
+    version="0.5.0",
     docs_url=None if is_prod else "/docs",
     redoc_url=None if is_prod else "/redoc",
     openapi_url=None if is_prod else "/openapi.json",
 )
+
+
+@app.on_event("startup")
+async def on_startup():
+    from .core.scheduler import start_background_scheduler
+    await start_background_scheduler()
 
 
 class DefensiveHeaders(BaseHTTPMiddleware):
@@ -56,10 +63,12 @@ app.add_middleware(
 
 app.include_router(auth_router)
 app.include_router(v1_router)
+app.include_router(modules_router)
 
 # Suporte universal com e sem stripPrefix do Traefik
 app.include_router(auth_router, prefix="/painel_sc")
 app.include_router(v1_router, prefix="/painel_sc")
+app.include_router(modules_router, prefix="/painel_sc")
 
 
 @app.get("/api/v1/health")

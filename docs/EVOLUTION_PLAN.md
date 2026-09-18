@@ -21,8 +21,8 @@ e total sanitização (sem credenciais no client).
 | F4.3 — Síntese & Sincronia | Síntese de 52 tarefas abertas + Numeração `#` + sync_db.py soberano (v0.4.1) | ✅ |
 | F4.4 — Multi-Espaços | Múltiplos espaços cliente (Mazzola) + customização dinâmica coordenação (v0.4.2) | ✅ |
 | F4.5 — Paridade & Coerência Temporal | Cursor pagination v3 + unificação estrita de período nos cards e tabela (v0.4.3) | ✅ |
-| F5 — Multi-estado | TO/AM/PR/GM ativados (YAML + papéis) + visão consolidada por estado | ⏳ v0.5 |
-| F6 — Automação | Automação JSM de conclusão + SLA por área + migração Node-RED | ⏳ v0.5 |
+| F5 — Extensões Modulares & Absorção Node-RED | Esteira Dev + Triagem N1/N2 + Relatórios SMTP + Monitor SSL + Layouts Persistentes + Ergonomia TV (v0.5.9) | ✅ |
+| F6 — Governança & Multi-Estado Pleno | Descomissionamento definitivo Node-RED + Automação JSM + SLAs corporativos | ⏳ v0.6 |
 
 ## Invariantes (gate canônico)
 1. **1 container único = todos os estados** (anti-desvio inegociável).
