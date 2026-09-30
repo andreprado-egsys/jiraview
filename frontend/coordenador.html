@@ -2177,7 +2177,7 @@
           <div class="noc-sub">Disposição em cards por estado com ordenação por dias restantes e monitoramento de renovação</div>
         </div>
         <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-          <input type="text" id="certCardsBuscaInput" class="search-input" placeholder="🔍 Filtrar card por domínio, host ou estado..." oninput="filtrarBlocosCert(this.value)" style="width: 290px; height: 38px;" />
+          <input type="text" id="certCardsBuscaInput" class="search-input" placeholder="🔍 Filtrar card por domínio ou estado..." oninput="filtrarBlocosCert(this.value)" style="width: 290px; height: 38px;" />
           <div class="noc-counter-badge alert-state" id="certCounterBadge">
             <span class="noc-count-label">VENCIDOS / CRÍTICOS</span>
             <span class="noc-count-value" id="certCriticosCardsCount">0</span>
@@ -2208,15 +2208,14 @@
               <option value="alerta">Em Alerta (&le; 30d)</option>
               <option value="validos">Válidos (&gt; 30d)</option>
             </select>
-            <input type="text" id="certBuscaInput" class="search-input" placeholder="🔍 Filtrar domínio, host, token..." oninput="filtrarTabelaCertificados()" style="max-width: 240px; height: 32px;" />
+            <input type="text" id="certBuscaInput" class="search-input" placeholder="🔍 Filtrar domínio, token, estado..." oninput="filtrarTabelaCertificados()" style="max-width: 240px; height: 32px;" />
           </div>
         </div>
         <div class="table-container" style="border:none;">
           <table>
             <thead>
               <tr>
-                <th>Domínio / URL</th>
-                <th style="width: 150px;">Ambiente / Host</th>
+                <th>Domínio</th>
                 <th style="width: 110px; text-align: center;">Renovado Em</th>
                 <th style="width: 110px; text-align: center;">Vence Em</th>
                 <th style="width: 130px; text-align: center;">Dias & Status</th>
@@ -2226,7 +2225,7 @@
               </tr>
             </thead>
             <tbody id="tabelaCertificadosCorpo">
-              <tr><td colspan="8" style="text-align:center; padding: 25px; color: var(--text-sub);">Carregando status dos certificados...</td></tr>
+              <tr><td colspan="7" style="text-align:center; padding: 25px; color: var(--text-sub);">Carregando status dos certificados...</td></tr>
             </tbody>
           </table>
         </div>
@@ -4739,11 +4738,19 @@
       return NOMES_ESTADOS_MAP[s] ? `${NOMES_ESTADOS_MAP[s]} (${s})` : s;
     }
 
+    function sanitizarDominio(str) {
+      if (!str) return "";
+      let d = String(str).trim();
+      d = d.replace(/^[a-zA-Z]+:\/\//i, ""); // Remove http://, https://
+      d = d.split("/")[0]; // Remove tudo que tiver após a primeira barra
+      return d.trim();
+    }
+
     async function carregarCertificados(silencioso = false) {
       const tbody = document.getElementById("tabelaCertificadosCorpo");
       const grid = document.getElementById("certGridEstados");
       if (!silencioso) {
-        if (tbody) tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 25px; color: var(--text-sub); font-weight:600;">⏳ Consultando certificados SSL e validade de domínios...</td></tr>`;
+        if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 25px; color: var(--text-sub); font-weight:600;">⏳ Consultando certificados SSL e validade de domínios...</td></tr>`;
         if (grid) grid.innerHTML = `<div class="noc-grid-full" style="text-align:center; padding: 30px; color: var(--text-sub);">⏳ Carregando certificados em risco por estado...</div>`;
       }
 
@@ -4767,9 +4774,9 @@
 
         // Agrupamento dos certificados críticos / vencidos por estado (≤ 15 dias ou vencidos)
         const itensCriticos = (resumo.itens_alerta && resumo.itens_alerta.length > 0)
-          ? resumo.itens_alerta
+          ? resumo.itens_alerta.map(it => ({ ...it, domain: sanitizarDominio(it.domain) }))
           : (data.certificados || []).filter(c => parseInt(c.dias_restantes, 10) <= 15 || c.status === 'VENCIDO').map(c => ({
-              domain: c.domain,
+              domain: sanitizarDominio(c.domain),
               host: c.host || '',
               state: (c.state || 'INFRA').toUpperCase(),
               dias: parseInt(c.dias_restantes, 10) || 0,
@@ -4829,7 +4836,7 @@
       } catch (err) {
         console.warn("Falha ao carregar certificados SSL:", err);
         if (!silencioso) {
-          if (tbody) tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 25px; color: var(--red); font-weight:700;">${err.message} <br/><button class="btn-action" onclick="carregarCertificados()" style="margin-top:10px;">🔄 Tentar Novamente</button></td></tr>`;
+          if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 25px; color: var(--red); font-weight:700;">${err.message} <br/><button class="btn-action" onclick="carregarCertificados()" style="margin-top:10px;">🔄 Tentar Novamente</button></td></tr>`;
           if (grid) grid.innerHTML = `<div class="noc-grid-full" style="text-align:center; padding: 30px; color: var(--red);">${err.message}</div>`;
         }
       }
@@ -4859,15 +4866,14 @@
             ? `<span class="badge" style="background: #dc2626; color: #ffffff; font-weight: 900; font-size: 10.5px; padding: 2px 7px; border-radius: 4px;">⛔ VENCIDO</span>`
             : `<span class="badge" style="background: #ea580c; color: #ffffff; font-weight: 800; font-size: 10.5px; padding: 2px 7px; border-radius: 4px;">⚠️ ${it.dias} dia${it.dias !== 1 ? 's' : ''}</span>`;
 
+          const cleanDomain = sanitizarDominio(it.domain);
+
           return `
             <tr class="${isVencido ? 'row-urgent' : ''}">
               <td class="col-ticket" style="font-weight: 700;">
-                <a href="https://${escapeHtml(it.domain)}" target="_blank" style="color: var(--link-color); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                  <span>🔒</span> <span>${escapeHtml(it.domain)}</span>
+                <a href="https://${escapeHtml(cleanDomain)}" target="_blank" style="color: var(--link-color); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                  <span>🔒</span> <span>${escapeHtml(cleanDomain)}</span>
                 </a>
-              </td>
-              <td class="col-summary">
-                <span style="font-size: 11.5px; color: var(--text); font-weight: 600;">${escapeHtml(it.host || 'Traefik Host')}</span>
               </td>
               <td class="col-date" style="text-align: center; font-weight: 600; font-size: 11.5px;">
                 ${escapeHtml(it.vence_em || '---')}
@@ -4908,8 +4914,7 @@
             <table class="clean-table">
               <thead>
                 <tr>
-                  <th class="col-ticket" style="min-width: 170px;">DOMÍNIO / URL</th>
-                  <th class="col-summary" style="min-width: 130px;">HOST / AMBIENTE</th>
+                  <th class="col-ticket" style="min-width: 170px;">DOMÍNIO</th>
                   <th class="col-date" style="text-align: center; width: 105px;">VENCIMENTO</th>
                   <th class="col-age" style="text-align: center; width: 120px;">DIAS / STATUS</th>
                   <th style="font-size: 10.5px; font-weight: 800; color: var(--text-sub); text-align: left; padding: 7px 10px; width: 140px;">TOKEN / MÉTODO</th>
@@ -5014,7 +5019,7 @@
 
       if (termo) {
         filtrados = filtrados.filter(c =>
-          (c.domain && c.domain.toLowerCase().includes(termo)) ||
+          (c.domain && sanitizarDominio(c.domain).toLowerCase().includes(termo)) ||
           (c.host && c.host.toLowerCase().includes(termo)) ||
           (c.state && c.state.toLowerCase().includes(termo)) ||
           (c.issuer && c.issuer.toLowerCase().includes(termo)) ||
@@ -5033,7 +5038,7 @@
     function renderizarTabelaCertificados(lista) {
       const tbody = document.getElementById("tabelaCertificadosCorpo");
       if (!lista || lista.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 30px; color: var(--text-sub); font-weight:600;">Nenhum certificado localizado para o filtro selecionado.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 30px; color: var(--text-sub); font-weight:600;">Nenhum certificado localizado para o filtro selecionado.</td></tr>`;
         return;
       }
 
@@ -5079,7 +5084,7 @@
         // Linha descritiva do estado (Aninhamento por Estado)
         html += `
           <tr class="tr-group-state" style="background: var(--th-bg); border-top: 2px solid var(--accent); border-bottom: 2px solid var(--border);">
-            <td colspan="8" style="padding: 10px 14px; font-weight: 800; font-size: 13px; color: var(--text);">
+            <td colspan="7" style="padding: 10px 14px; font-weight: 800; font-size: 13px; color: var(--text);">
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                 <div style="display:flex; align-items:center; gap:8px;">
                   <span style="font-size:16px;">🏛️</span>
@@ -5112,16 +5117,14 @@
             ? `<span class="badge-token-sim" style="background:#f59e0b; color:#ffffff; font-weight:800; border:1px solid #d97706;">🔑 ${tokenText}</span>`
             : `<span class="badge-token-nao" style="background:#3b82f6; color:#ffffff; font-weight:800; border:1px solid #2563eb;">⚡ ${tokenText}</span>`;
 
+          const cleanDomain = sanitizarDominio(c.domain);
+
           html += `
             <tr>
               <td style="padding-left: 24px;">
-                <a href="https://${c.domain}" target="_blank" style="color:var(--link-color); font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-size:13px;">
-                  🔒 ${c.domain}
+                <a href="https://${cleanDomain}" target="_blank" style="color:var(--link-color); font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-size:13px;">
+                  🔒 ${cleanDomain}
                 </a>
-              </td>
-              <td style="color:var(--text); font-size:12.5px; font-weight:700;">
-                ${c.host || 'Traefik Host'}
-                <span class="badge badge-state" style="margin-left:4px; font-weight:900;">${c.state || 'INFRA'}</span>
               </td>
               <td style="text-align:center; font-size:12px; color:var(--text-sub); font-weight:700;">${c.valid_from || '–'}</td>
               <td style="text-align:center; font-size:12.5px; color:var(--text); font-weight:900;">${c.valid_until || '–'}</td>

@@ -292,7 +292,7 @@ def sync_google_sheets_and_db(
             total_ok += 1
 
         upsert_certificate(
-            domain=url,
+            domain=host,
             host=host,
             state=state,
             status=status,

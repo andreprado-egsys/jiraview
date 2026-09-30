@@ -16,6 +16,7 @@ from pydantic import BaseModel
 
 from ..core.config import get_settings
 from ..core.db import (
+    clean_domain,
     delete_email_recipient,
     get_noc_layout,
     get_user_by_username,
@@ -916,7 +917,7 @@ async def get_certificates():
     # Identifica itens em situação de risco para card de alerta imediato
     itens_alerta = [
         {
-            "domain": c["domain"],
+            "domain": clean_domain(c["domain"]),
             "host": c.get("host", ""),
             "state": (c.get("state") or "INFRA").upper(),
             "dias": int(c.get("dias_restantes", 0)),

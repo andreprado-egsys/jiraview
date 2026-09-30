@@ -313,7 +313,9 @@ Retorna a lista completa de domínios e certificados SSL monitorados da infraest
 - `alerta`: Janela preventiva (&le; 30 dias)
 - `criticos`: Críticos (&le; 15 dias)
 - `vencidos`: Já expirados
-- `itens_alerta`: Lista de domínios críticos e vencidos contendo `domain`, `host`, `state` (normalizado para agrupamento hierárquico por estado), `vence_em`, `dias` e `precisa_token`.
+- `itens_alerta`: Lista de domínios críticos e vencidos contendo `domain` (sanitizado, sem prefixo http/https ou caminhos após a barra), `host`, `state` (normalizado para agrupamento hierárquico por estado), `vence_em`, `dias` e `precisa_token`.
+
+> **Nota de Sanitização (v0.5.11):** Todos os campos `domain` retornados pela API e persistidos no banco de dados passam compulsoriamente pela higienização `clean_domain()`, garantindo formato FQDN puro para integração e links HTTPS diretos.
 
 ### POST `/api/v1/modules/certificates/sync`
 Sincroniza os domínios com a planilha mestre do Google Sheets (`1yO1L72qkR1-SXSBGrYtTe9xtm1QCSVcfKqRqzSjbtGU`) e executa probe SSL TLS direto via socket para atualizar `valid_from` e `valid_until`.

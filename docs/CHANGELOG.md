@@ -1,5 +1,20 @@
 # egSYS JiraView — Changelog
 
+## [0.5.11] — 2026-09-30 (PSEI-325)
+
+### Changed
+- `ui(ssl-clean-view): Remoção da Coluna 'HOST / AMBIENTE' em Certificados SSL`:
+  - Eliminação da coluna "HOST / AMBIENTE" nos cards modulares por estado da esteira NOC SSL e na tabela de auditoria completa de domínios em [coordenador.html](file:///mnt/Projetos/egSYS/jiraview/frontend/coordenador.html).
+  - Renomeação do cabeçalho da primeira coluna de `DOMÍNIO / URL` para unicamente **`DOMÍNIO`**.
+  - Ajuste estrutural de todos os `colspan` de carregamento, erro, estado vazio e agrupador de estados de 8 para **7 colunas**.
+  - Limpeza dos placeholders de busca (`certCardsBuscaInput` e `certBuscaInput`), focando exclusivamente em domínio, token e estado.
+
+### Fixed
+- `fix(ssl-domain-sanitization): Sanitização Canônica de Domínio/FQDN`:
+  - Remoção compulsória de prefixos de protocolo (`http://`, `https://`) e eliminação estrita de qualquer caminho, barra ou parâmetros de rota após a primeira barra (`/`), garantindo exibição pura do FQDN do host.
+  - Implementação da função `sanitizarDominio()` no frontend ([coordenador.html](file:///mnt/Projetos/egSYS/jiraview/frontend/coordenador.html)) para links e textos de tabela.
+  - Implementação da função `clean_domain()` no backend ([db.py](file:///mnt/Projetos/egSYS/jiraview/backend/app/core/db.py)) aplicada em `upsert_certificate`, `list_certificates`, no payload de alerta de [modules.py](file:///mnt/Projetos/egSYS/jiraview/backend/app/api/modules.py) e na ingestão via Google Sheets em [sheets.py](file:///mnt/Projetos/egSYS/jiraview/backend/app/core/sheets.py).
+
 ## [0.5.10] — 2026-09-18 (PSEI-324)
 
 ### Added

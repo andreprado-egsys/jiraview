@@ -477,6 +477,16 @@ def update_user(
         conn.close()
 
 
+def clean_domain(domain_str: str) -> str:
+    """Extrai apenas o domínio limpo sem protocolo http/https ou caminhos."""
+    if not domain_str:
+        return ""
+    d = domain_str.strip()
+    if "://" in d:
+        d = d.split("://", 1)[1]
+    return d.split("/", 1)[0].strip()
+
+
 def upsert_certificate(
     domain: str,
     host: str,
@@ -492,6 +502,7 @@ def upsert_certificate(
 ) -> None:
     """Insere ou atualiza status de certificado SSL no SQLite."""
     conn = _get_connection()
+    clean_d = clean_domain(domain)
     try:
         with conn:
             conn.execute("""
@@ -512,7 +523,7 @@ def upsert_certificate(
                     precisa_token = COALESCE(excluded.precisa_token, certificates_status.precisa_token),
                     updated_at = CURRENT_TIMESTAMP;
             """, (
-                domain.strip(),
+                clean_d,
                 host.strip(),
                 state.strip().upper(),
                 status.strip().upper(),
@@ -645,11 +656,16 @@ def sync_traefik_acme_certificates(acme_paths: Optional[List[str]] = None) -> in
 
 
 def list_certificates() -> List[Dict[str, Any]]:
-    """Retorna listagem de certificados SSL monitorados."""
+    """Retorna listagem de certificados SSL monitorados com domínio limpo."""
     conn = _get_connection()
     try:
         cur = conn.execute("SELECT * FROM certificates_status ORDER BY dias_restantes ASC, state ASC;")
-        return [dict(r) for r in cur.fetchall()]
+        res = []
+        for r in cur.fetchall():
+            item = dict(r)
+            item["domain"] = clean_domain(item.get("domain", ""))
+            res.append(item)
+        return res
     finally:
         conn.close()
 
