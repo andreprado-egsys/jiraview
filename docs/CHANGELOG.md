@@ -1,6 +1,6 @@
 # egSYS JiraView — Changelog
 
-## [0.5.11] — 2026-09-30 (PSEI-325)
+## [0.5.11] — 2026-09-30 (PSEI-335)
 
 ### Changed
 - `ui(ssl-clean-view): Remoção da Coluna 'HOST / AMBIENTE' em Certificados SSL`:
