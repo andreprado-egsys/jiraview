@@ -122,7 +122,10 @@ def _build_jql(
     elif funil_stage == "concluidas":
         parts.append('(statusCategory in ("Done") OR resolution is not EMPTY)')
     elif aberto_apenas:
-        parts.append("resolution is EMPTY")
+        st_lower = (status or "").lower()
+        eh_status_concluido = any(x in st_lower for x in ("concluído", "concluido", "resolvido", "fechado", "done", "cancelad", "desenvolvimento concluído", "desenvolvimento concluido"))
+        if not eh_status_concluido:
+            parts.append("resolution is EMPTY")
 
     if tipo:
         parts.append(f'issuetype = "{tipo}"')
@@ -239,19 +242,20 @@ async def list_issues(
         fase_info = _detectar_fase(st_nome, st_cat)
         is_done = st_cat == "done" or fase_info["num"] == 8 or bool((f.get("resolution") or {}).get("name"))
 
-        # Filtro estrito do Funil de Atendimento (100% idêntico a /dashboard)
-        if funil_stage == "novas":
-            if is_done or fase_info["num"] not in (1, 2):
-                continue
-        elif funil_stage == "em_atendimento":
-            if is_done or fase_info["num"] not in (3, 4, 5, 6):
-                continue
-        elif funil_stage == "aguardando_validacao":
-            if is_done or (fase_info["num"] != 7 and fase_info["posse"] != "cliente"):
-                continue
-        elif funil_stage == "concluidas":
-            if not is_done:
-                continue
+        # Filtro estrito do Funil de Atendimento (aplica se não houver status_filter explícito)
+        if not status_filter:
+            if funil_stage == "novas":
+                if is_done or fase_info["num"] not in (1, 2):
+                    continue
+            elif funil_stage == "em_atendimento":
+                if is_done or fase_info["num"] not in (3, 4, 5, 6):
+                    continue
+            elif funil_stage == "aguardando_validacao":
+                if is_done or (fase_info["num"] != 7 and fase_info["posse"] != "cliente"):
+                    continue
+            elif funil_stage == "concluidas":
+                if not is_done:
+                    continue
 
         if posse_filter and fase_info["posse"] != posse_filter:
             continue
@@ -378,20 +382,20 @@ async def meta(
     estado: Optional[str] = None,
     projetos: Optional[str] = None,
     espacos: Optional[str] = None,
+    periodo: Optional[str] = None,
     user: TokenPayload = Depends(get_current_user)
 ):
-    """Status e tipos disponíveis para os filtros do painel com contagem completa."""
-    import json
+    """Status e tipos disponíveis para os filtros do painel com fragmentação completa por período."""
     import httpx
 
     projs_req = projetos or espacos
     projs, reporters, _ = _resolver_projetos_e_permissoes(estado, projs_req, user)
     projetos_str = ", ".join(projs)
-    statuses = []
-    tipos = []
+    statuses = set()
+    tipos = set()
     hdr = JSM._basic()
     async with httpx.AsyncClient() as c:
-        # tipos
+        # 1. Tipos de solicitações
         for p in projs:
             try:
                 r = await c.get("https://egsys.atlassian.net/rest/api/3/issue/createmeta",
@@ -400,33 +404,48 @@ async def meta(
                     data = r.json()
                     for proj in data.get("projects", []):
                         for it in proj.get("issuetypes", []):
-                            tipos.append(it.get("name"))
+                            tipos.add(it.get("name"))
             except Exception:
                 pass
-        # statuses do projeto principal (workflow completo)
-        if projs:
+        # 2. Statuses do workflow Jira
+        for p in projs:
             try:
-                r = await c.get(f"https://egsys.atlassian.net/rest/api/3/project/{projs[0]}/statuses", headers=hdr, timeout=4.0)
+                r = await c.get(f"https://egsys.atlassian.net/rest/api/3/project/{p}/statuses", headers=hdr, timeout=4.0)
                 if r.status_code == 200:
                     for it in r.json():
                         for st in it.get("statuses", []):
-                            statuses.append(st.get("name"))
+                            statuses.add(st.get("name"))
             except Exception:
                 pass
-    statuses = sorted(set(statuses))
-    
-    # contagem real por status (issues do estado sem cap de 100)
-    contagem = {}
+
+    _rp = ", ".join('"'+c["accountId"]+'"' for c in reporters if c.get("accountId"))
+    _filtro_rp = f" AND reporter in ({_rp})" if _rp else ""
+    janela = _jql_janela(periodo)
+
+    # 3. Descobrir todos os status ativos no projeto e calcular contagem precisa para o período
+    contagem_periodo = {}
     try:
-        issues_all = await JSM.search(f"project in ({projetos_str}) ORDER BY created DESC", 1000)
-        for it in issues_all:
+        # Busca no período selecionado para calcular fragmentação exata
+        issues_periodo = await JSM.search_full(f"project in ({projetos_str}){_filtro_rp}{janela} ORDER BY created DESC", cap=1000)
+        for it in issues_periodo:
             st = (it.get("fields", {}).get("status") or {}).get("name")
             if st:
-                contagem[st] = contagem.get(st, 0) + 1
+                statuses.add(st)
+                contagem_periodo[st] = contagem_periodo.get(st, 0) + 1
+
+        # Se statuses ainda estiver vazio (ex.: API Jira 404 em JSM), buscar histórico amplo do projeto
+        if len(statuses) < 3:
+            issues_global = await JSM.search_full(f"project in ({projetos_str}){_filtro_rp} ORDER BY updated DESC", cap=500)
+            for it in issues_global:
+                st = (it.get("fields", {}).get("status") or {}).get("name")
+                if st:
+                    statuses.add(st)
     except Exception:
         pass
-    statuses_info = [{"name": s, "tickets": contagem.get(s, 0)} for s in statuses]
-    return {"statuses": statuses_info, "tipos": sorted(set(tipos))}
+
+    lista_statuses = sorted(list(statuses))
+    statuses_info = [{"name": s, "tickets": contagem_periodo.get(s, 0)} for s in lista_statuses]
+    return {"statuses": statuses_info, "tipos": sorted(list(tipos))}
 
 
 def _traduzir_status_engenharia(st_nome: str) -> dict:

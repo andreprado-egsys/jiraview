@@ -299,38 +299,41 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 14px 18px;
+      padding: 12px 18px;
       margin-bottom: 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 16px;
       flex-wrap: wrap;
     }
     .summary-item {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
+      flex: 1 1 auto;
+      min-width: 200px;
     }
     .summary-tag {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       letter-spacing: 0.5px;
       color: var(--accent);
       text-transform: uppercase;
     }
     .summary-value {
-      font-size: 22px;
+      font-size: 19px;
       font-weight: 800;
       color: var(--text);
     }
     .summary-sub {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text-sub);
+      line-height: 1.35;
     }
     .summary-divider {
       width: 1px;
-      height: 44px;
+      height: 40px;
       background: var(--border);
     }
     @media (max-width: 768px) {
@@ -1606,7 +1609,7 @@
         <span class="summary-tag">📦 CARTEIRA OPERACIONAL ATIVA (EM ABERTO)</span>
         <div class="summary-value" id="summaryTotalBacklog">25 Chamados em Aberto</div>
         <div class="summary-sub" id="summaryFormula">
-          Decomposição das 3 frentes ativas: <b>📥 Triagem (<span id="eq-novas">0</span>)</b> + <b>⚙️ Em Atendimento (<span id="eq-atend">24</span>)</b> + <b>⏸️ Aguardando Cliente (<span id="eq-aguard">1</span>)</b> = <b><span id="eq-total">25</span> Chamados Ativos</b>
+          Decomposição: <b>📥 Triagem (<span id="eq-novas">0</span>)</b> + <b>⚙️ Atendimento (<span id="eq-atend">24</span>)</b> + <b>⏸️ Aguardando (<span id="eq-aguard">1</span>)</b> = <b><span id="eq-total">25</span> Ativos</b>
         </div>
       </div>
       <div class="summary-divider"></div>
@@ -1614,6 +1617,14 @@
         <span class="summary-tag" style="color: #238636;">✅ HISTÓRICO DE ENTREGAS</span>
         <div class="summary-value" id="summaryTotalConcluidas" style="color: #238636;">25 Concluídas</div>
         <div class="summary-sub">Chamados finalizados e entregues no Jira (fora do backlog ativo)</div>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-item">
+        <span class="summary-tag" style="color: #a371f7;">📊 VOLUME TOTAL DE DEMANDAS</span>
+        <div class="summary-value" id="summaryTotalGeral" style="color: #a371f7;">50 Demandas Totais</div>
+        <div class="summary-sub" id="summaryVolFormula">
+          Somatório do período: <b><span id="eq-vol-aberto">25</span> em Aberto</b> + <b><span id="eq-vol-concl">25</span> Concluídas</b>
+        </div>
       </div>
     </div>
 
@@ -2813,8 +2824,15 @@
       document.getElementById("kpi-vazao").innerText = `${concluidas} entregas`;
 
       // Atualizar Banner de Equação do Backlog
+      const totalGeral = backlogAtivo + concluidas;
       const elTotBacklog = document.getElementById("summaryTotalBacklog");
       if (elTotBacklog) elTotBacklog.innerText = `${backlogAtivo} Chamados em Aberto`;
+      const elTotGeral = document.getElementById("summaryTotalGeral");
+      if (elTotGeral) elTotGeral.innerText = `${totalGeral} Demandas Totais`;
+      const elEqVolAberto = document.getElementById("eq-vol-aberto");
+      if (elEqVolAberto) elEqVolAberto.innerText = backlogAtivo;
+      const elEqVolConcl = document.getElementById("eq-vol-concl");
+      if (elEqVolConcl) elEqVolConcl.innerText = concluidas;
       const elTotConcl = document.getElementById("summaryTotalConcluidas");
       if (elTotConcl) elTotConcl.innerText = `${concluidas} Concluídas`;
       const elEqNovas = document.getElementById("eq-novas");

@@ -196,38 +196,41 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 14px 18px;
+      padding: 12px 18px;
       margin-bottom: 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 16px;
       flex-wrap: wrap;
     }
     .summary-item {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
+      flex: 1 1 auto;
+      min-width: 200px;
     }
     .summary-tag {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       letter-spacing: 0.5px;
       color: var(--accent);
       text-transform: uppercase;
     }
     .summary-value {
-      font-size: 22px;
+      font-size: 19px;
       font-weight: 800;
       color: var(--text);
     }
     .summary-sub {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text-sub);
+      line-height: 1.35;
     }
     .summary-divider {
       width: 1px;
-      height: 44px;
+      height: 40px;
       background: var(--border);
     }
     @media (max-width: 768px) {
@@ -777,7 +780,7 @@
         <span class="summary-tag">📦 CARTEIRA OPERACIONAL ATIVA (EM ABERTO)</span>
         <div class="summary-value" id="summaryTotalBacklog">– Chamados em Aberto</div>
         <div class="summary-sub" id="summaryFormula">
-          Decomposição das 3 frentes ativas: <b>📥 Triagem (<span id="eq-novas">–</span>)</b> + <b>⚙️ Em Atendimento (<span id="eq-atend">–</span>)</b> + <b>⏸️ Aguardando Cliente (<span id="eq-aguard">–</span>)</b> = <b><span id="eq-total">–</span> Chamados Ativos</b>
+          Decomposição: <b>📥 Triagem (<span id="eq-novas">–</span>)</b> + <b>⚙️ Atendimento (<span id="eq-atend">–</span>)</b> + <b>⏸️ Aguardando (<span id="eq-aguard">–</span>)</b> = <b><span id="eq-total">–</span> Ativos</b>
         </div>
       </div>
       <div class="summary-divider"></div>
@@ -785,6 +788,14 @@
         <span class="summary-tag" style="color: #238636;">✅ HISTÓRICO DE ENTREGAS</span>
         <div class="summary-value" id="summaryTotalConcluidas" style="color: #238636;">– Concluídas</div>
         <div class="summary-sub">Chamados finalizados e entregues no Jira (fora do backlog ativo)</div>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-item">
+        <span class="summary-tag" style="color: #a371f7;">📊 VOLUME TOTAL DE DEMANDAS</span>
+        <div class="summary-value" id="summaryTotalGeral" style="color: #a371f7;">– Demandas Totais</div>
+        <div class="summary-sub" id="summaryVolFormula">
+          Somatório do período: <b><span id="eq-vol-aberto">–</span> em Aberto</b> + <b><span id="eq-vol-concl">–</span> Concluídas</b>
+        </div>
       </div>
     </div>
 
@@ -904,13 +915,13 @@
     <!-- Filtros em Barra -->
     <div class="filters">
       <label>Status
-        <select id="f-status"><option value="">Todos</option></select>
+        <select id="f-status" onchange="aoMudarStatusDropdown()"><option value="">Todos</option></select>
       </label>
       <label>Tipo de solicitação
         <select id="f-tipo"><option value="">Todos</option></select>
       </label>
       <label>Apenas abertas
-        <select id="f-abertas"><option value="true">Sim (Sem resolução)</option><option value="false">Não (Todas)</option></select>
+        <select id="f-abertas" onchange="loadAll()"><option value="true">Sim (Sem resolução)</option><option value="false">Não (Todas)</option></select>
       </label>
       <label>Período
         <select id="f-periodo" onchange="loadAll()">
@@ -1264,7 +1275,7 @@
       return document.getElementById("f-periodo") ? document.getElementById("f-periodo").value : "90d";
     }
     function loadAll() {
-      load(); loadCards(); loadCharts();
+      load(); loadCards(); loadCharts(); loadMeta();
     }
     function boot() {
       bootSeguro(load); bootSeguro(loadCards); bootSeguro(loadMeta);
@@ -1430,8 +1441,15 @@
       document.getElementById("c-projetos").textContent = "Projetos: " + (d.projetos || []).join(", ");
 
       // Atualizar Banner Executivo de Síntese
+      const totalGeral = totalAtivo + concluidasVal;
       const sTotalEl = document.getElementById("summaryTotalBacklog");
       if (sTotalEl) sTotalEl.textContent = `${totalAtivo} Chamados em Aberto`;
+      const sGeralEl = document.getElementById("summaryTotalGeral");
+      if (sGeralEl) sGeralEl.textContent = `${totalGeral} Demandas Totais`;
+      const eqVolAberto = document.getElementById("eq-vol-aberto");
+      if (eqVolAberto) eqVolAberto.textContent = totalAtivo;
+      const eqVolConcl = document.getElementById("eq-vol-concl");
+      if (eqVolConcl) eqVolConcl.textContent = concluidasVal;
       const sConcEl = document.getElementById("summaryTotalConcluidas");
       if (sConcEl) sConcEl.textContent = `${concluidasVal} Concluídas`;
       const eqNovas = document.getElementById("eq-novas");
@@ -1497,21 +1515,50 @@
       load();
     }
 
-    // ==== Meta (filtros dinâmicos com contagem real) ====
-    async function loadMeta() {
-      const d = await api("/meta?estado=" + ESTADO + queryEspacos());
+    function aoMudarStatusDropdown() {
       const selS = document.getElementById("f-status");
-      selS.innerHTML = '<option value="">Todos os status</option>';
-      (d.statuses || []).forEach(s => {
-        const o = document.createElement("option");
-        o.value = s.name;
-        o.textContent = `${s.name} (${s.tickets})`;
-        if (!s.tickets) { o.disabled = true; o.textContent += " — (0)"; }
-        selS.appendChild(o);
-      });
+      if (!selS) return;
+      const sVal = (selS.value || "").toLowerCase();
+      const selAb = document.getElementById("f-abertas");
+      if (sVal && selAb) {
+        if (sVal.includes("conclu") || sVal.includes("cancel") || sVal.includes("fechad") || sVal.includes("resolv") || sVal.includes("done")) {
+          selAb.value = "false";
+        }
+      }
+    }
+
+    // ==== Meta (filtros dinâmicos com contagem real por período e contexto) ====
+    async function loadMeta() {
+      const d = await api("/meta?estado=" + ESTADO + queryEspacos() + "&periodo=" + periodoAtual());
+      if (!d) return;
+      const selS = document.getElementById("f-status");
+      if (selS) {
+        const valAtual = selS.value;
+        selS.innerHTML = '<option value="">Todos os status</option>';
+        (d.statuses || []).forEach(s => {
+          const o = document.createElement("option");
+          o.value = s.name;
+          o.textContent = `${s.name} (${s.tickets})`;
+          selS.appendChild(o);
+        });
+        if (valAtual && Array.from(selS.options).some(o => o.value === valAtual)) {
+          selS.value = valAtual;
+        }
+      }
       const selT = document.getElementById("f-tipo");
-      selT.innerHTML = '<option value="">Todos os tipos</option>';
-      (d.tipos || []).forEach(t => { const o = document.createElement("option"); o.value = t; o.textContent = t; selT.appendChild(o); });
+      if (selT) {
+        const valTipoAtual = selT.value;
+        selT.innerHTML = '<option value="">Todos os tipos</option>';
+        (d.tipos || []).forEach(t => {
+          const o = document.createElement("option");
+          o.value = t;
+          o.textContent = t;
+          selT.appendChild(o);
+        });
+        if (valTipoAtual && Array.from(selT.options).some(o => o.value === valTipoAtual)) {
+          selT.value = valTipoAtual;
+        }
+      }
     }
 
     // ==== Listagem Principal ====
@@ -1520,7 +1567,17 @@
       const tp = document.getElementById("f-tipo").value;
       const ab = document.getElementById("f-abertas").value;
       const jql = document.getElementById("f-jql").value;
-      const q = new URLSearchParams({ estado: ESTADO, abertas: (funilStageAtivo === "concluidas" ? "false" : ab), periodo: periodoAtual(), max_results: "200" });
+
+      if (st && funilStageAtivo) {
+        funilStageAtivo = "";
+        document.querySelectorAll(".card").forEach(c => c.classList.remove("active-filter"));
+      }
+
+      const stLower = (st || "").toLowerCase();
+      const ehStatusConcluido = stLower.includes("conclu") || stLower.includes("cancel") || stLower.includes("fechad") || stLower.includes("resolv") || stLower.includes("done");
+      const paramAbertas = ehStatusConcluido ? "false" : (funilStageAtivo === "concluidas" ? "false" : ab);
+
+      const q = new URLSearchParams({ estado: ESTADO, abertas: paramAbertas, periodo: periodoAtual(), max_results: "200" });
       if (espacoClienteAtivo) q.set("projetos", espacoClienteAtivo);
       if (st) q.set("status_filter", st);
       if (tp) q.set("tipo", tp);

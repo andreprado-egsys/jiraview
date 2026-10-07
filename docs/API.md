@@ -158,10 +158,16 @@ Agregados formatados para renderização no Chart.js:
 - `por_dia` (série cronológica dos últimos 15 dias para gráfico de linha)
 - `total`
 
-### GET `/api/v1/meta?estado=sc`
-Metadados dinâmicos populados diretamente do Jira:
-- `statuses[]` (`[{name: "Em Atendimento", tickets: 23}, ...]`)
-- `tipos[]` (`["Incidente", "Melhoria", "Dúvida", ...]`)
+### GET `/api/v1/meta?estado=sc&periodo=90d&projetos=HDPMSC`
+Metadados dinâmicos e fragmentação exata populados diretamente do Jira com suporte a múltiplos espaços e períodos:
+- **Parâmetros**: `estado`, `projetos` (ou `espacos`), `periodo` (`30d`, `60d`, `90d`, `6m`, `12m`, `ano`, `todos`).
+- `statuses[]`: Lista exaustiva de todos os status do workflow com a contagem exata no período informado (`[{name: "Executando", tickets: 2}, {name: "Concluído", tickets: 18}, ...]`).
+- `tipos[]`: Lista de tipos de solicitações registradas no projeto (`["Incidente", "Melhoria", "Dúvida", ...]`).
+
+### GET `/api/v1/issues?estado=sc&periodo=90d&status_filter=Concluído&abertas=true`
+Listagem paginada de solicitações com resolução inteligente de filtros:
+- **Parâmetros**: `estado`, `projetos`, `status_filter`, `tipo`, `origem`, `posse_filter`, `funil_stage`, `jql`, `abertas` (`true`/`false`), `periodo`, `max_results`.
+- **Inteligência de Status Concluído**: Quando `status_filter` aponta para um status de finalização (`Concluído`, `Cancelada`, etc.), a cláusula restritiva `resolution is EMPTY` é ignorada para evitar consultas mutualmente exclusivas, retornando os tickets com paridade total.
 
 ### GET|POST `/api/v1/filtros?estado=sc` · DELETE `/api/v1/filtros/{id}?estado=sc`
 CRUD de filtros JQL personalizados salvos por gestor e por estado (persistência em `data/filtros.json`, 0600).

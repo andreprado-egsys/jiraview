@@ -1,5 +1,25 @@
 # egSYS JiraView — Changelog
 
+## [0.5.13] — 2026-10-07 (PSEI-340)
+
+### Added
+- `feat(filter-parity): Sincronização Dinâmica da Fragmentação de Status por Período e Contexto`:
+  - Calibração do endpoint `/api/v1/meta` para retornar o catálogo completo de status do workflow com contagens em tempo real por período (`30d`, `60d`, `90d`, `6m`, `12m`, `ano`, `todos`).
+  - O dropdown de **Status** (`f-status`) agora reflete a contagem matemática exata de tickets existentes para a janela temporal e escopo ativos (`Status (N)`).
+  - Inteligência de resolução de filtros: ao selecionar um status de conclusão/finalizado (ex.: `Concluído`, `Cancelada`), o backend e o frontend não impõem `resolution is EMPTY`, garantindo que as solicitações concluídas sejam exibidas com 100% de paridade.
+  - Atualização automática das contagens do dropdown ao alterar o período (`f-periodo`) ou o filtro de abertas (`f-abertas`), mantendo a seleção ativa caso válida.
+  - Eliminação de conflitos silenciosos entre seleção explícita de status e estágios do funil em [index.html](file:///home/prado/projeto_egSYS/jiraview/frontend/index.html).
+
+## [0.5.12] — 2026-10-07 (PSEI-340)
+
+### Added
+- `feat(dashboard-summary): Card Executivo de Volume Total Demandado na Extrema Direita`:
+  - Criação do card modular de síntese executiva `📊 VOLUME TOTAL DE DEMANDAS` posicionado na **extrema direita** do banner (`[Carteira Operacional Ativa] | [Histórico de Entregas] | [Volume Total de Demandas]`).
+  - Exibição em tempo real do somatório consolidado de tarefas do período (`Chamados em Aberto + Concluídas`) com subtítulo detalhado.
+  - Ajuste ergonômico e tipográfico no card `📦 CARTEIRA OPERACIONAL ATIVA (EM ABERTO)` para distribuição proporcional em 3 blocos.
+  - Sincronização dinâmica no cliente SC ([index.html](file:///home/prado/projeto_egSYS/jiraview/frontend/index.html)) e Painel da Coordenação ([coordenador.html](file:///home/prado/projeto_egSYS/jiraview/frontend/coordenador.html)).
+  - Deploy em produção validado no host `monitoramento-egsys` com container `egsys-jiraview` ativo.
+
 ## [0.5.11] — 2026-09-30 (PSEI-335)
 
 ### Changed
