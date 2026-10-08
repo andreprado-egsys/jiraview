@@ -150,13 +150,13 @@ Cards métricos agregados estilo Jira Dashboard com governança estrita de perí
 - `total_com_resolucao`
 
 ### GET `/api/v1/charts?estado=sc&periodo=90d`
-Agregados formatados para renderização no Chart.js:
+Agregados dinâmicos e paginados (cap=500) formatados para renderização no Chart.js:
 - `por_status` (Top 15 status mais frequentes)
 - `por_prioridade` (distribuição por criticidade)
-- `por_solicitante` (Top 6 solicitantes)
+- `por_solicitante` (Top 15 relatores/solicitantes com resolução resiliente de `displayName`, `name` ou `emailAddress`)
 - `por_tipo` (distribuição por tipo de chamado)
-- `por_dia` (série cronológica dos últimos 15 dias para gráfico de linha)
-- `total`
+- `por_dia` (série cronológica dos últimos 15 dias para gráfico de linha temporal)
+- `total` (volume consolidado de chamados analisados)
 
 ### GET `/api/v1/meta?estado=sc&periodo=90d&projetos=HDPMSC`
 Metadados dinâmicos e fragmentação exata populados diretamente do Jira com suporte a múltiplos espaços e períodos:

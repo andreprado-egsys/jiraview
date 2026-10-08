@@ -1,5 +1,22 @@
 # egSYS JiraView — Changelog
 
+## [0.5.14] — 2026-10-08 (PSEI-342)
+
+### Changed
+- `ui(charts-ux): Modernização do Gráfico de Solicitantes para Barras Horizontais de Alta Legibilidade`:
+  - Substituição da visualização em Área Polar (`polarArea`) por **Barras Horizontais** (`bar` com `indexAxis: 'y'`) no gráfico 3 do cliente SC ([index.html](file:///home/prado/projeto_egSYS/jiraview/frontend/index.html)).
+  - Renomeação do cabeçalho executivo para **`👤 Demandas por Relator / Solicitante`**, esclarecendo a vinculação com o militar/gestor que abriu o chamado.
+  - Alinhamento vertical do nome completo dos relatores no eixo Y com tipografia e contraste calibrados, permitindo identificação visual instantânea (<1s).
+  - Tooltips executivos com callback formatado (`X chamado(s)`) e escala linear inteira no eixo X.
+
+### Fixed
+- `fix(charts-reporter): Extração Dinâmica e Agregação Resiliente do Campo Relator (fields.reporter)`:
+  - Resolução robusta de identidade do relator em `GET /api/v1/charts` e `GET /api/v1/issues` ([v1.py](file:///home/prado/projeto_egSYS/jiraview/backend/app/api/v1.py)), extraindo `displayName or name or emailAddress`, impedindo que militares da PMSC (como Alex Sandro de Oliveira, Ilclemar Vieira e Cap Thiesen) caiam em `N/D`.
+  - Ampliação da paginação JQL em `/charts` de `JSM.search(100)` para `JSM.search_full(cap=500)` e aumento do retorno de `most_common(6)` para `most_common(15)`.
+  - Eliminação da sobreposição estática de nomes em [dev_server.py](file:///home/prado/projeto_egSYS/jiraview/scripts/dev_server.py) (que forçava um único gestor em todos os tickets) e implementação do handler dinâmico de `/charts` para desenvolvimento local.
+  - Deploy em produção validado no host `monitoramento-egsys` (45.7.171.41) com container `egsys-jiraview` ativo e saudável (`{"status":"ok","jira":true}`).
+
+
 ## [0.5.13] — 2026-10-07 (PSEI-340)
 
 ### Added
