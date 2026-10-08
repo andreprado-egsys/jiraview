@@ -157,7 +157,7 @@ class JiraViewDevHandler(http.server.SimpleHTTPRequestHandler):
                     "faseNome": t.get("etapaNome", "Triagem"),
                     "posse": t.get("posse", "egsys"),
                     "posseLabel": t.get("posseLabel", "🔵 Ação com egSYS"),
-                    "solicitante": "João Mário Mazzola",
+                    "solicitante": t.get("solicitante") or t.get("reporter") or "João Mário Mazzola",
                     "responsavel": "Engenharia egSYS",
                     "prioridade": "Normal",
                     "atualizacao": "2026-09-10",
@@ -315,6 +315,42 @@ class JiraViewDevHandler(http.server.SimpleHTTPRequestHandler):
                     {"de": "Em Atendimento", "para": status, "quando": "2026-09-12 10:30:00", "autor": "Engenharia egSYS"},
                     {"de": "Triagem N1", "para": "Em Atendimento", "quando": "2026-09-11 14:15:00", "autor": "Suporte egSYS"}
                 ]
+            })
+            return
+
+        if subpath == "charts":
+            from collections import Counter, defaultdict
+            from datetime import datetime, timedelta
+            por_status = Counter()
+            por_prioridade = Counter()
+            por_solicitante = Counter()
+            por_tipo = Counter()
+            por_dia = defaultdict(int)
+            hoje = datetime.now()
+            for t in tickets:
+                st = t.get("status") or "Novo"
+                por_status[st] += 1
+                por_tipo[t.get("tipo", "Demanda")] += 1
+                por_prioridade[t.get("prioridade", "Normal")] += 1
+                sol = t.get("solicitante") or t.get("reporter") or "João Mário Mazzola"
+                por_solicitante[sol] += 1
+                cr = t.get("criacao") or "2026-09-01"
+                try:
+                    dia = datetime.fromisoformat(cr[:10]).date()
+                    por_dia[dia] += 1
+                except Exception:
+                    pass
+            serie = []
+            for i in range(14, -1, -1):
+                d = (hoje - timedelta(days=i)).date()
+                serie.append({"dia": d.isoformat(), "count": por_dia[d]})
+            self._send_json({
+                "por_status": dict(por_status.most_common(15)),
+                "por_prioridade": dict(por_prioridade.most_common()),
+                "por_solicitante": dict(por_solicitante.most_common(15)),
+                "por_tipo": dict(por_tipo.most_common()),
+                "por_dia": serie,
+                "total": len(tickets),
             })
             return
 

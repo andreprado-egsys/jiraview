@@ -276,7 +276,7 @@ async def list_issues(
             "faseNome": fase_info["nome"],
             "posse": fase_info["posse"],
             "posseLabel": fase_info["label_posse"],
-            "solicitante": (f.get("reporter") or {}).get("displayName"),
+            "solicitante": (f.get("reporter") or {}).get("displayName") or (f.get("reporter") or {}).get("name") or (f.get("reporter") or {}).get("emailAddress") or "N/D",
             "responsavel": (f.get("assignee") or {}).get("displayName") or "Não atribuído",
             "prioridade": (f.get("priority") or {}).get("name") or "Normal",
             "atualizacao": (f.get("updated") or "")[:10],
@@ -720,9 +720,9 @@ async def charts(
     projetos_str = ", ".join(projs)
     _rp = ", ".join('"'+c["accountId"]+'"' for c in reporters if c.get("accountId"))
     _filtro_rp = f" AND reporter in ({_rp})" if _rp else ""
-    issues = await JSM.search(
+    issues = await JSM.search_full(
         f"project in ({projetos_str}){_filtro_rp}{_jql_janela(periodo)} ORDER BY created DESC",
-        100)
+        cap=500)
     por_status = Counter()
     por_prioridade = Counter()
     por_solicitante = Counter()
@@ -736,7 +736,9 @@ async def charts(
         por_status[st] += 1
         por_tipo[(f.get("issuetype") or {}).get("name") or "?"] += 1
         por_prioridade[(f.get("priority") or {}).get("name") or "Sem prioridade"] += 1
-        por_solicitante[(f.get("reporter") or {}).get("displayName") or "N/D"] += 1
+        rep = f.get("reporter") or {}
+        nome_rep = rep.get("displayName") or rep.get("name") or rep.get("emailAddress") or "N/D"
+        por_solicitante[nome_rep] += 1
         cr = f.get("created") or ""
         try:
             dia = datetime.fromisoformat(cr[:19]).date()
@@ -751,7 +753,7 @@ async def charts(
     return {
         "por_status": dict(por_status.most_common(15)),
         "por_prioridade": dict(por_prioridade.most_common()),
-        "por_solicitante": dict(por_solicitante.most_common(6)),
+        "por_solicitante": dict(por_solicitante.most_common(15)),
         "por_tipo": dict(por_tipo.most_common()),
         "por_dia": serie,
         "total": len(issues),
