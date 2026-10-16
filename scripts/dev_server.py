@@ -167,12 +167,11 @@ class JiraViewDevHandler(http.server.SimpleHTTPRequestHandler):
             else:
                 limite_p_str = "2000-01-01"
 
-            # Conjunto canônico das tasks abertas/criadas na semana recente (Cb Mazzola: 9 chamados de HDPMSC-417 a HDPMSC-425)
+            limite_7d_dt = (hoje - timedelta(days=7)).isoformat()
             chaves_abertas_semana = {
                 t.get("chave") for t in tickets
-                if (t.get("criacao") or "")[:10] >= "2026-10-07" and t.get("chave") != "HDPMSC-416"
+                if (t.get("criacao") or "")[:10] >= limite_7d_dt
             }
-            limite_7d_dt = (hoje - timedelta(days=7)).isoformat()
 
             out = []
             for t in tickets:
@@ -251,12 +250,12 @@ class JiraViewDevHandler(http.server.SimpleHTTPRequestHandler):
             hoje = datetime.now().date()
             limite_7d_dt = (hoje - timedelta(days=7)).isoformat()
 
-            # Conjunto canônico das 9 tasks abertas/criadas na semana recente (Cb Mazzola)
+            # Chamados abertos/criados nos últimos 7 dias corridos (conforme solicitação do Coordenador André)
             abertas_semana_tickets = [
                 t for t in tickets
-                if (t.get("criacao") or "")[:10] >= "2026-10-07" and t.get("chave") != "HDPMSC-416"
+                if (t.get("criacao") or "")[:10] >= limite_7d_dt
             ]
-            abertas_7d = len(abertas_semana_tickets) # 9 chamados
+            abertas_7d = len(abertas_semana_tickets)
 
             fechadas_7d = 0
             for t in tickets:

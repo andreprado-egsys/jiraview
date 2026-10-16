@@ -122,10 +122,10 @@ def _build_jql(
     elif funil_stage in ("concluidas", "fechadas_7d"):
         parts.append('(statusCategory in ("Done") OR resolution is not EMPTY)')
         if funil_stage == "fechadas_7d":
-            parts.append("resolved >= -7d")
+            parts.append('(resolved >= startOfDay(-7d) OR updated >= startOfDay(-7d))')
     elif funil_stage == "abertas_7d":
-        # Abertas na semana/7d traz todas as tasks criadas no período, independente de já estarem resolvidas
-        parts.append("created >= -7d")
+        # Abertas nos ultimos 7 dias (startOfDay(-7d) garante paridade com o dia completo)
+        parts.append("created >= startOfDay(-7d)")
     elif aberto_apenas:
         st_lower = (status or "").lower()
         eh_status_concluido = any(x in st_lower for x in ("concluído", "concluido", "resolvido", "fechado", "done", "cancelad", "desenvolvimento concluído", "desenvolvimento concluido"))
@@ -280,10 +280,10 @@ async def list_issues(
                     continue
             elif funil_stage == "fechadas_7d":
                 from datetime import datetime, timedelta
-                limite_7d = datetime.now() - timedelta(days=7)
+                limite_7d = (datetime.now().date() - timedelta(days=7)).isoformat()
                 res = (f.get("resolutiondate") or f.get("updated") or "")[:10]
                 try:
-                    if not is_done or datetime.fromisoformat(res) < limite_7d:
+                    if not is_done or res < limite_7d:
                         continue
                 except Exception:
                     continue
