@@ -165,17 +165,33 @@
     #theme-btn:hover { filter: brightness(1.2); }
     .container { padding: 20px 24px; max-width: 1440px; margin: 0 auto; }
 
-    /* Funil de Atendimento (Cards estilo Jira Dashboard) */
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    /* Funil de Atendimento (Cards Compactos em Linha Única) */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 1100px) {
+      .cards {
+        overflow-x: auto;
+        padding-bottom: 6px;
+        grid-template-columns: repeat(7, minmax(135px, 1fr));
+      }
+    }
     .card {
       background-color: var(--card);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 18px;
+      border-radius: 7px;
+      padding: 9px 10px;
       cursor: pointer;
       position: relative;
       overflow: hidden;
       transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
     }
     .card:hover {
       transform: translateY(-2px);
@@ -186,10 +202,46 @@
       border-color: var(--accent);
       box-shadow: 0 0 0 2px var(--accent);
     }
-    .card .label { font-size: 12px; color: var(--text-sub); text-transform: uppercase; letter-spacing: .4px; display: flex; align-items: center; gap: 6px; }
-    .card .value { font-size: 28px; font-weight: 700; margin-top: 6px; color: var(--text); }
-    .card small { color: var(--text-sub); font-size: 11px; }
-    .card-indicator { height: 4px; width: 100%; position: absolute; bottom: 0; left: 0; }
+    .card .label {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: .2px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .card .label .lbl-txt {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .card .label .lbl-period {
+      font-size: 9px;
+      opacity: 0.8;
+      flex-shrink: 0;
+    }
+    .card .value {
+      font-size: 21px;
+      font-weight: 700;
+      margin: 3px 0 1px 0;
+      color: var(--text);
+      line-height: 1.1;
+    }
+    .card small {
+      color: var(--text-sub);
+      font-size: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+      line-height: 1.25;
+    }
+    .card-indicator { height: 3px; width: 100%; position: absolute; bottom: 0; left: 0; }
 
     /* Banner de Síntese e Decomposição Matemática do Backlog */
     .summary-banner {
@@ -237,12 +289,16 @@
       .summary-divider { display: none; }
     }
     .badge-cat-funil {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
-      margin-top: 6px;
+      margin-top: 4px;
       display: inline-block;
-      padding: 2px 6px;
+      padding: 1px 5px;
       border-radius: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
 
     /* Seletor Executivo de Multi-Espaço do Cliente */
@@ -801,43 +857,50 @@
 
     <!-- 🎯 Funil de Atendimento em 4 Estágios + Total Backlog Ativo -->
     <div class="cards" id="cards">
-      <div class="card" onclick="filtrarPorFunil('novas')" id="card-novas" title="Clique para filtrar apenas chamados novos">
-        <div class="label">📥 Novas / Triagem N1-N2 <span id="p-label"></span></div>
+      <div class="card" onclick="filtrarPorFunil('novas')" id="card-novas" title="Novas / Triagem N1-N2 — Aguardando início pela egSYS (Componente 1/3 do Backlog)">
+        <div class="label"><span class="lbl-txt">📥 Novas / Triagem</span> <span id="p-label" class="lbl-period"></span></div>
         <div class="value" id="c-novas">–</div>
-        <small>Aguardando início pela egSYS</small>
-        <div><span class="badge-cat-funil" style="background: rgba(56,139,253,0.15); color: #388bfd;">Componente 1/3 do Backlog</span></div>
+        <small>Aguardando início</small>
+        <div><span class="badge-cat-funil" style="background: rgba(56,139,253,0.15); color: #388bfd;">1/3 do Backlog</span></div>
         <div class="card-indicator" style="background:var(--blue);"></div>
       </div>
-      <div class="card" onclick="filtrarPorFunil('em_atendimento')" id="card-andamento" title="Clique para filtrar chamados em atendimento">
-        <div class="label">⚙️ Em Atendimento Dev/QA <span id="p-label2"></span></div>
+      <div class="card" onclick="filtrarPorFunil('em_atendimento')" id="card-andamento" title="Em Atendimento Dev/QA — Em análise / desenvolvimento / QA (Componente 2/3 do Backlog)">
+        <div class="label"><span class="lbl-txt">⚙️ Atendimento</span> <span id="p-label2" class="lbl-period"></span></div>
         <div class="value" id="c-andamento">–</div>
-        <small>Em análise / desenvolvimento / QA</small>
-        <div><span class="badge-cat-funil" style="background: rgba(163,113,247,0.15); color: #a371f7;">Componente 2/3 do Backlog</span></div>
+        <small>Análise / Dev / QA</small>
+        <div><span class="badge-cat-funil" style="background: rgba(163,113,247,0.15); color: #a371f7;">2/3 do Backlog</span></div>
         <div class="card-indicator" style="background:#a371f7;"></div>
       </div>
-      <div class="card" onclick="filtrarPorFunil('aguardando_validacao')" id="card-validacao" title="Clique para filtrar chamados aguardando o cliente">
-        <div class="label">⏸️ Aguard. Validação Cliente</div>
+      <div class="card" onclick="filtrarPorFunil('aguardando_validacao')" id="card-validacao" title="Aguardando Validação Cliente — Homologação / Bloqueio externo (Componente 3/3 do Backlog)">
+        <div class="label"><span class="lbl-txt">⏸️ Aguard. Cliente</span></div>
         <div class="value" id="c-validacao">–</div>
-        <small>Homologação / Bloqueio externo</small>
-        <div><span class="badge-cat-funil" style="background: rgba(210,153,34,0.15); color: #d29922;">Componente 3/3 do Backlog</span></div>
+        <small>Homologação externa</small>
+        <div><span class="badge-cat-funil" style="background: rgba(210,153,34,0.15); color: #d29922;">3/3 do Backlog</span></div>
         <div class="card-indicator" style="background:var(--yellow);"></div>
       </div>
-      <div class="card" onclick="filtrarPorFunil('')" id="card-total-backlog" title="Clique para ver todo o backlog em aberto">
-        <div class="label">📦 Total Backlog Ativo</div>
+      <div class="card" onclick="filtrarPorFunil('')" id="card-total-backlog" title="Total Backlog Ativo — Soma das 3 frentes ativas (1 + 2 + 3) — Fechamento Exato da Carteira">
+        <div class="label"><span class="lbl-txt">📦 Backlog Ativo</span></div>
         <div class="value" id="c-backlog-total" style="color: var(--accent);">–</div>
-        <small>Soma das 3 frentes ativas (1 + 2 + 3)</small>
-        <div><span class="badge-cat-funil" style="background: rgba(56,139,253,0.2); color: var(--accent);">Fechamento Exato da Carteira</span></div>
+        <small>Frentes 1 + 2 + 3</small>
+        <div><span class="badge-cat-funil" style="background: rgba(56,139,253,0.2); color: var(--accent);">Total Carteira</span></div>
         <div class="card-indicator" style="background:var(--accent);"></div>
       </div>
-      <div class="card" onclick="filtrarPorFunil('concluidas')" id="card-concluidas" title="Clique para filtrar chamadas concluídas">
-        <div class="label">✅ Concluídas Histórico <span id="p-label3"></span></div>
+      <div class="card" onclick="filtrarPorFunil('concluidas')" id="card-concluidas" title="Concluídas Histórico — Resolvidas / Entregues no período (Histórico Fora do Backlog)">
+        <div class="label"><span class="lbl-txt">✅ Concluídas</span> <span id="p-label3" class="lbl-period"></span></div>
         <div class="value" id="c-concluidas">–</div>
-        <small>Resolvidas / Entregues no período</small>
-        <div><span class="badge-cat-funil" style="background: rgba(35,134,54,0.15); color: #238636;">Histórico Fora do Backlog</span></div>
+        <small>Resolvidas no período</small>
+        <div><span class="badge-cat-funil" style="background: rgba(35,134,54,0.15); color: #238636;">Fora do Backlog</span></div>
         <div class="card-indicator" style="background:var(--green);"></div>
       </div>
-      <div class="card" style="cursor:default;" id="card-info">
-        <div class="label">🗓️ Fechadas (7 dias)</div>
+      <div class="card" onclick="filtrarUltimos7Dias()" id="card-abertas-7d" title="Abertas nos últimos 7 dias — Entradas Recentes / Novas Demandas">
+        <div class="label"><span class="lbl-txt">🆕 Abertas (7d)</span></div>
+        <div class="value" id="c-abertas-7d" style="color: var(--blue);">–</div>
+        <small id="c-novas-7d-sub">Entradas Recentes</small>
+        <div><span class="badge-cat-funil" style="background: rgba(56,139,253,0.15); color: #388bfd;">Novas Demandas</span></div>
+        <div class="card-indicator" style="background:var(--blue);"></div>
+      </div>
+      <div class="card" onclick="filtrarFechadas7Dias()" id="card-info" title="Fechadas nos últimos 7 dias — Ritmo de Vazão de Entregas">
+        <div class="label"><span class="lbl-txt">🗓️ Fechadas (7d)</span></div>
         <div class="value" id="c-fechadas">–</div>
         <small id="c-projetos">Projetos: HDPMSC</small>
         <div><span class="badge-cat-funil" style="background: rgba(140,149,159,0.15); color: var(--text-sub);">Ritmo de Vazão</span></div>
@@ -920,6 +983,9 @@
       <label>Tipo de solicitação
         <select id="f-tipo"><option value="">Todos</option></select>
       </label>
+      <label>Solicitante
+        <select id="f-solicitante" onchange="load()"><option value="">Todos os solicitantes</option></select>
+      </label>
       <label>Apenas abertas
         <select id="f-abertas" onchange="loadAll()"><option value="true">Sim (Sem resolução)</option><option value="false">Não (Todas)</option></select>
       </label>
@@ -931,6 +997,7 @@
           <option value="6m">Últimos 6 meses</option>
           <option value="12m">Últimos 12 meses</option>
           <option value="ano">Ano atual</option>
+          <option value="todos">Todo o histórico (sem corte)</option>
         </select>
       </label>
       <label>Origem
@@ -1078,6 +1145,18 @@
     const BASE = window.location.pathname.startsWith("/painel_sc") ? "/painel_sc" : "";
     const API = BASE + "/api/v1";
     let token = localStorage.getItem("jiraview_token") || "";
+    if (!token && window.location.hostname === "localhost" && window.location.port === "8090") {
+      token = "dev-token-gestor.sc-valid";
+      localStorage.setItem("jiraview_token", token);
+      localStorage.setItem("jiraview_user", JSON.stringify({
+        username: "gestor.sc",
+        nome: "João Mário Mazzola",
+        role: "manager",
+        estado: "sc",
+        painel_url: "/painel_sc",
+        must_change_password: false
+      }));
+    }
     let posseAtiva = "";
     let activeTicketKey = "";
 
@@ -1381,6 +1460,22 @@
             options: {
               indexAxis: "y",
               maintainAspectRatio: false,
+              onHover: (event, chartElement) => {
+                if (event.native && event.native.target) {
+                  event.native.target.style.cursor = chartElement && chartElement.length ? "pointer" : "default";
+                }
+              },
+              onClick: (event, elements) => {
+                if (elements && elements.length > 0) {
+                  const idx = elements[0].index;
+                  const nomeSelecionado = labelsSol[idx];
+                  const selSol = document.getElementById("f-solicitante");
+                  if (selSol) {
+                    selSol.value = (selSol.value === nomeSelecionado) ? "" : nomeSelecionado;
+                    load();
+                  }
+                }
+              },
               plugins: {
                 legend: { display: false },
                 tooltip: {
@@ -1390,7 +1485,7 @@
                   borderColor: P.grid,
                   borderWidth: 1,
                   callbacks: {
-                    label: (ctx) => ` ${ctx.raw} chamado(s)`
+                    label: (ctx) => ` ${ctx.raw} chamado(s) (Clique para filtrar)`
                   }
                 }
               },
@@ -1458,6 +1553,8 @@
       const bTotalEl = document.getElementById("c-backlog-total");
       if (bTotalEl) bTotalEl.textContent = totalAtivo;
       document.getElementById("c-concluidas").textContent = concluidasVal;
+      const abEl = document.getElementById("c-abertas-7d");
+      if (abEl) abEl.textContent = d.abertas_7d ?? "–";
       document.getElementById("c-fechadas").textContent = d.fechadas_7d ?? "–";
       document.getElementById("c-projetos").textContent = "Projetos: " + (d.projetos || []).join(", ");
 
@@ -1492,7 +1589,9 @@
         "novas": "card-novas",
         "em_atendimento": "card-andamento",
         "aguardando_validacao": "card-validacao",
-        "concluidas": "card-concluidas"
+        "concluidas": "card-concluidas",
+        "abertas_7d": "card-abertas-7d",
+        "fechadas_7d": "card-info"
       };
 
       if (funilStageAtivo === categoria || categoria === "") {
@@ -1513,6 +1612,14 @@
       load();
     }
 
+    function filtrarUltimos7Dias() {
+      filtrarPorFunil("abertas_7d");
+    }
+
+    function filtrarFechadas7Dias() {
+      filtrarPorFunil("fechadas_7d");
+    }
+
     function setPosseFilter(posse) {
       posseAtiva = (posseAtiva === posse) ? "" : posse;
       document.getElementById("posse-btn-todos").classList.toggle("active", posseAtiva === "");
@@ -1524,6 +1631,7 @@
     function resetFiltros() {
       document.getElementById("f-status").value = "";
       document.getElementById("f-tipo").value = "";
+      if (document.getElementById("f-solicitante")) document.getElementById("f-solicitante").value = "";
       document.getElementById("f-abertas").value = "true";
       document.getElementById("f-origem").value = "";
       document.getElementById("f-jql").value = "";
@@ -1580,12 +1688,36 @@
           selT.value = valTipoAtual;
         }
       }
+      const selSol = document.getElementById("f-solicitante");
+      if (selSol) {
+        const valSolAtual = selSol.value;
+        selSol.innerHTML = '<option value="">Todos os solicitantes</option>';
+        const uNome = (typeof currentUser !== "undefined" && currentUser && currentUser.nome) ? currentUser.nome : "";
+        if (uNome) {
+          const optMinhas = document.createElement("option");
+          optMinhas.value = uNome;
+          optMinhas.textContent = `⭐ Minhas solicitações (${uNome})`;
+          selSol.appendChild(optMinhas);
+        }
+        (d.solicitantes || []).forEach(sol => {
+          if (sol !== uNome) {
+            const o = document.createElement("option");
+            o.value = sol;
+            o.textContent = sol;
+            selSol.appendChild(o);
+          }
+        });
+        if (valSolAtual && Array.from(selSol.options).some(o => o.value === valSolAtual)) {
+          selSol.value = valSolAtual;
+        }
+      }
     }
 
     // ==== Listagem Principal ====
     async function load(silencioso = false) {
       const st = document.getElementById("f-status").value;
       const tp = document.getElementById("f-tipo").value;
+      const sol = document.getElementById("f-solicitante") ? document.getElementById("f-solicitante").value : "";
       const ab = document.getElementById("f-abertas").value;
       const jql = document.getElementById("f-jql").value;
 
@@ -1596,12 +1728,13 @@
 
       const stLower = (st || "").toLowerCase();
       const ehStatusConcluido = stLower.includes("conclu") || stLower.includes("cancel") || stLower.includes("fechad") || stLower.includes("resolv") || stLower.includes("done");
-      const paramAbertas = ehStatusConcluido ? "false" : (funilStageAtivo === "concluidas" ? "false" : ab);
+      const paramAbertas = ehStatusConcluido ? "false" : ((funilStageAtivo === "concluidas" || funilStageAtivo === "fechadas_7d" || funilStageAtivo === "abertas_7d") ? "false" : ab);
 
       const q = new URLSearchParams({ estado: ESTADO, abertas: paramAbertas, periodo: periodoAtual(), max_results: "200" });
       if (espacoClienteAtivo) q.set("projetos", espacoClienteAtivo);
       if (st) q.set("status_filter", st);
       if (tp) q.set("tipo", tp);
+      if (sol) q.set("solicitante", sol);
       const org = document.getElementById("f-origem").value;
       if (org) q.set("origem", org);
       if (posseAtiva) q.set("posse_filter", posseAtiva);

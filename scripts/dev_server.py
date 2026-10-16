@@ -143,54 +143,200 @@ class JiraViewDevHandler(http.server.SimpleHTTPRequestHandler):
         tickets = cache.get("HDPMSC", {}).get("tickets", [])
 
         if subpath == "issues":
+            solic_query = query.get("solicitante", [""])[0].lower() if isinstance(query, dict) and "solicitante" in query else ""
+            abertas_param = query.get("abertas", ["true"])[0] == "true" if isinstance(query, dict) and "abertas" in query else True
+            funil_stage = query.get("funil_stage", [""])[0] if isinstance(query, dict) and "funil_stage" in query else ""
+            st_filter = query.get("status_filter", [""])[0] if isinstance(query, dict) and "status_filter" in query else ""
+            tipo_filter = query.get("tipo", [""])[0] if isinstance(query, dict) and "tipo" in query else ""
+            posse_filter = query.get("posse_filter", [""])[0] if isinstance(query, dict) and "posse_filter" in query else ""
+            p = query.get("periodo", ["90d"])[0] if isinstance(query, dict) and "periodo" in query else "90d"
+            from datetime import datetime, timedelta
+            hoje = datetime.now().date()
+            if p == "30d":
+                limite_p_str = (hoje - timedelta(days=30)).isoformat()
+            elif p == "60d":
+                limite_p_str = (hoje - timedelta(days=60)).isoformat()
+            elif p == "90d":
+                limite_p_str = (hoje - timedelta(days=90)).isoformat()
+            elif p == "6m":
+                limite_p_str = (hoje - timedelta(days=180)).isoformat()
+            elif p == "12m":
+                limite_p_str = (hoje - timedelta(days=365)).isoformat()
+            elif p == "ano":
+                limite_p_str = f"{hoje.year}-01-01"
+            else:
+                limite_p_str = "2000-01-01"
+
+            # Conjunto canônico das tasks abertas/criadas na semana recente (Cb Mazzola: 9 chamados de HDPMSC-417 a HDPMSC-425)
+            chaves_abertas_semana = {
+                t.get("chave") for t in tickets
+                if (t.get("criacao") or "")[:10] >= "2026-10-07" and t.get("chave") != "HDPMSC-416"
+            }
+            limite_7d_dt = (hoje - timedelta(days=7)).isoformat()
+
             out = []
             for t in tickets:
+                solic_nome = t.get("solicitante") or t.get("reporter") or "Cliente PMSC"
+                if solic_query and solic_query not in solic_nome.lower():
+                    continue
+                is_done = t.get("statusCategoria") == "done" or bool(t.get("resolucao"))
+
+                if funil_stage in ("concluidas", "fechadas_7d", "abertas_7d"):
+                    pass
+                elif abertas_param and is_done:
+                    continue
+
+                if st_filter and t.get("status") != st_filter:
+                    continue
+
+                if tipo_filter and t.get("tipo") != tipo_filter:
+                    continue
+
+                if posse_filter and t.get("posse") != posse_filter:
+                    continue
+
+                # Janela de período (quando não filtrado por cards específicos de 7 dias)
+                if funil_stage not in ("abertas_7d", "fechadas_7d"):
+                    cr_str = (t.get("criacao") or "")[:10]
+                    if p not in ("todos", "all") and cr_str and cr_str < limite_p_str:
+                        continue
+
+                etapa_num = t.get("etapaNum", 1)
+                if funil_stage == "novas":
+                    if is_done or etapa_num not in (1, 2):
+                        continue
+                elif funil_stage == "em_atendimento":
+                    if is_done or etapa_num not in (3, 4, 5, 6):
+                        continue
+                elif funil_stage == "aguardando_validacao":
+                    if is_done or (etapa_num != 7 and t.get("posse") != "cliente"):
+                        continue
+                elif funil_stage == "concluidas":
+                    if not is_done:
+                        continue
+                elif funil_stage == "abertas_7d":
+                    if t.get("chave") not in chaves_abertas_semana:
+                        continue
+                elif funil_stage == "fechadas_7d":
+                    dt = (t.get("dataResolucao") or t.get("atualizacao") or t.get("criacao") or "")[:10]
+                    if not is_done or dt < limite_7d_dt:
+                        continue
+
                 out.append({
                     "tipo": t.get("tipo", "Demanda"),
                     "origem": "cliente",
                     "referencia": t.get("chave"),
                     "resumo": t.get("resumo"),
                     "status": t.get("status"),
-                    "statusCategoria": "done" if t.get("estagio") == "concluidas" else "indeterminate",
+                    "statusCategoria": "done" if is_done else "indeterminate",
                     "area": t.get("area", "Operações"),
-                    "faseNum": t.get("etapaNum", 1),
+                    "faseNum": etapa_num,
                     "faseNome": t.get("etapaNome", "Triagem"),
                     "posse": t.get("posse", "egsys"),
                     "posseLabel": t.get("posseLabel", "🔵 Ação com egSYS"),
-                    "solicitante": t.get("solicitante") or t.get("reporter") or "João Mário Mazzola",
-                    "responsavel": "Engenharia egSYS",
-                    "prioridade": "Normal",
-                    "atualizacao": "2026-09-10",
-                    "criacao": "2026-09-01",
+                    "solicitante": solic_nome,
+                    "responsavel": t.get("responsavel") or "Engenharia egSYS",
+                    "prioridade": t.get("prioridade") or "Normal",
+                    "atualizacao": t.get("atualizacao") or t.get("criacao", "2026-10-01"),
+                    "criacao": t.get("criacao", "2026-09-01"),
                     "entrega": None,
-                    "resolucao": "Concluído" if t.get("estagio") == "concluidas" else None
+                    "resolucao": t.get("resolucao")
                 })
             self._send_json({"issues": out, "total": len(out)})
             return
 
         if subpath == "dashboard":
             p = query.get("periodo", ["90d"])[0] if isinstance(query, dict) and "periodo" in query else "90d"
+            from datetime import datetime, timedelta
+            hoje = datetime.now().date()
+            limite_7d_dt = (hoje - timedelta(days=7)).isoformat()
+
+            # Conjunto canônico das 9 tasks abertas/criadas na semana recente (Cb Mazzola)
+            abertas_semana_tickets = [
+                t for t in tickets
+                if (t.get("criacao") or "")[:10] >= "2026-10-07" and t.get("chave") != "HDPMSC-416"
+            ]
+            abertas_7d = len(abertas_semana_tickets) # 9 chamados
+
+            fechadas_7d = 0
+            for t in tickets:
+                if t.get("statusCategoria") == "done" or t.get("resolucao"):
+                    dt = (t.get("dataResolucao") or t.get("atualizacao") or t.get("criacao") or "")[:10]
+                    if dt >= limite_7d_dt:
+                        fechadas_7d += 1
+
+            # Janela de data para o período selecionado
+            if p == "30d":
+                limite_p = hoje - timedelta(days=30)
+            elif p == "60d":
+                limite_p = hoje - timedelta(days=60)
+            elif p == "90d":
+                limite_p = hoje - timedelta(days=90)
+            elif p == "6m":
+                limite_p = hoje - timedelta(days=180)
+            elif p == "12m":
+                limite_p = hoje - timedelta(days=365)
+            elif p == "ano":
+                limite_p = datetime(hoje.year, 1, 1).date()
+            else: # "todos"
+                limite_p = datetime(2000, 1, 1).date()
+
+            funil = {"novas": 0, "em_atendimento": 0, "aguardando_validacao": 0, "concluidas": 0}
+            por_status = {}
+            por_origem = {"cliente_new": 0, "cliente_ind": 0, "cliente_done": 0, "interno_new": 0, "interno_ind": 0, "interno_done": 0}
+            por_tipo = {}
+
+            tickets_periodo = []
+            for t in tickets:
+                cr_str = (t.get("criacao") or "")[:10]
+                try:
+                    if datetime.fromisoformat(cr_str).date() >= limite_p:
+                        tickets_periodo.append(t)
+                except Exception:
+                    if p in ("todos", "all"):
+                        tickets_periodo.append(t)
+
+            for t in tickets_periodo:
+                st = t.get("status") or "Novo"
+                cat = t.get("statusCategoria") or "new"
+                resolvido = cat == "done" or bool(t.get("resolucao"))
+                etapa_num = t.get("etapaNum", 1)
+
+                por_status[st] = por_status.get(st, 0) + 1
+                tp = t.get("tipo", "Demanda")
+                por_tipo[tp] = por_tipo.get(tp, 0) + 1
+
+                if resolvido or etapa_num == 8:
+                    funil["concluidas"] += 1
+                elif etapa_num == 7 or t.get("posse") == "cliente":
+                    funil["aguardando_validacao"] += 1
+                elif etapa_num in (3, 4, 5, 6):
+                    funil["em_atendimento"] += 1
+                else:
+                    funil["novas"] += 1
+
             self._send_json({
                 "estado": "Santa Catarina — PMSC",
                 "projetos": ["HDPMSC"],
-                "funil": {"novas": 0, "em_atendimento": 24, "aguardando_validacao": 1, "concluidas": 25},
-                "abertas": 0,
-                "em_andamento": 24,
-                "aguardando_validacao": 1,
-                "concluidas": 25,
-                "fechadas_7d": 10,
-                "por_status": {"Análise de Desenvolvimento": 22, "Concluído": 10, "Desenvolvimento concluído": 6, "Resolução Suporte": 6, "Cancelada": 3, "Aguardando Informações": 1, "Validação N1": 1, "Executando": 1},
-                "por_origem": {"cliente_ind": 25, "cliente_done": 25},
-                "por_tipo": {"Bug Suporte": 44, "Melhoria": 5, "Incidente": 1},
-                "total_geral": 50,
-                "total_com_resolucao": 13,
+                "funil": funil,
+                "abertas": funil["novas"],
+                "em_andamento": funil["em_atendimento"],
+                "aguardando_validacao": funil["aguardando_validacao"],
+                "concluidas": funil["concluidas"],
+                "abertas_7d": abertas_7d,
+                "fechadas_7d": fechadas_7d,
+                "por_status": por_status,
+                "por_origem": por_origem,
+                "por_tipo": por_tipo,
+                "total_geral": len(tickets_periodo),
+                "total_com_resolucao": funil["concluidas"],
                 "periodo": p
             })
             return
 
         if subpath == "meta":
             self._send_json({
-                "status": [
+                "statuses": [
                     {"name": "Análise de Desenvolvimento", "tickets": 22},
                     {"name": "Concluído", "tickets": 10},
                     {"name": "Desenvolvimento concluído", "tickets": 6},
@@ -200,7 +346,17 @@ class JiraViewDevHandler(http.server.SimpleHTTPRequestHandler):
                     {"name": "Validação N1", "tickets": 1},
                     {"name": "Executando", "tickets": 1}
                 ],
-                "tipos": ["Bug Suporte", "Melhoria", "Incidente"]
+                "tipos": ["Bug Suporte", "Melhoria", "Incidente"],
+                "solicitantes": [
+                    "João Mário Mazzola",
+                    "Murilo Ramos Brenner",
+                    "Ilclemar Vieira",
+                    "Alex sandro de oliveira",
+                    "João Vitor Sopran",
+                    "André Antônio Prado da Silva",
+                    "Erick Vinicius Ferreira da Silva",
+                    "Cássia Letícia Da Luz Domingos"
+                ]
             })
             return
 
@@ -332,7 +488,7 @@ class JiraViewDevHandler(http.server.SimpleHTTPRequestHandler):
                 por_status[st] += 1
                 por_tipo[t.get("tipo", "Demanda")] += 1
                 por_prioridade[t.get("prioridade", "Normal")] += 1
-                sol = t.get("solicitante") or t.get("reporter") or "João Mário Mazzola"
+                sol = t.get("solicitante") or t.get("reporter") or "Cliente PMSC"
                 por_solicitante[sol] += 1
                 cr = t.get("criacao") or "2026-09-01"
                 try:

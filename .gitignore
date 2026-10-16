@@ -70,6 +70,8 @@ openspec/
 graphify-out/
 .ai_lessons_learned*
 LOGO_PROMPT*
+QODER.md
+skills/
 
 # Snapshots e backups operacionais
 *.bak*

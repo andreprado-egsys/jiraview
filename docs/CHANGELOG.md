@@ -1,5 +1,25 @@
 # egSYS JiraView — Changelog
 
+## [0.5.15] — 2026-10-16 (PSEI-343)
+
+### Added
+- `feat(dashboard-flow): Card Executivo de Entradas Recentes / Abertas nos Últimos 7 Dias (abertas_7d)`:
+  - Adição do card modular **`🗓️ Abertas (7d)`** alinhado ao card `🗓️ Fechadas (7d)`, estruturando uma grade de 7 colunas em linha única (`repeat(7, minmax(0, 1fr))`) de alta densidade visual.
+  - Implementação do endpoint de agregação no backend (`v1.py`) e mock dev (`dev_server.py`) calculando `abertas_7d` com base em `created >= -7d`.
+  - Clique interativo no card com suporte a `funil_stage=abertas_7d`, filtrando automaticamente a listagem de chamados recentes da semana.
+- `feat(filter-solicitante): Dropdown de Solicitantes e Destaque de Sessão`:
+  - Novo filtro `f-solicitante` na barra principal com catálogo dinâmico de relatores extraído de `/api/v1/meta`.
+  - Opção inteligente `⭐ Minhas solicitações (<Nome>)` destacando o militar logado (ex.: Cb Mazzola na PMSC).
+  - Parâmetro `solicitante` integrado ao endpoint `/api/v1/issues` com filtragem case-insensitive por nome/relator.
+- `feat(charts-interactive): Cross-Filtering Bidirecional no Gráfico de Solicitantes`:
+  - Interação dinâmica no gráfico `👤 Demandas por Relator / Solicitante`: clicar na barra horizontal do solicitante aplica o filtro instantaneamente na tabela e atualiza o dropdown.
+  - Cursor pointer no hover e tooltip explicativo para indicar interatividade ao gestor.
+- `feat(filter-period): Inclusão da Opção 'Todo o Histórico (sem corte)'`:
+  - Nova opção `todos` no seletor de período, permitindo consulta irrestrita a todo o acervo histórico de tickets.
+
+### Changed
+- Compactação e calibração de espaçamentos dos cards de topo para evitar quebras de layout em resoluções de 1280px e 1440px.
+
 ## [0.5.14] — 2026-10-08 (PSEI-342)
 
 ### Changed

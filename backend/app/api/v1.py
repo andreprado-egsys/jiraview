@@ -119,8 +119,13 @@ def _build_jql(
     # Tratamento semântico do Funil de Atendimento (alinhado rigorosamente a _detectar_fase)
     if funil_stage in ("novas", "em_atendimento", "aguardando_validacao"):
         parts.append("resolution is EMPTY")
-    elif funil_stage == "concluidas":
+    elif funil_stage in ("concluidas", "fechadas_7d"):
         parts.append('(statusCategory in ("Done") OR resolution is not EMPTY)')
+        if funil_stage == "fechadas_7d":
+            parts.append("resolved >= -7d")
+    elif funil_stage == "abertas_7d":
+        # Abertas na semana/7d traz todas as tasks criadas no período, independente de já estarem resolvidas
+        parts.append("created >= -7d")
     elif aberto_apenas:
         st_lower = (status or "").lower()
         eh_status_concluido = any(x in st_lower for x in ("concluído", "concluido", "resolvido", "fechado", "done", "cancelad", "desenvolvimento concluído", "desenvolvimento concluido"))
@@ -209,6 +214,7 @@ async def list_issues(
     status_filter: Optional[str] = None,
     tipo: Optional[str] = None,
     origem: Optional[str] = None,
+    solicitante: Optional[str] = None,
     posse_filter: Optional[str] = None,
     funil_stage: Optional[str] = None,
     jql: Optional[str] = None,
@@ -230,6 +236,13 @@ async def list_issues(
             acct = str(((it.get("fields", {}).get("reporter") or {}).get("accountId") or ""))
             return acct.startswith("qm:")
         issues = [it for it in issues if _eh_origem(it) == (origem == "cliente")]
+    if solicitante:
+        solic_term = solicitante.strip().lower()
+        def _eh_solicitante(it):
+            rep = it.get("fields", {}).get("reporter") or {}
+            nome = str(rep.get("displayName") or rep.get("name") or rep.get("emailAddress") or "").lower()
+            return solic_term in nome
+        issues = [it for it in issues if _eh_solicitante(it)]
     # normaliza campos p/ frontend (colunas do painel + observabilidade)
     out = []
     for it in issues:
@@ -255,6 +268,24 @@ async def list_issues(
                     continue
             elif funil_stage == "concluidas":
                 if not is_done:
+                    continue
+            elif funil_stage == "abertas_7d":
+                from datetime import datetime, timedelta
+                limite_7d = (datetime.now().date() - timedelta(days=7)).isoformat()
+                cr = (f.get("created") or "")[:10]
+                try:
+                    if cr < limite_7d:
+                        continue
+                except Exception:
+                    continue
+            elif funil_stage == "fechadas_7d":
+                from datetime import datetime, timedelta
+                limite_7d = datetime.now() - timedelta(days=7)
+                res = (f.get("resolutiondate") or f.get("updated") or "")[:10]
+                try:
+                    if not is_done or datetime.fromisoformat(res) < limite_7d:
+                        continue
+                except Exception:
                     continue
 
         if posse_filter and fase_info["posse"] != posse_filter:
@@ -321,6 +352,7 @@ async def dashboard(
                   "interno_new": 0, "interno_ind": 0, "interno_done": 0}
     por_tipo = {}
     concluidas_7d = 0
+    abertas_7d = 0
     from datetime import datetime, timedelta
     limite = datetime.now() - timedelta(days=7)
     for it in todas:
@@ -352,10 +384,17 @@ async def dashboard(
         else:
             funil["novas"] += 1
 
-        upd = (f.get("updated") or "")[:10]
+        upd = (f.get("resolutiondate") or f.get("updated") or "")[:10]
         try:
-            if datetime.fromisoformat(upd) >= limite and key == "done":
+            if datetime.fromisoformat(upd).date() >= limite.date() and key == "done":
                 concluidas_7d += 1
+        except Exception:
+            pass
+
+        cr = (f.get("created") or "")[:10]
+        try:
+            if datetime.fromisoformat(cr).date() >= limite.date():
+                abertas_7d += 1
         except Exception:
             pass
     return {
@@ -366,6 +405,7 @@ async def dashboard(
         "em_andamento": funil["em_atendimento"], # 2. Em Atendimento
         "aguardando_validacao": funil["aguardando_validacao"], # 3. Aguardando Validação
         "concluidas": funil["concluidas"],       # 4. Concluídas
+        "abertas_7d": abertas_7d,
         "fechadas_7d": concluidas_7d,
         "por_status": por_status,
         "por_origem": por_origem,
@@ -424,28 +464,43 @@ async def meta(
 
     # 3. Descobrir todos os status ativos no projeto e calcular contagem precisa para o período
     contagem_periodo = {}
+    solicitantes_periodo = set()
     try:
         # Busca no período selecionado para calcular fragmentação exata
         issues_periodo = await JSM.search_full(f"project in ({projetos_str}){_filtro_rp}{janela} ORDER BY created DESC", cap=1000)
         for it in issues_periodo:
-            st = (it.get("fields", {}).get("status") or {}).get("name")
+            f = it.get("fields", {})
+            st = (f.get("status") or {}).get("name")
             if st:
                 statuses.add(st)
                 contagem_periodo[st] = contagem_periodo.get(st, 0) + 1
+            rep = f.get("reporter") or {}
+            nome_rep = rep.get("displayName") or rep.get("name") or rep.get("emailAddress")
+            if nome_rep:
+                solicitantes_periodo.add(nome_rep)
 
         # Se statuses ainda estiver vazio (ex.: API Jira 404 em JSM), buscar histórico amplo do projeto
-        if len(statuses) < 3:
+        if len(statuses) < 3 or len(solicitantes_periodo) < 2:
             issues_global = await JSM.search_full(f"project in ({projetos_str}){_filtro_rp} ORDER BY updated DESC", cap=500)
             for it in issues_global:
-                st = (it.get("fields", {}).get("status") or {}).get("name")
+                f = it.get("fields", {})
+                st = (f.get("status") or {}).get("name")
                 if st:
                     statuses.add(st)
+                rep = f.get("reporter") or {}
+                nome_rep = rep.get("displayName") or rep.get("name") or rep.get("emailAddress")
+                if nome_rep:
+                    solicitantes_periodo.add(nome_rep)
     except Exception:
         pass
 
     lista_statuses = sorted(list(statuses))
     statuses_info = [{"name": s, "tickets": contagem_periodo.get(s, 0)} for s in lista_statuses]
-    return {"statuses": statuses_info, "tipos": sorted(list(tipos))}
+    return {
+        "statuses": statuses_info,
+        "tipos": sorted(list(tipos)),
+        "solicitantes": sorted(list(solicitantes_periodo)),
+    }
 
 
 def _traduzir_status_engenharia(st_nome: str) -> dict:
