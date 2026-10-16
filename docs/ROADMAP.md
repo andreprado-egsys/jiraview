@@ -119,6 +119,21 @@
   - Estruturação dos certificados vencidos e críticos em cards modulares por estado (`.estado-bloco`) no padrão soberano das esteiras de Triagem N1&N2 e Dev.
   - Drag-and-drop livre entre colunas e integração com o modal `⚙️ Posição dos Cards` com persistência em banco SQLite (`noc_layouts` tipo `cert`).
   - Hierarquia de tela: Inicialmente os Cards (KPIs e Cards por Estado) e abaixo a Listagem Completa Geral com busca e filtros de status.
+- [x] **Card Executivo de Volume Total Demandado (v0.5.12 — PSEI-340)**:
+  - Posicionamento do card de síntese executiva `📊 VOLUME TOTAL DE DEMANDAS` na extrema direita do banner.
+  - Exibição em tempo real do somatório consolidado de tarefas do período (`Chamados em Aberto + Concluídas`).
+- [x] **Fragmentação Dinâmica de Status por Período & Paridade Concluído (v0.5.13 — PSEI-340)**:
+  - Atualização do endpoint `/meta` com contagens dinâmicas por status (`Status (N)`).
+  - Supressão inteligente da trava `resolution is EMPTY` ao selecionar status de conclusão, garantindo paridade com tarefas entregues.
+- [x] **Demandas por Relator / Solicitante em Barras Horizontais (v0.5.14 — PSEI-342)**:
+  - Substituição da Área Polar por Barras Horizontais de alta legibilidade no Chart.js.
+  - Extração resiliente de relatores (`fields.reporter`) com paginação `cap=500` e Top 15.
+- [x] **Card Abertas 7d, Filtro de Solicitante e Cross-Filtering Interativo (v0.5.15 — PSEI-343)**:
+  - Implementação do card executivo `🗓️ Abertas (7d)` em grid de 7 colunas em linha única (`repeat(7, minmax(0, 1fr))`).
+  - Paridade temporal estrita com `startOfDay(-7d)` tanto no card quanto na listagem JQL, eliminando descompassos de fuso ou hora.
+  - Dropdown `f-solicitante` com auto-população dinâmica e destaque `⭐ Minhas solicitações (<Nome>)`.
+  - Cross-filtering bidirecional interativo: clique na barra horizontal do solicitante filtra a tabela e atualiza o dropdown.
+  - Suporte ao período `Todo o histórico (sem corte)`.
 
 ## v0.6 — Governança e Automações Corporativas
 - [ ] Regra de automação JSM (workflow/conclusão) substituindo script-timer quando permitido

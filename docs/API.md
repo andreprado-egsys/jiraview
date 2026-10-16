@@ -86,17 +86,18 @@ Alive + checagem leve do Jira. **Público** (sem auth).
 Visão resumida das solicitações do estado do usuário logado (`role >= viewer`).
 Retorna: `role`, `state`, `issues[]`.
 
-### GET `/api/v1/issues?estado=sc&projetos=HDPMSC,SSC&status_filter=&tipo=&origem=&jql=&abertas=true&periodo=90d&max_results=250&funil_stage=`
+### GET `/api/v1/issues?estado=sc&projetos=HDPMSC,SSC&status_filter=&tipo=&origem=&solicitante=&jql=&abertas=true&periodo=90d&max_results=250&funil_stage=`
 Listagem principal do painel com colunas normalizadas e paginação oficial por cursor. **Auth obrigatório** (viewer do estado/espaços autorizados).
 - `estado` — sigla do estado (`sc`, `to`, `am`, etc.).
 - `projetos` ou `espacos` — lista de projetos/espaços Jira separados por vírgula para consolidação multi-espaço (ex.: `HDPMSC,SSC`).
 - `status_filter` / `tipo` — filtros visuais por dropdown
 - `origem` — filtro por tipo de solicitante (`cliente` para contas `qm:*` vs `interno` para agentes)
+- `solicitante` — filtro textual case-insensitive pelo nome/email do solicitante/relator (`fields.reporter`).
 - `jql` — filtro JQL livre ou composto pelo construtor visual
 - `abertas=true` — aplica `resolution is EMPTY`
-- `periodo` — janela temporal estrita (`30d`, `60d`, `90d`, `6m`, `12m`, `ano` nos painéis de clientes; `todos` exclusivo para Coordenação/Admin)
+- `periodo` — janela temporal estrita (`30d`, `60d`, `90d`, `6m`, `12m`, `ano` ou `todos` para acervo irrestrito sem corte)
 - `max_results` — limite de tickets retornados (padrão `250`, integrado com `search_full` via cursor `nextPageToken` da API Jira Cloud v3, eliminando truncamento)
-- `funil_stage` — filtro semântico por estágio da esteira: `novas` (inclui Triagem N1 e Validação N2), `em_atendimento` (Análise de Dev, Executando e QA), `aguardando_validacao` ou `concluidas`
+- `funil_stage` — filtro semântico por estágio da esteira: `novas` (Triagem N1 e Validação N2), `em_atendimento` (Dev/QA), `aguardando_validacao`, `concluidas`, `abertas_7d` (criadas nos últimos 7 dias corridos via `created >= startOfDay(-7d)`) ou `fechadas_7d` (concluídas nos últimos 7 dias via `resolved >= startOfDay(-7d) OR updated >= startOfDay(-7d)`)
 Resposta:
 ```json
 {
@@ -133,20 +134,21 @@ Cards métricos agregados estilo Jira Dashboard com governança estrita de perí
   ```json
   {
     "novas": 2,
-    "em_atendimento": 20,
+    "em_atendimento": 16,
     "aguardando_validacao": 0,
-    "concluidas": 23
+    "concluidas": 31
   }
   ```
 - `abertas` (novas / Triagem N1-N2: 2)
-- `em_andamento` (em tratamento técnico Dev/QA: 20)
+- `em_andamento` (em tratamento técnico Dev/QA: 16)
 - `aguardando_validacao` (homologação cliente: 0)
-- `concluidas` (resolvidas no período: 23)
-- `fechadas_7d` (concluídas nos últimos 7 dias: 2)
+- `concluidas` (resolvidas no período: 31)
+- `abertas_7d` (criadas nos últimos 7 dias corridos via `startOfDay(-7d)`: 8)
+- `fechadas_7d` (concluídas nos últimos 7 dias corridos via `startOfDay(-7d)`: 9)
 - `por_status` (mapa nome_status ➔ total)
 - `por_origem` (`cliente_new`, `cliente_ind`, `cliente_done`, `interno_new`, etc.)
 - `por_tipo` (mapa nome_tipo ➔ total)
-- `total_geral` (soma exata da carteira ativa + concluídas no período: 45 em 90d; 350 em Todos os Períodos)
+- `total_geral` (soma exata da carteira ativa + concluídas no período: 49 em 90d)
 - `total_com_resolucao`
 
 ### GET `/api/v1/charts?estado=sc&periodo=90d`
@@ -163,6 +165,7 @@ Metadados dinâmicos e fragmentação exata populados diretamente do Jira com su
 - **Parâmetros**: `estado`, `projetos` (ou `espacos`), `periodo` (`30d`, `60d`, `90d`, `6m`, `12m`, `ano`, `todos`).
 - `statuses[]`: Lista exaustiva de todos os status do workflow com a contagem exata no período informado (`[{name: "Executando", tickets: 2}, {name: "Concluído", tickets: 18}, ...]`).
 - `tipos[]`: Lista de tipos de solicitações registradas no projeto (`["Incidente", "Melhoria", "Dúvida", ...]`).
+- `solicitantes[]`: Lista ordenada alfabeticamente de todos os relatores/solicitantes com chamados no período, viabilizando auto-população do dropdown `f-solicitante`.
 
 ### GET `/api/v1/issues?estado=sc&periodo=90d&status_filter=Concluído&abertas=true`
 Listagem paginada de solicitações com resolução inteligente de filtros:

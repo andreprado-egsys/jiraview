@@ -22,6 +22,7 @@ e total sanitização (sem credenciais no client).
 | F4.4 — Multi-Espaços | Múltiplos espaços cliente (Mazzola) + customização dinâmica coordenação (v0.4.2) | ✅ |
 | F4.5 — Paridade & Coerência Temporal | Cursor pagination v3 + unificação estrita de período nos cards e tabela (v0.4.3) | ✅ |
 | F5 — Extensões Modulares & Absorção Node-RED | Esteira Dev + Triagem N1/N2 + Relatórios SMTP + Monitor SSL + Cards Modulares por Estado + Layouts Persistentes (v0.5.10) | ✅ |
+| F5.1 — UX Executiva & Paridade Temporal | Volume Total + Fragmentação Status + Barras Horizontais Relatores + Card Abertas 7d + Cross-filtering (v0.5.15) | ✅ |
 | F6 — Governança & Multi-Estado Pleno | Descomissionamento definitivo Node-RED + Automação JSM + SLAs corporativos | ⏳ v0.6 |
 
 ## Invariantes (gate canônico)

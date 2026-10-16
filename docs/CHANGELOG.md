@@ -20,6 +20,11 @@
 ### Changed
 - Compactação e calibração de espaçamentos dos cards de topo para evitar quebras de layout em resoluções de 1280px e 1440px.
 
+### Fixed
+- `fix(jql-parity): Paridade Temporal Estrita de 7 Dias via startOfDay(-7d)`:
+  - Eliminação de discrepâncias por hora e fuso no JQL do Jira Cloud, substituindo o corte dinâmico `-7d` por `startOfDay(-7d)` para chamados abertos e `(resolved >= startOfDay(-7d) OR updated >= startOfDay(-7d))` para chamados concluídos.
+  - Correção na comparação de datas do backend (`v1.py`) e mock de desenvolvimento (`dev_server.py`), assegurando 100% de paridade matemática biunívoca entre a contagem exibida nos cards executivos e a listagem de tickets retornada ao clicar.
+
 ## [0.5.14] — 2026-10-08 (PSEI-342)
 
 ### Changed
