@@ -134,6 +134,10 @@
   - Dropdown `f-solicitante` com auto-população dinâmica e destaque `⭐ Minhas solicitações (<Nome>)`.
   - Cross-filtering bidirecional interativo: clique na barra horizontal do solicitante filtra a tabela e atualiza o dropdown.
   - Suporte ao período `Todo o histórico (sem corte)`.
+- [x] **Auto-refresh individual por tela no NOC Monitor TV (v0.5.16)**:
+  - Seletor 5/10/15/30/60s com countdown nas telas Análise Dev, Triagem N1 & N2 e Certificados SSL (padrão 60s, persistência por dispositivo).
+  - Tick único de 1s avalia apenas a aba visível; `⏸ pausado` com drawer/modal/foco e `⚠️ sessão` após 3 falhas.
+  - Cache TTL 5s no backend para as esteiras/certificados e sync Traefik fora do event loop.
 
 ## v0.6 — Governança e Automações Corporativas
 - [ ] Regra de automação JSM (workflow/conclusão) substituindo script-timer quando permitido

@@ -277,10 +277,12 @@ Retorna o catálogo de módulos operacionais disponíveis no sistema e se estão
 
 ### GET `/api/v1/modules/analise-dev/issues`
 Retorna todas as tarefas da esteira de Análise de Desenvolvimento em tempo real no Jira Cloud, agrupadas por estado/projeto (SC, PR, AM, TO, RO, GM) com alertas de SLA (&ge; 7d e &ge; 10d).
+Cache TTL de 5s no servidor: polls de múltiplas TVs NOC (intervalo individual de 5/10/15/30/60s por tela) colapsam em no máximo 1 busca ao Jira por janela.
 Retorna: `total`, `hasAlert`, `hasCritico10d`, `grupos[]`, `issues[]`.
 
 ### GET `/api/v1/modules/triagem-n1n2/issues`
 Retorna todos os tickets em triagem inicial de suporte (N1 e N2) em tempo real, particionados por estado com cálculo de tempo em aberto e severidade.
+Cache TTL de 5s no servidor (mesma política da esteira de Análise Dev).
 Retorna: `total`, `hasAlert`, `hasCritico10d`, `grupos[]`, `issues[]`.
 
 ### POST `/api/v1/modules/reports/trigger-analise-dev`
@@ -316,7 +318,8 @@ Atualiza flags de notificação, nome, e-mail ou ativação (`ativo: 0/1`) de um
 Remove um destinatário do cadastro corporativo.
 
 ### GET `/api/v1/modules/certificates`
-Retorna a lista completa de domínios e certificados SSL monitorados da infraestrutura egSYS, com cruzamento de dados do Google Sheets e Traefik, validade, dias restantes e cálculo de KPIs:
+Retorna a lista completa de domínios e certificados SSL monitorados da infraestrutura egSYS, com cruzamento de dados do Google Sheets e Traefik, validade, dias restantes e cálculo de KPIs.
+Cache TTL de 5s no servidor; a sincronização de `acme.json` (Traefik) executa em thread dedicada fora do event loop:
 - `total`: Total de domínios cadastrados (ex.: 92)
 - `ok`: Em dia (> 30 dias)
 - `alerta`: Janela preventiva (&le; 30 dias)

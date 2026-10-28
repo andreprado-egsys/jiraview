@@ -4,6 +4,7 @@
 # 2. Esteira de Análise de Desenvolvimento
 # 3. Relatórios Matinais & E-mails Corporativos
 # 4. Webhook & Monitor de Certificados SSL
+import asyncio
 import os
 import smtplib
 from datetime import datetime, timezone
@@ -14,6 +15,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from fastapi import APIRouter, Depends, Header, HTTPException, status
 from pydantic import BaseModel
 
+from ..core.cache import TTLCache
 from ..core.config import get_settings
 from ..core.db import (
     clean_domain,
@@ -84,6 +86,9 @@ PROJETOS_ESTADOS_MAP = {
     "HDSESDEC": {"estado": "Rondônia", "sigla": "RO", "cor": "#0369A1"},
     "SSC": {"estado": "Suporte SC", "sigla": "SSC", "cor": "#4C1D95"},
 }
+
+# TVs/NOC podem polar a cada 5s; o TTL colapsa polls múltiplos em ≤1 chamada Jira por ciclo
+_refresh_cache = TTLCache(ttl=5.0)
 
 
 @router.get("/catalog")
@@ -215,6 +220,10 @@ def _extrair_texto_desc(desc: Any) -> str:
 @router.get("/analise-dev/issues")
 async def get_analise_dev_issues():
     """Retorna itens em 'Análise de Desenvolvimento' modulados por estado (absorve aba 3 do Node-RED)."""
+    cached = _refresh_cache.get("analise_dev")
+    if cached is not None:
+        return cached
+
     lista_projetos = ", ".join(PROJETOS_ESTADOS_MAP.keys())
     jql = (
         f"project in ({lista_projetos}) AND status = 'Análise de Desenvolvimento' "
@@ -322,13 +331,15 @@ async def get_analise_dev_issues():
     has_alert = any(t["diasAberta"] >= 7 for t in processados)
     has_critico_10d = any(t["diasAberta"] >= 10 for t in processados)
 
-    return {
+    resultado = {
         "total": total_tasks,
         "grupos": grupos,
         "hasAlert": has_alert,
         "hasCritico10d": has_critico_10d,
         "issues": processados,
     }
+    _refresh_cache.set("analise_dev", resultado)
+    return resultado
 
 
 # ============================================================================
@@ -354,6 +365,10 @@ STATUSES_TRIAGEM_N1N2 = [
 @router.get("/triagem-n1n2/issues")
 async def get_triagem_n1n2_issues():
     """Retorna itens em triagem técnica N1/N2 e suporte modulados por estado."""
+    cached = _refresh_cache.get("triagem_n1n2")
+    if cached is not None:
+        return cached
+
     lista_projetos = ", ".join(PROJETOS_ESTADOS_MAP.keys())
     st_jql = ", ".join([f"'{s}'" for s in STATUSES_TRIAGEM_N1N2])
     jql = (
@@ -462,13 +477,15 @@ async def get_triagem_n1n2_issues():
     has_alert = any(t["diasAberta"] >= 7 for t in processados)
     has_critico_10d = any(t["diasAberta"] >= 10 for t in processados)
 
-    return {
+    resultado = {
         "total": total_tasks,
         "grupos": grupos,
         "hasAlert": has_alert,
         "hasCritico10d": has_critico_10d,
         "issues": processados,
     }
+    _refresh_cache.set("triagem_n1n2", resultado)
+    return resultado
 
 
 # ============================================================================
@@ -902,9 +919,13 @@ async def sync_certificates_sheets_endpoint(user: TokenPayload = Depends(require
 @router.get("/certificates")
 async def get_certificates():
     """Lista todos os certificados SSL monitorados com contadores analíticos e status detalhados."""
-    # Sincroniza dinamicamente se acme.json estiver disponível
+    cached = _refresh_cache.get("cert")
+    if cached is not None:
+        return cached
+
+    # Sincroniza dinamicamente se acme.json estiver disponível (parse x509 + UPSERTs são bloqueantes)
     try:
-        sync_traefik_acme_certificates()
+        await asyncio.to_thread(sync_traefik_acme_certificates)
     except Exception:
         pass
 
@@ -929,7 +950,7 @@ async def get_certificates():
         if int(c.get("dias_restantes", 999)) <= 15 or c.get("status") == "VENCIDO"
     ]
 
-    return {
+    resultado = {
         "resumo": {
             "total": len(certs),
             "vencidos": vencidos,
@@ -941,6 +962,8 @@ async def get_certificates():
         },
         "certificados": certs,
     }
+    _refresh_cache.set("cert", resultado)
+    return resultado
 
 
 class NocLayoutPayload(BaseModel):

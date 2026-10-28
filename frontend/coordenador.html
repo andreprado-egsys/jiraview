@@ -1140,6 +1140,40 @@
       background: #dc2626 !important;
       border-color: #ef4444 !important;
     }
+    .refresh-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .refresh-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-sub);
+    }
+    .refresh-countdown {
+      min-width: 56px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--accent);
+      background: rgba(56, 139, 253, 0.12);
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      padding: 6px 8px;
+    }
+    .refresh-countdown.pausado {
+      color: var(--yellow);
+      background: rgba(245, 158, 11, 0.12);
+      border-color: var(--yellow);
+    }
+    .refresh-countdown.falha {
+      color: var(--red);
+      background: rgba(220, 38, 38, 0.12);
+      border-color: var(--red);
+    }
     .noc-count-label {
       font-size: 11px;
       font-weight: 700;
@@ -1939,6 +1973,13 @@
             <span class="noc-count-value" id="devTotalCount">0</span>
           </div>
           <button class="btn-action" id="btnOrdemCardsDev" onclick="abrirModalOrdemCards('dev')" title="Organizar ordem e colunas dos cards de estado" style="height: 38px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; background: rgba(56, 139, 253, 0.15); border-color: var(--accent); color: var(--accent);">⚙️ Posição dos Cards</button>
+          <div class="refresh-control" title="Intervalo de atualização automática desta tela">
+            <span class="refresh-label">⏱️ Auto</span>
+            <select id="refreshSelDev" class="select-control" style="height: 38px; font-size: 12.5px; padding: 0 8px;" onchange="aoMudarIntervaloRefresh('dev', this.value)">
+              <option value="5">5s</option><option value="10">10s</option><option value="15">15s</option><option value="30">30s</option><option value="60">60s</option>
+            </select>
+            <span class="refresh-countdown" id="refreshCountDev">60 s</span>
+          </div>
           <button class="btn-action" onclick="carregarAnaliseDevIssues()" style="height: 38px;">🔄 Atualizar Esteira</button>
         </div>
       </div>
@@ -1976,6 +2017,13 @@
             <span class="noc-count-value" id="n1n2TotalCount">0</span>
           </div>
           <button class="btn-action" id="btnOrdemCardsN1N2" onclick="abrirModalOrdemCards('n1n2')" title="Organizar ordem e colunas dos cards de estado" style="height: 38px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; background: rgba(56, 139, 253, 0.15); border-color: var(--accent); color: var(--accent);">⚙️ Posição dos Cards</button>
+          <div class="refresh-control" title="Intervalo de atualização automática desta tela">
+            <span class="refresh-label">⏱️ Auto</span>
+            <select id="refreshSelN1N2" class="select-control" style="height: 38px; font-size: 12.5px; padding: 0 8px;" onchange="aoMudarIntervaloRefresh('n1n2', this.value)">
+              <option value="5">5s</option><option value="10">10s</option><option value="15">15s</option><option value="30">30s</option><option value="60">60s</option>
+            </select>
+            <span class="refresh-countdown" id="refreshCountN1N2">60 s</span>
+          </div>
           <button class="btn-action" onclick="carregarTriagemN1N2Issues()" style="height: 38px;">🔄 Atualizar Esteira</button>
         </div>
       </div>
@@ -2147,6 +2195,13 @@
           <button class="btn-action" onclick="sincronizarTraefikCertificados()" id="btnSyncTraefik" style="background: rgba(56, 139, 253, 0.15); color: var(--accent); border-color: var(--accent); font-weight: 600;">
             ⚡ Sincronizar Traefik (acme.json)
           </button>
+          <div class="refresh-control" title="Intervalo de atualização automática desta tela">
+            <span class="refresh-label">⏱️ Auto</span>
+            <select id="refreshSelCert" class="select-control" style="height: 38px; font-size: 12.5px; padding: 0 8px;" onchange="aoMudarIntervaloRefresh('cert', this.value)">
+              <option value="5">5s</option><option value="10">10s</option><option value="15">15s</option><option value="30">30s</option><option value="60">60s</option>
+            </select>
+            <span class="refresh-countdown" id="refreshCountCert">60 s</span>
+          </div>
           <button class="btn-action" onclick="carregarCertificados()">🔄 Atualizar Status</button>
         </div>
       </div>
@@ -3719,6 +3774,7 @@
         // Sincroniza layout persistido no servidor antes de renderizar
         await sincronizarLayoutDoServidor("dev");
         renderizarBlocosDev(devGruposCache);
+        marcarColetaExecutada("dev");
       } catch (err) {
         console.warn("Falha ao carregar tarefas em Análise Dev:", err);
         if (!silencioso && grid) {
@@ -4345,6 +4401,7 @@
         // Sincroniza layout persistido no servidor antes de renderizar
         await sincronizarLayoutDoServidor("n1n2");
         renderizarBlocosN1N2(n1n2GruposCache);
+        marcarColetaExecutada("n1n2");
       } catch (err) {
         console.warn("Falha ao carregar tarefas em Triagem N1 & N2:", err);
         if (!silencioso && grid) {
@@ -4850,6 +4907,7 @@
 
         certsCache = data.certificados || [];
         filtrarTabelaCertificados();
+        marcarColetaExecutada("cert");
 
       } catch (err) {
         console.warn("Falha ao carregar certificados SSL:", err);
@@ -5696,7 +5754,8 @@
     });
 
     // ============================================================================
-    // ⏱️ AUTO-REFRESH INTELIGENTE (45s) — ZERO INTERRUPÇÃO DO USUÁRIO
+    // ⏱️ AUTO-REFRESH POR TELA (NOC) — 5/10/15/30/60s configuráveis por aba
+    // Tick de 1s avalia apenas a aba visível; Observabilidade preserva 45s fixo.
     // Preserva o Drawer Lateral, Modais Abertos e Campos em Edição
     // ============================================================================
     async function recarregarObservabilidadeSilencioso() {
@@ -5720,6 +5779,75 @@
       } catch (err) {
         console.warn("Auto-refresh observabilidade silencioso:", err);
       }
+    }
+
+    const REFRESH_OPCOES = [5, 10, 15, 30, 60];
+    const REFRESH_PADRAO = 60;
+    const ABA_REFRESH = {
+      "mod-dev": { tipo: "dev", sel: "refreshSelDev", cnt: "refreshCountDev", loader: () => carregarAnaliseDevIssues(true) },
+      "mod-n1n2": { tipo: "n1n2", sel: "refreshSelN1N2", cnt: "refreshCountN1N2", loader: () => carregarTriagemN1N2Issues(true) },
+      "mod-cert": { tipo: "cert", sel: "refreshSelCert", cnt: "refreshCountCert", loader: () => carregarCertificados(true) },
+      "observabilidade": { tipo: null, seg: 45, loader: () => recarregarObservabilidadeSilencioso() },
+    };
+    const estadoRefresh = {};
+    const estadoRefreshObs = { seg: 45, proxima: 0, falhas: 0 };
+    let emAndamentoRefresh = false;
+    let coletaOkNoCiclo = false;
+
+    function lerIntervaloRefresh(tipo) {
+      const v = parseInt(localStorage.getItem("jiraview_refresh_" + tipo), 10);
+      return REFRESH_OPCOES.includes(v) ? v : REFRESH_PADRAO;
+    }
+
+    function cfgPorTipo(tipo) {
+      return Object.values(ABA_REFRESH).find(c => c.tipo === tipo) || null;
+    }
+
+    function pintarCountdown(cfg, segundos) {
+      const el = cfg && document.getElementById(cfg.cnt);
+      if (!el) return;
+      el.classList.remove("pausado");
+      el.classList.remove("falha");
+      el.textContent = segundos <= 0 ? "agora" : segundos + " s";
+    }
+
+    function marcarCountdownEstado(cfg, classe, texto) {
+      const el = cfg && document.getElementById(cfg.cnt);
+      if (!el) return;
+      el.classList.remove("pausado");
+      el.classList.remove("falha");
+      el.classList.add(classe);
+      el.textContent = texto;
+    }
+
+    function aplicarIntervaloRefresh(tipo, seg, persistir) {
+      estadoRefresh[tipo] = { seg, proxima: Date.now() + seg * 1000, falhas: 0 };
+      if (persistir) {
+        try {
+          localStorage.setItem("jiraview_refresh_" + tipo, String(seg));
+        } catch (err) {
+          console.warn("Falha a persistir intervalo de refresh:", err);
+        }
+      }
+      const cfg = cfgPorTipo(tipo);
+      const sel = cfg && document.getElementById(cfg.sel);
+      if (sel) sel.value = String(seg);
+      pintarCountdown(cfg, seg);
+    }
+
+    function aoMudarIntervaloRefresh(tipo, valor) {
+      const seg = parseInt(valor, 10);
+      if (!REFRESH_OPCOES.includes(seg)) return;
+      aplicarIntervaloRefresh(tipo, seg, true);
+    }
+
+    // Chamado no fim do sucesso de cada loader: re-arma a próxima execução e limpa alerta de falha
+    function marcarColetaExecutada(tipo) {
+      coletaOkNoCiclo = true;
+      const st = estadoRefresh[tipo];
+      if (!st) return;
+      st.proxima = Date.now() + st.seg * 1000;
+      st.falhas = 0;
     }
 
     let autoRefreshTimerCoordenador = null;
@@ -5752,27 +5880,49 @@
       return true;
     }
 
-    async function executarCicloAutoRefresh() {
-      if (!podeExecutarAutoRefreshCoordenador()) return;
-      const aba = window.abaAtiva || "observabilidade";
-      try {
-        if (aba === "mod-dev") {
-          await carregarAnaliseDevIssues(true);
-        } else if (aba === "mod-n1n2") {
-          await carregarTriagemN1N2Issues(true);
-        } else if (aba === "mod-cert") {
-          await carregarCertificados(true);
-        } else if (aba === "observabilidade") {
-          await recarregarObservabilidadeSilencioso();
+    async function tickAutoRefresh() {
+      const cfg = ABA_REFRESH[window.abaAtiva || "observabilidade"];
+      if (!cfg) return;
+      if (document.visibilityState !== "visible") return;
+      if (!podeExecutarAutoRefreshCoordenador()) {
+        if (cfg.tipo) marcarCountdownEstado(cfg, "pausado", "⏸ pausado");
+        return;
+      }
+      const st = cfg.tipo ? estadoRefresh[cfg.tipo] : estadoRefreshObs;
+      if (!st) return;
+      const agora = Date.now();
+      if (emAndamentoRefresh) return;
+      if (agora >= st.proxima) {
+        if (cfg.tipo && st.falhas < 3) pintarCountdown(cfg, 0);
+        emAndamentoRefresh = true;
+        st.proxima = agora + st.seg * 1000;
+        coletaOkNoCiclo = false;
+        try {
+          await cfg.loader();
+          if (cfg.tipo && !coletaOkNoCiclo) {
+            st.falhas += 1;
+            if (st.falhas >= 3) marcarCountdownEstado(cfg, "falha", "⚠️ sessão");
+          }
+        } catch (err) {
+          console.warn("Ciclo auto-refresh coordenador silencioso:", err);
+          if (cfg.tipo) {
+            st.falhas += 1;
+            if (st.falhas >= 3) marcarCountdownEstado(cfg, "falha", "⚠️ sessão");
+          }
+        } finally {
+          emAndamentoRefresh = false;
         }
-      } catch (e) {
-        console.warn("Ciclo auto-refresh coordenador silencioso:", e);
+      } else if (cfg.tipo && st.falhas < 3) {
+        pintarCountdown(cfg, Math.ceil((st.proxima - agora) / 1000));
       }
     }
 
     function iniciarAutoRefreshCoordenador() {
+      for (const cfg of Object.values(ABA_REFRESH)) {
+        if (cfg.tipo) aplicarIntervaloRefresh(cfg.tipo, lerIntervaloRefresh(cfg.tipo), false);
+      }
       if (autoRefreshTimerCoordenador) clearInterval(autoRefreshTimerCoordenador);
-      autoRefreshTimerCoordenador = setInterval(executarCicloAutoRefresh, 45000);
+      autoRefreshTimerCoordenador = setInterval(tickAutoRefresh, 1000);
     }
 
     window.addEventListener("DOMContentLoaded", () => {

@@ -1,5 +1,16 @@
 # egSYS JiraView — Changelog
 
+## [0.5.16] — 2026-10-28
+
+### Added
+- `feat(noc-refresh): Auto-refresh individual por tela no NOC Monitor TV`:
+  - Seletor de intervalo **5/10/15/30/60s com countdown** nos cabeçalhos das três telas do perfil monitor: 📐 Análise Dev, 📟 Triagem N1 & N2 e 🛡️ Certificados SSL (padrão 60s por tela).
+  - Motor único com tick de 1s que avalia apenas a aba visível; cada tela mantém cadência própria sobrevivente a trocas de aba, com re-arm imediato ao clicar em 🔄 Atualizar ou trocar de tela.
+  - Persistência por dispositivo em `localStorage` (`jiraview_refresh_dev|n1n2|cert`), no mesmo padrão do layout de colunas.
+  - Indicadores de estado no countdown: `⏸ pausado` (drawer/modal/campo em foco) e `⚠️ sessão` (3 falhas consecutivas de coleta).
+  - Backpressure no backend: cache TTL de 5s (`backend/app/core/cache.py`) nos endpoints `analise-dev/issues`, `triagem-n1n2/issues` e `certificates`, colapsando polls de múltiplas TVs em ≤1 busca ao Jira Cloud por janela; sincronização do `acme.json` (Traefik) movida para thread dedicada fora do event loop.
+  - Suite de testes unitários do `TTLCache` (`backend/tests/test_ttl_cache.py`) com relógio falso injetável.
+
 ## [0.5.15] — 2026-10-16 (PSEI-343)
 
 ### Added
