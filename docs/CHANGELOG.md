@@ -1,5 +1,16 @@
 # egSYS JiraView — Changelog
 
+## [0.5.17] — 2026-10-29
+
+### Changed
+- `feat(ui): Rampa Slate de Contraste para Modo Escuro e Claro nos Painéis`:
+  - Modo escuro recalibrado para a escala slate (`--bg #0f172a`, `--card #1e293b`, corpo `#f1f5f9`, secundário `#94a3b8`): elimina o ofuscamento (halation) do branco puro sobre quase-preto — contraste do corpo cai de 19:1 para 13.4:1 — e cria hierarquia real de elevação entre fundo, cards, cabeçalhos de tabela e hover.
+  - Modo claro adota texto `#0f172a` no lugar de preto puro, reduzindo fadiga em leitura prolongada.
+  - Cores com vazamento entre temas migradas para tokens: badge do contador NOC (`--noc-badge-bg`/`--noc-badge-border`), grade do Chart.js, rodapés de SLA (verde/amarelo/vermelho) e coluna "precisa token" dos certificados.
+  - Badges de status (dias/urgência) escurecidos um passo: texto branco sobre badge passa de ~3,3–4,2:1 para ≥5:1 (WCAG AA).
+  - Correção de bug pré-existente: botões `.btn-action` nos cabeçalhos de módulo ficavam invisíveis no modo claro (herdavam o texto branco do topo); regra escopada usa fundo de chip.
+  - Todos os pares texto/superfície verificados contra WCAG (AA/AAA); plano de rollback documentado em `docs/DEPLOY.md`.
+
 ## [0.5.16] — 2026-10-28
 
 ### Added

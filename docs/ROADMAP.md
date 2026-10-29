@@ -138,6 +138,9 @@
   - Seletor 5/10/15/30/60s com countdown nas telas Análise Dev, Triagem N1 & N2 e Certificados SSL (padrão 60s, persistência por dispositivo).
   - Tick único de 1s avalia apenas a aba visível; `⏸ pausado` com drawer/modal/foco e `⚠️ sessão` após 3 falhas.
   - Cache TTL 5s no backend para as esteiras/certificados e sync Traefik fora do event loop.
+- [x] **Rampa Slate de Contraste Dark/Light (v0.5.17)**:
+  - Fim do halation no NOC TV: corpo 13.4:1 (de 19:1), secundário com hierarquia real, elevação por luminância entre fundo/cards/tabelas.
+  - Tokens em lugar de hex vazados entre temas; badges AA; correção dos botões invisíveis no modo claro; plano de rollback em DEPLOY.md.
 
 ## v0.6 — Governança e Automações Corporativas
 - [ ] Regra de automação JSM (workflow/conclusão) substituindo script-timer quando permitido

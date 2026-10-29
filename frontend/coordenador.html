@@ -29,7 +29,7 @@
       --bg: #edf1f7;
       --card: #ffffff;
       --border: #94a3b8;
-      --text: #000000;
+      --text: #0f172a;
       --text-sub: #1e293b;
       --header-bg: #003399;
       --header-text: #ffffff;
@@ -44,6 +44,8 @@
       --chip-bg: #dbeafe;
       --chip-text: #0047b3;
       --chip-border: #93c5fd;
+      --noc-badge-bg: #21262d;
+      --noc-badge-border: #30363d;
       --link-color: #0047b3;
       --accent: #0047b3;
       --green: #15803d;
@@ -64,30 +66,32 @@
 
     [data-theme="dark"], html.dark, body.dark {
       color-scheme: dark !important;
-      --bg: #030712;
-      --card: #0b0f19;
-      --border: #374151;
-      --text: #ffffff;
-      --text-sub: #e2e8f0;
-      --header-bg: #0b0f19;
-      --header-text: #ffffff;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --text: #f1f5f9;
+      --text-sub: #94a3b8;
+      --header-bg: #1e293b;
+      --header-text: #f1f5f9;
       --header-btn-bg: rgba(255, 255, 255, 0.18);
       --header-btn-border: rgba(255, 255, 255, 0.35);
-      --th-bg: #111827;
-      --tr-border: #1f2937;
-      --tr-hover: #1f2937;
-      --input-bg: #030712;
+      --th-bg: #273548;
+      --tr-border: #334155;
+      --tr-hover: #273548;
+      --input-bg: #0f172a;
       --input-border: #4b5563;
-      --input-text: #ffffff;
+      --input-text: #f1f5f9;
       --chip-bg: #172554;
       --chip-text: #38bdf8;
       --chip-border: #1d4ed8;
+      --noc-badge-bg: #273548;
+      --noc-badge-border: #334155;
       --link-color: #38bdf8;
       --accent: #38bdf8;
-      --green: #16a34a;
-      --yellow: #f59e0b;
-      --red: #ef4444;
-      --drawer-bg: #0b0f19;
+      --green: #22c55e;
+      --yellow: #fbbf24;
+      --red: #f87171;
+      --drawer-bg: #1e293b;
       --drawer-overlay: rgba(0, 0, 0, 0.85);
       --posse-egsys-bg: #172554;
       --posse-egsys-border: #2563eb;
@@ -95,7 +99,7 @@
       --posse-cliente-bg: #451a03;
       --posse-cliente-border: #b45309;
       --posse-cliente-text: #fde047;
-      --step-done: #16a34a;
+      --step-done: #22c55e;
       --step-active: #38bdf8;
       --step-pending: #4b5563;
     }
@@ -193,6 +197,11 @@
       align-items: center;
       gap: 6px;
       transition: all 0.2s ease;
+    }
+    .noc-esteira-header .btn-action, .section-header .btn-action {
+      background: var(--chip-bg);
+      color: var(--text);
+      border-color: var(--chip-border);
     }
     .btn-action:hover { filter: brightness(1.2); }
 
@@ -1127,14 +1136,14 @@
       color: var(--text-sub);
     }
     .noc-counter-badge {
-      background: #21262d;
+      background: var(--noc-badge-bg);
       color: #ffffff;
       padding: 8px 18px;
       border-radius: 8px;
       display: flex;
       gap: 12px;
       align-items: center;
-      border: 1px solid #30363d;
+      border: 1px solid var(--noc-badge-border);
     }
     .noc-counter-badge.alert-state {
       background: #dc2626 !important;
@@ -1358,9 +1367,9 @@
       line-height: 1.25;
       letter-spacing: 0.3px;
     }
-    .badge-green { background: #16a34a; color: #ffffff; border: 1px solid #15803d; }
-    .badge-yellow { background: #d97706; color: #ffffff; border: 1px solid #b45309; }
-    .badge-red { background: #dc2626; color: #ffffff; border: 1px solid #b91c1c; }
+    .badge-green { background: #15803d; color: #ffffff; border: 1px solid #166534; }
+    .badge-yellow { background: #b45309; color: #ffffff; border: 1px solid #92400e; }
+    .badge-red { background: #b91c1c; color: #ffffff; border: 1px solid #991b1b; }
     .badge-grey { background: #475569; color: #ffffff; border: 1px solid #334155; }
 
     .clean-table .col-ticket a {
@@ -1993,7 +2002,7 @@
 
       <!-- RODAPÉ DO MÓDULO ESTEIRA -->
       <div class="noc-footer" id="devFooter">
-        <span id="devFooterStatus" style="color: #059669; font-weight: 700;">● Tudo dentro do prazo</span>
+        <span id="devFooterStatus" style="color: var(--green); font-weight: 700;">● Tudo dentro do prazo</span>
         <span id="devFooterUpdated" style="color: var(--text-sub);">Atualizado: --:--:--</span>
       </div>
 
@@ -2037,7 +2046,7 @@
 
       <!-- RODAPÉ DO MÓDULO ESTEIRA N1/N2 -->
       <div class="noc-footer" id="n1n2Footer">
-        <span id="n1n2FooterStatus" style="color: #059669; font-weight: 700;">● Tudo dentro do prazo</span>
+        <span id="n1n2FooterStatus" style="color: var(--green); font-weight: 700;">● Tudo dentro do prazo</span>
         <span id="n1n2FooterUpdated" style="color: var(--text-sub);">Atualizado: --:--:--</span>
       </div>
 
@@ -2910,7 +2919,7 @@
       if (!window.Chart) return;
       const isDark = document.documentElement.classList.contains("dark");
       const textColor = isDark ? "#8b949e" : "#6b778c";
-      const gridColor = isDark ? "#21262d" : "#dfe1e6";
+      const gridColor = isDark ? "#334155" : "#dfe1e6";
 
       // GRÁFICO 1: Se for ALL, GRP ou CUSTOM (multi-espaço), compara espaços. Se for espaço individual, mostra distribuição de Áreas!
       const ctx1 = document.getElementById("chart1").getContext("2d");
@@ -3761,9 +3770,9 @@
         const footerStatus = document.getElementById("devFooterStatus");
         if (footerStatus) {
           if (data.hasCritico10d) {
-            footerStatus.innerHTML = `<span style="color:#DC2626;font-weight:bold;">⚠️ EXISTEM TASKS COM MAIS DE 10 DIAS SEM ANÁLISE</span>`;
+            footerStatus.innerHTML = `<span style="color:var(--red);font-weight:bold;">⚠️ EXISTEM TASKS COM MAIS DE 10 DIAS SEM ANÁLISE</span>`;
           } else {
-            footerStatus.innerHTML = `<span style="color:#059669;">● Tudo dentro do prazo</span>`;
+            footerStatus.innerHTML = `<span style="color:var(--green);">● Tudo dentro do prazo</span>`;
           }
         }
         const footerUpdated = document.getElementById("devFooterUpdated");
@@ -4386,11 +4395,11 @@
         const footerStatus = document.getElementById("n1n2FooterStatus");
         if (footerStatus) {
           if (data.hasCritico10d) {
-            footerStatus.innerHTML = `<span style="color:#DC2626;font-weight:bold;">⚠️ EXISTEM TICKETS DE SUPORTE COM MAIS DE 10 DIAS EM TRIAGEM</span>`;
+            footerStatus.innerHTML = `<span style="color:var(--red);font-weight:bold;">⚠️ EXISTEM TICKETS DE SUPORTE COM MAIS DE 10 DIAS EM TRIAGEM</span>`;
           } else if (data.hasAlert) {
-            footerStatus.innerHTML = `<span style="color:#F59E0B;font-weight:bold;">⚠️ TICKETS COM MAIS DE 7 DIAS EXIGEM ATENÇÃO</span>`;
+            footerStatus.innerHTML = `<span style="color:var(--yellow);font-weight:bold;">⚠️ TICKETS COM MAIS DE 7 DIAS EXIGEM ATENÇÃO</span>`;
           } else {
-            footerStatus.innerHTML = `<span style="color:#059669;">● SLA de Triagem dentro da conformidade</span>`;
+            footerStatus.innerHTML = `<span style="color:var(--green);">● SLA de Triagem dentro da conformidade</span>`;
           }
         }
         const footerUpdated = document.getElementById("n1n2FooterUpdated");
@@ -4958,7 +4967,7 @@
                 ${statusBadge}
               </td>
               <td style="font-size: 11px; color: var(--text); padding: 7px 10px;">
-                <span style="font-weight: 700; color: ${it.precisa_token && it.precisa_token.toLowerCase().includes('sim') ? '#dc2626' : 'var(--text-sub)'};">
+                <span style="font-weight: 700; color: ${it.precisa_token && it.precisa_token.toLowerCase().includes('sim') ? 'var(--red)' : 'var(--text-sub)'};">
                   ${escapeHtml(it.precisa_token || 'Não (Automático)')}
                 </span>
               </td>
@@ -5178,7 +5187,7 @@
         // Linhas de certificados do estado (ordenadas por vencimento)
         itens.forEach(c => {
           const dias = parseInt(c.dias_restantes, 10) || 0;
-          let badgeStatus = `<span class="badge" style="background:#16a34a; color:#ffffff; font-weight:900; border:1px solid #15803d;">● Válido (${dias}d)</span>`;
+          let badgeStatus = `<span class="badge" style="background:#15803d; color:#ffffff; font-weight:900; border:1px solid #166534;">● Válido (${dias}d)</span>`;
           if (c.status === "VENCIDO" || dias <= 0) {
             badgeStatus = `<span class="badge" style="background:#dc2626; color:#ffffff; font-weight:900; border:1px solid #b91c1c;">⛔ VENCIDO (${dias}d)</span>`;
           } else if (dias <= 15) {
